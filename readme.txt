@@ -1,9 +1,9 @@
 === WordPress Beta Tester  ===
 Tags: beta, advanced, testing
-Contributors: westi, mlteal
+Contributors: westi, mlteal, afragen
 Tested up to: 4.7
 Requires at least: 3.0.5
-Stable Tag: 1.0.2
+Stable Tag: 1.1.0
 License: GPLv2
 License URI: http://www.opensource.org/licenses/GPL-2.0
 
@@ -12,7 +12,7 @@ Allows you to easily upgrade to Beta releases.
 == Description ==
 This plugin provides an easy way to get involved with Beta testing WordPress.
 
-Once installed it will enable you to upgrade your blog to the latest Beta or Release candidate at the click of a button using the built in upgrader. 
+Once installed it will enable you to upgrade your blog to the latest Beta or Release candidate at the click of a button using the built in upgrader.
 
 By default once enabled it switches your blog onto the point release development track.
 
@@ -21,6 +21,9 @@ For the more adventurous there is the option to switch to the bleeding edge of d
 Don't forget to backup before you start!
 
 == Changelog ==
+
+= 1.1.0 =
+* Fixed to work properly under Multisite.
 
 = 1.0.2 =
 * Update tested up to version to 4.7.
@@ -74,7 +77,7 @@ Don't forget to backup before you start!
 * Fixed an issue in the version mangling for the bleeding edge develpment track which didn't handle the x.9 => y.0 transition
 * Added translation files for Albanian and French.
 
-= 0.8 = 
+= 0.8 =
 * Fixed noticed on dashboard after upgrade and before the update api data was refreshed
 * Added translation files for German, Bosnian, Italian, Polish and Romanian.
 
@@ -83,7 +86,7 @@ Don't forget to backup before you start!
 * Added translation files for Japanese
 * Fixed issue with calls to get_preferred_from_update_core() when running on a cron hook.
 
-= 0.6 = 
+= 0.6 =
 * Update the code to validate the returned upgrade url so as to ensure that we only offer to upgrade to builds that exist.
 
 = 0.5 =

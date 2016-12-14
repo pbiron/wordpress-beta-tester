@@ -4,7 +4,7 @@
 	Plugin URI: https://wordpress.org/plugins/wordpress-beta-tester/
 	Description: Allows you to easily upgrade to Beta releases.
 	Author: Peter Westwood
-	Version: 1.0.2
+	Version: 1.1.0
     Network: true
 	Author URI: http://blog.ftwr.co.uk/
 	Text Domain: wordpress-beta-tester
@@ -14,7 +14,7 @@
 /*	Copyright 2009-2016 Peter Westwood (email : peter.westwood@ftwr.co.uk)
 
 	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License, version 2, as 
+	it under the terms of the GNU General Public License, version 2, as
 	published by the Free Software Foundation.
 
 	This program is distributed in the hope that it will be useful,
@@ -83,7 +83,11 @@ class wp_beta_tester {
 
 	function action_admin_init() {
 		load_plugin_textdomain( 'wordpress-beta-tester' );
-		register_setting( 'wp_beta_tester_options', 'wp_beta_tester_stream', array( &$this, 'validate_setting' ) );
+		register_setting(
+			'wp_beta_tester_options',
+			'wp_beta_tester_stream',
+			array( &$this, 'validate_setting' )
+		);
 	}
 
 	function action_admin_menu() {
@@ -220,22 +224,22 @@ class wp_beta_tester {
 						<table class="form-table">
 							<tr>
 								<th><label><input name="wp_beta_tester_stream"
-								                  id="update-stream-point-nightlies" type="radio" value="point"
-								                  class="tog" <?php checked( 'point', $stream ); ?> /><?php _e( 'Point release nightlies', 'wordpress-beta-tester' ); ?>
+												  id="update-stream-point-nightlies" type="radio" value="point"
+												  class="tog" <?php checked( 'point', $stream ); ?> /><?php _e( 'Point release nightlies', 'wordpress-beta-tester' ); ?>
 									</label></th>
 								<td><?php _e( 'This contains the work that is occurring on a branch in preparation for a x.x.x point release.  This should also be fairly stable but will be available before the branch is ready for beta.', 'wordpress-beta-tester' ); ?></td>
 							</tr>
 							<tr>
 								<th><label><input name="wp_beta_tester_stream"
-								                  id="update-stream-bleeding-nightlies" type="radio" value="unstable"
-								                  class="tog" <?php checked( 'unstable', $stream ); ?> /><?php _e( 'Bleeding edge nightlies', 'wordpress-beta-tester' ); ?>
+												  id="update-stream-bleeding-nightlies" type="radio" value="unstable"
+												  class="tog" <?php checked( 'unstable', $stream ); ?> /><?php _e( 'Bleeding edge nightlies', 'wordpress-beta-tester' ); ?>
 									</label></th>
 								<td><?php _e( 'This is the bleeding edge development code which may be unstable at times. <em>Only use this if you really know what you are doing</em>.', 'wordpress-beta-tester' ); ?></td>
 							</tr>
 						</table>
 					</fieldset>
 					<p class="submit"><input type="submit" class="button-primary"
-					                         value="<?php _e( 'Save Changes', 'wordpress-beta-tester' ); ?>"/></p>
+											 value="<?php _e( 'Save Changes', 'wordpress-beta-tester' ); ?>" /></p>
 				</form>
 				<p><?php echo sprintf( __( 'Why don\'t you <a href="%s">head on over and upgrade now</a>.', 'wordpress-beta-tester' ), 'update-core.php' ); ?></p>
 			</div>

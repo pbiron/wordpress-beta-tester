@@ -34,6 +34,7 @@ class wp_beta_tester {
 	function __construct() {
 		add_action( 'admin_init', array( &$this, 'action_admin_init' ) );
 		add_action( is_multisite() ? 'network_admin_menu' : 'admin_menu', array( &$this, 'action_admin_menu' ) );
+		add_action( 'network_admin_edit_wp_beta_tester', array( &$this, 'update_settings' ) );
 		add_action( 'update_option_wp_beta_tester_stream', array(
 			&$this,
 			'action_update_option_wp_beta_tester_stream',
@@ -43,6 +44,23 @@ class wp_beta_tester {
 		add_action( 'admin_head-update-core.php', array( &$this, 'action_admin_head_plugins_php' ) );
 	}
 
+	function update_settings() {
+		if ( isset( $_POST['option_page'] ) ) {
+			if ( 'wp_beta_tester_options' === $_POST['option_page'] ) {
+				update_site_option( 'wp_beta_tester_stream', $this->validate_setting( $_POST['wp_beta_tester_stream'] ) );
+			}
+		}
+
+		$redirect_url = is_multisite() ? network_admin_url( 'settings.php' ) : admin_url( 'options-general.php' );
+		$query        = isset( $_POST['_wp_http_referer'] ) ? parse_url( $_POST['_wp_http_referer'], PHP_URL_QUERY ) : null;
+		parse_str( $query, $arr );
+
+		$location = add_query_arg(
+			array( 'page' => 'wp_beta_tester' ),
+			$redirect_url
+		);
+		wp_redirect( $location );
+		exit;
 	}
 
 	function action_admin_head_plugins_php() {
@@ -193,12 +211,13 @@ class wp_beta_tester {
 						'https://core.trac.wordpress.org/newticket' ); ?></p>
 
 				<p><?php _e( 'By default, your WordPress install uses the stable update stream. To return to this, please deactivate this plugin.', 'wordpress-beta-tester' ); ?></p>
-				<form method="post" action="options.php"><?php settings_fields( 'wp_beta_tester_options' ); ?>
+				<?php $action = is_multisite() ? 'edit.php?action=wp_beta_tester' : 'options.php'; ?>
+				<form method="post" action="<?php esc_attr_e( $action ); ?>">
+					<?php settings_fields( 'wp_beta_tester_options' ); ?>
 					<fieldset>
 						<legend><?php _e( 'Please select the update stream you would like this blog to use:', 'wordpress-beta-tester' ); ?></legend>
 						<?php
-						// in multisite, this option is stored in the primary blog options table
-						$stream = get_option( 'wp_beta_tester_stream', 'point' );
+						$stream = get_site_option( 'wp_beta_tester_stream', 'point' );
 						?>
 						<table class="form-table">
 							<tr>

@@ -143,11 +143,14 @@ class wp_beta_tester {
 	}
 
 	function mangle_wp_version() {
-		$stream    = get_option( 'wp_beta_tester_stream', 'point' );
-		$preferred = $this->_get_preferred_from_update_core();
-		// If we're getting no updates back from get_preferred_from_update_core(), let an HTTP request go through unmangled.
+		$stream     = get_option( 'wp_beta_tester_stream', 'point' );
+		$preferred  = $this->_get_preferred_from_update_core();
+		$wp_version = $GLOBALS['wp_version'];
+
+		// If we're getting no updates back from get_preferred_from_update_core(),
+		// let an HTTP request go through unmangled.
 		if ( ! isset( $preferred->current ) ) {
-			return $GLOBALS['wp_version'];
+			return $wp_version;
 		}
 
 		switch ( $stream ) {
@@ -163,9 +166,7 @@ class wp_beta_tester {
 					$versions[0] += 1;
 					$versions[1] = 0;
 				}
-
 				$wp_version = $versions[0] . '.' . $versions[1] . '-wp-beta-tester';
-
 				break;
 		}
 

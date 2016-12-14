@@ -1,9 +1,13 @@
 === WordPress Beta Tester  ===
 Tags: beta, advanced, testing
-Contributors: westi
-Tested up to: 4.2
+Contributors: westi, mlteal
+Tested up to: 4.7
 Requires at least: 3.0.5
-Stable Tag: 1.0
+Stable Tag: 1.0.2
+License: GPLv2
+License URI: http://www.opensource.org/licenses/GPL-2.0
+
+Allows you to easily upgrade to Beta releases.
 
 == Description ==
 This plugin provides an easy way to get involved with Beta testing WordPress.
@@ -17,6 +21,18 @@ For the more adventurous there is the option to switch to the bleeding edge of d
 Don't forget to backup before you start!
 
 == Changelog ==
+
+= 1.0.2 =
+* Update tested up to version to 4.7.
+* Fix the location of the settings screen in Multisite (moved under Settings in Network Admin).
+* Minor text fixes.
+
+= 1.0.1 =
+* Update tested up to version to 4.5.
+* Fix PHP7 deprecated constructor notice.
+* Change text domain to match the plugin slug.
+* Update WordPress.org links to use HTTPS.
+* Remove outdated bundled translations in favor of language packs.
 
 = 1.0 =
 * Update tested up to version to 4.2.

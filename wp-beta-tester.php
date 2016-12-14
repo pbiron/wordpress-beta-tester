@@ -28,8 +28,6 @@
 */
 
 class wp_beta_tester {
-	var $real_wp_version;
-	var $real_wpmu_version = false;
 
 	function __construct() {
 		add_action( 'admin_init', array( &$this, 'action_admin_init' ) );

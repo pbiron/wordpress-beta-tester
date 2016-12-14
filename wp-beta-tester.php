@@ -33,11 +33,7 @@ class wp_beta_tester {
 
 	function __construct() {
 		add_action( 'admin_init', array( &$this, 'action_admin_init' ) );
-		if ( is_multisite() ) {
-			add_action( 'network_admin_menu', array( &$this, 'action_admin_menu' ) );
-		} else {
-			add_action( 'admin_menu', array( &$this, 'action_admin_menu' ) );
-		}
+		add_action( is_multisite() ? 'network_admin_menu' : 'admin_menu', array( &$this, 'action_admin_menu' ) );
 		add_action( 'update_option_wp_beta_tester_stream', array(
 			&$this,
 			'action_update_option_wp_beta_tester_stream',
@@ -75,16 +71,14 @@ class wp_beta_tester {
 	}
 
 	function action_admin_menu() {
-		$parent = 'tools.php';
-		if ( is_multisite() ) {
-			$parent = 'settings.php';
-		}
+		$parent     = is_multisite() ? 'settings.php' : 'tools.php';
+		$capability = is_multisite() ? 'manage_network' : 'manage_options';
 
 		add_submenu_page(
 			$parent,
 			__( 'Beta Testing WordPress', 'wordpress-beta-tester' ),
 			__( 'Beta Testing', 'wordpress-beta-tester' ),
-			'update_plugins',
+			$capability,
 			'wp_beta_tester',
 			array( &$this, 'display_page' )
 		);
@@ -171,11 +165,7 @@ class wp_beta_tester {
 	}
 
 	function validate_setting( $setting ) {
-		if ( ! in_array( $setting, array( 'point', 'unstable' ) ) ) {
-			$setting = 'point';
-		}
-
-		return $setting;
+		return ( in_array( $setting, array( 'point', 'unstable' ) ) ? $setting : 'point' );
 	}
 
 	function display_page() {

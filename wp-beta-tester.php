@@ -54,7 +54,10 @@ class wp_beta_tester {
 		parse_str( $query, $arr );
 
 		$location = add_query_arg(
-			array( 'page' => 'wp_beta_tester' ),
+			array(
+				'page'    => 'wp_beta_tester',
+				'updated' => 'true',
+			),
 			$redirect_url
 		);
 		wp_redirect( $location );
@@ -193,6 +196,13 @@ class wp_beta_tester {
 		?>
 		<div class="wrap">
 			<h1><?php _e( 'Beta Testing WordPress', 'wordpress-beta-tester' ); ?></h1>
+			<?php if ( isset( $_GET['updated'] ) && true == $_GET['updated'] ||
+			           isset( $_GET['settings-updated'] ) && true == $_GET['settings-updated']
+			): ?>
+				<div class="updated">
+					<p><?php esc_html_e( 'Settings saved.', 'wordpress-beta-tester' ); ?></p>
+				</div>
+			<?php endif; ?>
 			<div class="updated fade">
 				<p><?php _e( '<strong>Please note:</strong> Once you have switched your blog to one of these beta versions of software, it will not always be possible to downgrade, as the database structure may be updated during the development of a major release.', 'wordpress-beta-tester' ); ?></p>
 			</div>
@@ -243,6 +253,8 @@ class wp_beta_tester {
 			</div>
 		</div>
 		<?php
+
+		$this->update_settings();
 	}
 }
 

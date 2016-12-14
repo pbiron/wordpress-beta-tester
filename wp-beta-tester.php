@@ -197,7 +197,7 @@ class wp_beta_tester {
 			           isset( $_GET['settings-updated'] ) && true == $_GET['settings-updated']
 			): ?>
 				<div class="updated">
-					<p><?php esc_html_e( 'Settings saved.', 'wordpress-beta-tester' ); ?></p>
+					<p><?php esc_html_e( 'Saved.', 'wordpress-beta-tester' ); ?></p>
 				</div>
 			<?php endif; ?>
 			<div class="updated fade">
@@ -223,21 +223,21 @@ class wp_beta_tester {
 					<?php settings_fields( 'wp_beta_tester_options' ); ?>
 					<fieldset>
 						<legend><?php _e( 'Please select the update stream you would like this blog to use:', 'wordpress-beta-tester' ); ?></legend>
-						<?php
-						$stream = get_site_option( 'wp_beta_tester_stream', 'point' );
-						?>
+						<?php $stream = get_site_option( 'wp_beta_tester_stream', 'point' ); ?>
 						<table class="form-table">
 							<tr>
 								<th><label><input name="wp_beta_tester_stream"
 												  id="update-stream-point-nightlies" type="radio" value="point"
-												  class="tog" <?php checked( 'point', $stream ); ?> /><?php _e( 'Point release nightlies', 'wordpress-beta-tester' ); ?>
+												  class="tog" <?php checked( 'point', $stream ); ?> />
+										<?php _e( 'Point release nightlies', 'wordpress-beta-tester' ); ?>
 									</label></th>
 								<td><?php _e( 'This contains the work that is occurring on a branch in preparation for a x.x.x point release.  This should also be fairly stable but will be available before the branch is ready for beta.', 'wordpress-beta-tester' ); ?></td>
 							</tr>
 							<tr>
 								<th><label><input name="wp_beta_tester_stream"
 												  id="update-stream-bleeding-nightlies" type="radio" value="unstable"
-												  class="tog" <?php checked( 'unstable', $stream ); ?> /><?php _e( 'Bleeding edge nightlies', 'wordpress-beta-tester' ); ?>
+												  class="tog" <?php checked( 'unstable', $stream ); ?> />
+										<?php _e( 'Bleeding edge nightlies', 'wordpress-beta-tester' ); ?>
 									</label></th>
 								<td><?php _e( 'This is the bleeding edge development code which may be unstable at times. <em>Only use this if you really know what you are doing</em>.', 'wordpress-beta-tester' ); ?></td>
 							</tr>

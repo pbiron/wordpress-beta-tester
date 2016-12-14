@@ -43,8 +43,6 @@ class wp_beta_tester {
 		add_action( 'admin_head-update-core.php', array( &$this, 'action_admin_head_plugins_php' ) );
 	}
 
-	function wp_beta_tester() {
-		wp_beta_tester::__construct();
 	}
 
 	function action_admin_head_plugins_php() {

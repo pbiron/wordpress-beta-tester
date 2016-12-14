@@ -244,8 +244,11 @@ class wp_beta_tester {
 	}
 }
 
-/* Initialise outselves */
-add_action( 'plugins_loaded', create_function( '', 'global $wp_beta_tester_instance; $wp_beta_tester_instance = new wp_beta_tester();' ) );
+/* Initialise ourselves */
+add_action( 'plugins_loaded', function() {
+	global $wp_beta_tester_instance;
+	$wp_beta_tester_instance = new wp_beta_tester();
+} );
 
 // Clear down
 function wordpress_beta_tester_deactivate_or_activate() {

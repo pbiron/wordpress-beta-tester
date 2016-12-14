@@ -50,10 +50,7 @@ class wp_beta_tester {
 		}
 
 		$redirect_url = is_multisite() ? network_admin_url( 'settings.php' ) : admin_url( 'options-general.php' );
-		$query        = isset( $_POST['_wp_http_referer'] ) ? parse_url( $_POST['_wp_http_referer'], PHP_URL_QUERY ) : null;
-		parse_str( $query, $arr );
-
-		$location = add_query_arg(
+		$location     = add_query_arg(
 			array(
 				'page'    => 'wp_beta_tester',
 				'updated' => 'true',
@@ -253,8 +250,6 @@ class wp_beta_tester {
 			</div>
 		</div>
 		<?php
-
-		$this->update_settings();
 	}
 }
 

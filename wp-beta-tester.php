@@ -5,6 +5,7 @@
 	Description: Allows you to easily upgrade to Beta releases.
 	Author: Peter Westwood
 	Version: 1.0.2
+    Network: true
 	Author URI: http://blog.ftwr.co.uk/
 	Text Domain: wordpress-beta-tester
 	License: GPL v2 or later

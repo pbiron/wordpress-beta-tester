@@ -189,8 +189,8 @@ class wp_beta_tester {
 		$preferred = $this->_get_preferred_from_update_core();
 
 		?>
-		<div class="wrap"><?php screen_icon(); ?>
 			<h2><?php _e( 'Beta Testing WordPress', 'wordpress-beta-tester' ); ?></h2>
+		<div class="wrap">
 			<div class="updated fade">
 				<p><?php _e( '<strong>Please note:</strong> Once you have switched your blog to one of these beta versions of software, it will not always be possible to downgrade, as the database structure may be updated during the development of a major release.', 'wordpress-beta-tester' ); ?></p>
 			</div>

@@ -145,7 +145,7 @@ class wp_beta_tester {
 	}
 
 	function mangle_wp_version() {
-		$stream     = get_option( 'wp_beta_tester_stream', 'point' );
+		$stream     = get_site_option( 'wp_beta_tester_stream', 'point' );
 		$preferred  = $this->_get_preferred_from_update_core();
 		$wp_version = $GLOBALS['wp_version'];
 

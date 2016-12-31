@@ -4,7 +4,8 @@
 	Plugin URI: https://wordpress.org/plugins/wordpress-beta-tester/
 	Description: Allows you to easily upgrade to Beta releases.
 	Author: Peter Westwood
-	Version: 1.0.2
+	Version: 1.1.0
+	Network: true
 	Author URI: http://blog.ftwr.co.uk/
 	Text Domain: wordpress-beta-tester
 	License: GPL v2 or later
@@ -13,7 +14,7 @@
 /*	Copyright 2009-2016 Peter Westwood (email : peter.westwood@ftwr.co.uk)
 
 	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License, version 2, as 
+	it under the terms of the GNU General Public License, version 2, as
 	published by the Free Software Foundation.
 
 	This program is distributed in the hope that it will be useful,
@@ -27,16 +28,11 @@
 */
 
 class wp_beta_tester {
-	var $real_wp_version;
-	var $real_wpmu_version = false;
 
 	function __construct() {
 		add_action( 'admin_init', array( &$this, 'action_admin_init' ) );
-		if ( is_multisite() ) {
-			add_action( 'network_admin_menu', array( &$this, 'action_admin_menu' ) );
-		} else {
-			add_action( 'admin_menu', array( &$this, 'action_admin_menu' ) );
-		}
+		add_action( is_multisite() ? 'network_admin_menu' : 'admin_menu', array( &$this, 'action_admin_menu' ) );
+		add_action( 'network_admin_edit_wp_beta_tester', array( &$this, 'update_settings' ) );
 		add_action( 'update_option_wp_beta_tester_stream', array(
 			&$this,
 			'action_update_option_wp_beta_tester_stream',
@@ -46,8 +42,23 @@ class wp_beta_tester {
 		add_action( 'admin_head-update-core.php', array( &$this, 'action_admin_head_plugins_php' ) );
 	}
 
-	function wp_beta_tester() {
-		wp_beta_tester::__construct();
+	function update_settings() {
+		if ( isset( $_POST['option_page'] ) ) {
+			if ( 'wp_beta_tester_options' === $_POST['option_page'] ) {
+				update_site_option( 'wp_beta_tester_stream', $this->validate_setting( $_POST['wp_beta_tester_stream'] ) );
+			}
+		}
+
+		$redirect_url = is_multisite() ? network_admin_url( 'settings.php' ) : admin_url( 'options-general.php' );
+		$location     = add_query_arg(
+			array(
+				'page'    => 'wp_beta_tester',
+				'updated' => 'true',
+			),
+			$redirect_url
+		);
+		wp_redirect( $location );
+		exit;
 	}
 
 	function action_admin_head_plugins_php() {
@@ -70,20 +81,22 @@ class wp_beta_tester {
 
 	function action_admin_init() {
 		load_plugin_textdomain( 'wordpress-beta-tester' );
-		register_setting( 'wp_beta_tester_options', 'wp_beta_tester_stream', array( &$this, 'validate_setting' ) );
+		register_setting(
+			'wp_beta_tester_options',
+			'wp_beta_tester_stream',
+			array( &$this, 'validate_setting' )
+		);
 	}
 
 	function action_admin_menu() {
-		$parent = 'tools.php';
-		if ( is_multisite() ) {
-			$parent = 'settings.php';
-		}
+		$parent     = is_multisite() ? 'settings.php' : 'tools.php';
+		$capability = is_multisite() ? 'manage_network' : 'manage_options';
 
 		add_submenu_page(
 			$parent,
 			__( 'Beta Testing WordPress', 'wordpress-beta-tester' ),
 			__( 'Beta Testing', 'wordpress-beta-tester' ),
-			'update_plugins',
+			$capability,
 			'wp_beta_tester',
 			array( &$this, 'display_page' )
 		);
@@ -132,11 +145,14 @@ class wp_beta_tester {
 	}
 
 	function mangle_wp_version() {
-		$stream    = get_option( 'wp_beta_tester_stream', 'point' );
-		$preferred = $this->_get_preferred_from_update_core();
-		// If we're getting no updates back from get_preferred_from_update_core(), let an HTTP request go through unmangled.
+		$stream     = get_site_option( 'wp_beta_tester_stream', 'point' );
+		$preferred  = $this->_get_preferred_from_update_core();
+		$wp_version = $GLOBALS['wp_version'];
+
+		// If we're getting no updates back from get_preferred_from_update_core(),
+		// let an HTTP request go through unmangled.
 		if ( ! isset( $preferred->current ) ) {
-			return $GLOBALS['wp_version'];
+			return $wp_version;
 		}
 
 		switch ( $stream ) {
@@ -152,9 +168,7 @@ class wp_beta_tester {
 					$versions[0] += 1;
 					$versions[1] = 0;
 				}
-
 				$wp_version = $versions[0] . '.' . $versions[1] . '-wp-beta-tester';
-
 				break;
 		}
 
@@ -170,22 +184,22 @@ class wp_beta_tester {
 	}
 
 	function validate_setting( $setting ) {
-		if ( ! in_array( $setting, array( 'point', 'unstable' ) ) ) {
-			$setting = 'point';
-		}
-
-		return $setting;
+		return ( in_array( $setting, array( 'point', 'unstable' ) ) ? $setting : 'point' );
 	}
 
 	function display_page() {
-		if ( ! current_user_can( 'update_plugins' ) ) {
-			wp_die( __( 'You do not have sufficient permissions to access this page.', 'wordpress-beta-tester' ) );
-		}
 		$preferred = $this->_get_preferred_from_update_core();
 
 		?>
-		<div class="wrap"><?php screen_icon(); ?>
-			<h2><?php _e( 'Beta Testing WordPress', 'wordpress-beta-tester' ); ?></h2>
+		<div class="wrap">
+			<h1><?php _e( 'Beta Testing WordPress', 'wordpress-beta-tester' ); ?></h1>
+			<?php if ( isset( $_GET['updated'] ) && true == $_GET['updated'] ||
+			           isset( $_GET['settings-updated'] ) && true == $_GET['settings-updated']
+			): ?>
+				<div class="updated">
+					<p><?php esc_html_e( 'Saved.', 'wordpress-beta-tester' ); ?></p>
+				</div>
+			<?php endif; ?>
 			<div class="updated fade">
 				<p><?php _e( '<strong>Please note:</strong> Once you have switched your blog to one of these beta versions of software, it will not always be possible to downgrade, as the database structure may be updated during the development of a major release.', 'wordpress-beta-tester' ); ?></p>
 			</div>
@@ -204,32 +218,33 @@ class wp_beta_tester {
 						'https://core.trac.wordpress.org/newticket' ); ?></p>
 
 				<p><?php _e( 'By default, your WordPress install uses the stable update stream. To return to this, please deactivate this plugin.', 'wordpress-beta-tester' ); ?></p>
-				<form method="post" action="options.php"><?php settings_fields( 'wp_beta_tester_options' ); ?>
+				<?php $action = is_multisite() ? 'edit.php?action=wp_beta_tester' : 'options.php'; ?>
+				<form method="post" action="<?php esc_attr_e( $action ); ?>">
+					<?php settings_fields( 'wp_beta_tester_options' ); ?>
 					<fieldset>
 						<legend><?php _e( 'Please select the update stream you would like this blog to use:', 'wordpress-beta-tester' ); ?></legend>
-						<?php
-						// in multisite, this option is stored in the primary blog options table
-						$stream = get_option( 'wp_beta_tester_stream', 'point' );
-						?>
+						<?php $stream = get_site_option( 'wp_beta_tester_stream', 'point' ); ?>
 						<table class="form-table">
 							<tr>
 								<th><label><input name="wp_beta_tester_stream"
-								                  id="update-stream-point-nightlies" type="radio" value="point"
-								                  class="tog" <?php checked( 'point', $stream ); ?> /><?php _e( 'Point release nightlies', 'wordpress-beta-tester' ); ?>
+												  id="update-stream-point-nightlies" type="radio" value="point"
+												  class="tog" <?php checked( 'point', $stream ); ?> />
+										<?php _e( 'Point release nightlies', 'wordpress-beta-tester' ); ?>
 									</label></th>
 								<td><?php _e( 'This contains the work that is occurring on a branch in preparation for a x.x.x point release.  This should also be fairly stable but will be available before the branch is ready for beta.', 'wordpress-beta-tester' ); ?></td>
 							</tr>
 							<tr>
 								<th><label><input name="wp_beta_tester_stream"
-								                  id="update-stream-bleeding-nightlies" type="radio" value="unstable"
-								                  class="tog" <?php checked( 'unstable', $stream ); ?> /><?php _e( 'Bleeding edge nightlies', 'wordpress-beta-tester' ); ?>
+												  id="update-stream-bleeding-nightlies" type="radio" value="unstable"
+												  class="tog" <?php checked( 'unstable', $stream ); ?> />
+										<?php _e( 'Bleeding edge nightlies', 'wordpress-beta-tester' ); ?>
 									</label></th>
 								<td><?php _e( 'This is the bleeding edge development code which may be unstable at times. <em>Only use this if you really know what you are doing</em>.', 'wordpress-beta-tester' ); ?></td>
 							</tr>
 						</table>
 					</fieldset>
 					<p class="submit"><input type="submit" class="button-primary"
-					                         value="<?php _e( 'Save Changes', 'wordpress-beta-tester' ); ?>"/></p>
+											 value="<?php _e( 'Save Changes', 'wordpress-beta-tester' ); ?>" /></p>
 				</form>
 				<p><?php echo sprintf( __( 'Why don\'t you <a href="%s">head on over and upgrade now</a>.', 'wordpress-beta-tester' ), 'update-core.php' ); ?></p>
 			</div>
@@ -238,8 +253,11 @@ class wp_beta_tester {
 	}
 }
 
-/* Initialise outselves */
-add_action( 'plugins_loaded', create_function( '', 'global $wp_beta_tester_instance; $wp_beta_tester_instance = new wp_beta_tester();' ) );
+/* Initialise ourselves */
+add_action( 'plugins_loaded', function() {
+	global $wp_beta_tester_instance;
+	$wp_beta_tester_instance = new wp_beta_tester();
+} );
 
 // Clear down
 function wordpress_beta_tester_deactivate_or_activate() {

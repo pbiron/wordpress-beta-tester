@@ -155,6 +155,8 @@ class wp_beta_tester {
 			return $wp_version;
 		}
 
+		$preferred->current = substr( $preferred->current, 0, strpos( $preferred->current, '-' ) );
+
 		switch ( $stream ) {
 			case 'point':
 				$versions    = explode( '.', $preferred->current );

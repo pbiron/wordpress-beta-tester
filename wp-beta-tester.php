@@ -155,16 +155,14 @@ class wp_beta_tester {
 			return $wp_version;
 		}
 
-		$preferred->current = substr( $preferred->current, 0, strpos( $preferred->current, '-' ) );
+		$versions = array_map( 'intval', explode( '.', $preferred->current ) );
 
 		switch ( $stream ) {
 			case 'point':
-				$versions    = explode( '.', $preferred->current );
 				$versions[2] = isset( $versions[2] ) ? $versions[2] + 1 : 1;
 				$wp_version  = $versions[0] . '.' . $versions[1] . '.' . $versions[2] . '-wp-beta-tester';
 				break;
 			case 'unstable':
-				$versions    = explode( '.', $preferred->current );
 				$versions[1] += 1;
 				if ( 10 == $versions[1] ) {
 					$versions[0] += 1;

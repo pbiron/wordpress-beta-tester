@@ -23,7 +23,8 @@ Don't forget to backup before you start!
 == Changelog ==
 
 = 1.1.1 =
-* fix PHP notice for PHP 7.1
+* fixed PHP notice for PHP 7.1
+* made URL scheme agnostic
 
 = 1.1.0 =
 * Fixed to work properly under Multisite.

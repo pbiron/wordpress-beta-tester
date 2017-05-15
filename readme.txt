@@ -1,9 +1,9 @@
 === WordPress Beta Tester  ===
 Tags: beta, advanced, testing
 Contributors: westi, mlteal, afragen
-Tested up to: 4.7
+Tested up to: 4.8
 Requires at least: 3.0.5
-Stable Tag: 1.1.0
+Stable Tag: 1.1.1
 License: GPLv2
 License URI: http://www.opensource.org/licenses/GPL-2.0
 
@@ -21,6 +21,9 @@ For the more adventurous there is the option to switch to the bleeding edge of d
 Don't forget to backup before you start!
 
 == Changelog ==
+
+= 1.1.1 =
+* fix PHP notice for PHP 7.1
 
 = 1.1.0 =
 * Fixed to work properly under Multisite.

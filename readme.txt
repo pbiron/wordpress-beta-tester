@@ -20,6 +20,8 @@ For the more adventurous there is the option to switch to the bleeding edge of d
 
 Don't forget to backup before you start!
 
+PRs are welcome on [GitHub](https://github.com/mlteal/wordpress-beta-tester).
+
 == Changelog ==
 
 = 1.1.2 =
@@ -119,7 +121,8 @@ Updated Russian language pack.
 1. Upload to your plugins folder, usually `wp-content/plugins/`
 2. Activate the plugin on the plugin screen.
 3. Navigate to Tools ... Beta Testing to configure the plugin.
-4. Visit Dashboard ... Upgrade (Or Tools ... Upgrade in versions before 3.0) and update to the latest Beta Release.
+4. Under Mulitsite, navigate to Settings ... Beta Testing to configure the plugin.
+5. Visit Dashboard ... Upgrade (Or Tools ... Upgrade in versions before 3.0) and update to the latest Beta Release.
 
 == Screenshots ==
 

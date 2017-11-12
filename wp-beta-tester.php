@@ -129,7 +129,7 @@ class wp_beta_tester {
 
 	private function _get_preferred_from_update_core() {
 		if ( ! function_exists( 'get_preferred_from_update_core' ) ) {
-			require_once( ABSPATH . 'wp-admin/includes/update.php' );
+			require_once ABSPATH . 'wp-admin/includes/update.php';
 		}
 
 		//Validate that we have api data and if not get the normal data so we always have it.
@@ -161,9 +161,9 @@ class wp_beta_tester {
 				$wp_version  = $versions[0] . '.' . $versions[1] . '.' . $versions[2] . '-wp-beta-tester';
 				break;
 			case 'unstable':
-				$versions[1] += 1;
-				if ( 10 == $versions[1] ) {
-					$versions[0] += 1;
+				++ $versions[1];
+				if ( 10 === $versions[1] ) {
+					++ $versions[0];
 					$versions[1] = 0;
 				}
 				$wp_version = $versions[0] . '.' . $versions[1] . '-wp-beta-tester';
@@ -181,8 +181,8 @@ class wp_beta_tester {
 		return version_compare( $wp_mangled_version[0], $wp_real_version[0], 'lt' );
 	}
 
-		return ( in_array( $setting, array( 'point', 'unstable' ) ) ? $setting : 'point' );
 	protected function validate_setting( $setting ) {
+		return ( in_array( $setting, array( 'point', 'unstable' ), true ) ? $setting : 'point' );
 	}
 
 	public function display_page() {
@@ -190,9 +190,9 @@ class wp_beta_tester {
 
 		?>
 		<div class="wrap">
-			<?php if ( isset( $_GET['updated'] ) && true == $_GET['updated'] ||
-			           isset( $_GET['settings-updated'] ) && true == $_GET['settings-updated']
 			<h1><?php esc_html_e( 'Beta Testing WordPress', 'wordpress-beta-tester' ); ?></h1>
+			<?php if ( ( isset( $_GET['updated'] ) && true == $_GET['updated'] ) ||
+			           ( isset( $_GET['settings-updated'] ) && true == $_GET['settings-updated'] )
 			): ?>
 				<div class="updated">
 					<p><?php esc_html_e( 'Saved.', 'wordpress-beta-tester' ); ?></p>
@@ -201,7 +201,7 @@ class wp_beta_tester {
 			<div class="updated fade">
 				<p><?php esc_html( printf( __( '%sPlease note:%s Once you have switched your blog to one of these beta versions of software, it will not always be possible to downgrade, as the database structure may be updated during the development of a major release.', 'wordpress-beta-tester' ), '<strong>', '</strong>' ) ); ?></p>
 			</div>
-			<?php if ( 'development' != $preferred->response ) : ?>
+			<?php if ( 'development' !== $preferred->response ) : ?>
 				<div class="updated fade">
 					<p><?php esc_html( printf( __( '%sPlease note:%s There are no development builds of the beta stream you have choosen available, so you will receive normal update notifications.', 'wordpress-beta-tester' ), '<strong>', '</strong>' ) ); ?></p>
 				</div>

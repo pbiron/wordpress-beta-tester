@@ -29,7 +29,7 @@
 
 class wp_beta_tester {
 
-	function __construct() {
+	public function __construct() {
 		add_action( 'admin_init', array( &$this, 'action_admin_init' ) );
 		add_action( is_multisite() ? 'network_admin_menu' : 'admin_menu', array( &$this, 'action_admin_menu' ) );
 		add_action( 'network_admin_edit_wp_beta_tester', array( &$this, 'update_settings' ) );
@@ -42,7 +42,7 @@ class wp_beta_tester {
 		add_action( 'admin_head-update-core.php', array( &$this, 'action_admin_head_plugins_php' ) );
 	}
 
-	function update_settings() {
+	public function update_settings() {
 		if ( isset( $_POST['option_page'] ) ) {
 			if ( 'wp_beta_tester_options' === $_POST['option_page'] ) {
 				update_site_option( 'wp_beta_tester_stream', $this->validate_setting( $_POST['wp_beta_tester_stream'] ) );
@@ -61,7 +61,7 @@ class wp_beta_tester {
 		exit;
 	}
 
-	function action_admin_head_plugins_php() {
+	public function action_admin_head_plugins_php() {
 		// Workaround the check throttling in wp_version_check()
 		$st = get_site_transient( 'update_core' );
 		if ( is_object( $st ) ) {
@@ -79,7 +79,7 @@ class wp_beta_tester {
 		}
 	}
 
-	function action_admin_init() {
+	public function action_admin_init() {
 		load_plugin_textdomain( 'wordpress-beta-tester' );
 		register_setting(
 			'wp_beta_tester_options',
@@ -88,7 +88,7 @@ class wp_beta_tester {
 		);
 	}
 
-	function action_admin_menu() {
+	public function action_admin_menu() {
 		$parent     = is_multisite() ? 'settings.php' : 'tools.php';
 		$capability = is_multisite() ? 'manage_network' : 'manage_options';
 
@@ -102,7 +102,7 @@ class wp_beta_tester {
 		);
 	}
 
-	function filter_http_request( $result, $args, $url ) {
+	public function filter_http_request( $result, $args, $url ) {
 		if ( $result || isset( $args['_beta_tester'] ) ) {
 			return $result;
 		}
@@ -122,12 +122,12 @@ class wp_beta_tester {
 		return wp_remote_get( $url, $args );
 	}
 
-	function action_update_option_wp_beta_tester_stream() {
+	public function action_update_option_wp_beta_tester_stream() {
 		//Our option has changed so update the cached information pronto.
 		do_action( 'wp_version_check' );
 	}
 
-	function _get_preferred_from_update_core() {
+	private function _get_preferred_from_update_core() {
 		if ( ! function_exists( 'get_preferred_from_update_core' ) ) {
 			require_once( ABSPATH . 'wp-admin/includes/update.php' );
 		}
@@ -142,7 +142,7 @@ class wp_beta_tester {
 		return $preferred;
 	}
 
-	function mangle_wp_version() {
+	protected function mangle_wp_version() {
 		$stream     = get_site_option( 'wp_beta_tester_stream', 'point' );
 		$preferred  = $this->_get_preferred_from_update_core();
 		$wp_version = $GLOBALS['wp_version'];
@@ -173,7 +173,7 @@ class wp_beta_tester {
 		return $wp_version;
 	}
 
-	function check_if_settings_downgrade() {
+	protected function check_if_settings_downgrade() {
 		global $wp_version;
 		$wp_real_version    = explode( '-', $wp_version );
 		$wp_mangled_version = explode( '-', $this->mangle_wp_version() );
@@ -181,11 +181,11 @@ class wp_beta_tester {
 		return version_compare( $wp_mangled_version[0], $wp_real_version[0], 'lt' );
 	}
 
-	function validate_setting( $setting ) {
 		return ( in_array( $setting, array( 'point', 'unstable' ) ) ? $setting : 'point' );
+	protected function validate_setting( $setting ) {
 	}
 
-	function display_page() {
+	public function display_page() {
 		$preferred = $this->_get_preferred_from_update_core();
 
 		?>

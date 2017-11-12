@@ -1,11 +1,12 @@
 === WordPress Beta Tester  ===
 Tags: beta, advanced, testing
 Contributors: westi, mlteal, afragen
-Tested up to: 4.8
+Tested up to: 4.9
 Requires at least: 3.0.5
-Stable Tag: 1.1.2
+Stable Tag: 1.2.0
 License: GPLv2
 License URI: http://www.opensource.org/licenses/GPL-2.0
+Requires PHP: 5.2.4
 
 Allows you to easily upgrade to Beta releases.
 
@@ -16,13 +17,19 @@ Once installed it will enable you to upgrade your blog to the latest Beta or Rel
 
 By default once enabled it switches your blog onto the point release development track.
 
-For the more adventurous there is the option to switch to the bleeding edge of development.
+For the more adventurous there is the option to switch to the bleeding edge (trunk) of development.
 
 Don't forget to backup before you start!
 
-PRs are welcome on [GitHub](https://github.com/mlteal/wordpress-beta-tester).
+PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 
 == Changelog ==
+
+= 1.2.0 =
+* Escape output
+* Indicate that _Bleeding edge nightlies_ are _trunk_
+* new screenshot
+* code improvements from linter
 
 = 1.1.2 =
 * Remove anonymous function for PHP 5.2 compatibility.

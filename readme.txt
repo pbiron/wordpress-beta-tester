@@ -13,9 +13,9 @@ Allows you to easily upgrade to Beta releases.
 == Description ==
 This plugin provides an easy way to get involved with Beta testing WordPress.
 
-Once installed it will enable you to upgrade your blog to the latest Beta or Release candidate at the click of a button using the built in upgrader.
+Once installed it will enable you to upgrade your website to the latest Beta or Release candidate at the click of a button using the built in upgrader.
 
-By default once enabled it switches your blog onto the point release development track.
+By default once enabled it switches your website onto the point release development track.
 
 For the more adventurous there is the option to switch to the bleeding edge (trunk) of development.
 
@@ -25,7 +25,7 @@ PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 
 == Changelog ==
 
-= 1.2.1 =
+= 1.2.2 =
 * change wording from blog to website
 
 = 1.2.0 =

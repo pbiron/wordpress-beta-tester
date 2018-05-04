@@ -3,7 +3,7 @@ Tags: beta, advanced, testing
 Contributors: westi, mlteal, afragen
 Tested up to: 4.9
 Requires at least: 3.0.5
-Stable Tag: 1.2.1
+Stable Tag: 1.2.2
 License: GPLv2
 License URI: http://www.opensource.org/licenses/GPL-2.0
 Requires PHP: 5.2.4

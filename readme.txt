@@ -3,7 +3,7 @@ Tags: beta, advanced, testing
 Contributors: westi, mlteal, afragen
 Tested up to: 4.9
 Requires at least: 3.0.5
-Stable Tag: 1.2.0
+Stable Tag: 1.2.1
 License: GPLv2
 License URI: http://www.opensource.org/licenses/GPL-2.0
 Requires PHP: 5.2.4
@@ -24,6 +24,9 @@ Don't forget to backup before you start!
 PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 
 == Changelog ==
+
+= 1.2.1 =
+* change wording from blog to website
 
 = 1.2.0 =
 * Escape output

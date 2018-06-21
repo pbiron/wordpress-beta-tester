@@ -240,7 +240,7 @@ class wp_beta_tester {
 				?>
 				</p>
 
-				<p><?php esc_html_e( 'By default, your WordPress install uses the stable update stream. To return to this, please deactivate this plugin.', 'wordpress-beta-tester' ); ?></p>
+				<p><?php echo( wp_kses_post( __( 'By default, your WordPress install uses the stable update stream. To return to this, please deactivate this plugin and re-install from the <a href="update-core.php">WordPress Updates</a> page.', 'wordpress-beta-tester' ) ) ); ?></p>
 				<?php $action = is_multisite() ? 'edit.php?action=wp_beta_tester' : 'options.php'; ?>
 				<form method="post" action="<?php esc_attr_e( $action ); ?>">
 					<?php settings_fields( 'wp_beta_tester_options' ); ?>

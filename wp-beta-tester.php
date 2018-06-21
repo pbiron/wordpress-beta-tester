@@ -30,16 +30,18 @@
 class wp_beta_tester {
 
 	public function __construct() {
-		add_action( 'admin_init', array( &$this, 'action_admin_init' ) );
-		add_action( is_multisite() ? 'network_admin_menu' : 'admin_menu', array( &$this, 'action_admin_menu' ) );
-		add_action( 'network_admin_edit_wp_beta_tester', array( &$this, 'update_settings' ) );
-		add_action( 'update_option_wp_beta_tester_stream', array(
-			&$this,
-			'action_update_option_wp_beta_tester_stream',
-		) );
-		add_filter( 'pre_http_request', array( &$this, 'filter_http_request' ), 10, 3 );
-		add_action( 'admin_head-plugins.php', array( &$this, 'action_admin_head_plugins_php' ) );
-		add_action( 'admin_head-update-core.php', array( &$this, 'action_admin_head_plugins_php' ) );
+		add_action( 'admin_init', array( $this, 'action_admin_init' ) );
+		add_action( is_multisite() ? 'network_admin_menu' : 'admin_menu', array( $this, 'action_admin_menu' ) );
+		add_action( 'network_admin_edit_wp_beta_tester', array( $this, 'update_settings' ) );
+		add_action(
+			'update_option_wp_beta_tester_stream', array(
+				$this,
+				'action_update_option_wp_beta_tester_stream',
+			)
+		);
+		add_filter( 'pre_http_request', array( $this, 'filter_http_request' ), 10, 3 );
+		add_action( 'admin_head-plugins.php', array( $this, 'action_admin_head_plugins_php' ) );
+		add_action( 'admin_head-update-core.php', array( $this, 'action_admin_head_plugins_php' ) );
 	}
 
 	public function update_settings() {

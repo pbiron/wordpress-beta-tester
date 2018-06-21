@@ -26,9 +26,10 @@ PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 == Changelog ==
 
 = 1.2.3 =
-* update a few strings and correct typos
+* updated a few strings and correct typos
 * run through WPCS linter
-* fix translation strings to include HTML in context and properly escape with `wp_kses_post()`
+* fixed translation strings to include HTML in context and properly escape with `wp_kses_post()`
+* fixed link to settings page under Multisite
 
 = 1.2.2 =
 * change wording from blog to website

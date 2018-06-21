@@ -75,7 +75,7 @@ class wp_beta_tester {
 		if ( $this->check_if_settings_downgrade() ) {
 			?>
 			<div id="message" class="error">
-				<p><?php esc_html( printf( __( '%1$sError:%2$s Your current <a href="%3$s">WordPress Beta Tester plugin configuration</a> will downgrade your install to a previous version - please reconfigure it.', 'wordpress-beta-tester' ), '<strong>', '</strong>', admin_url( 'tools.php?page=wp_beta_tester' ) ) ); ?></p>
+				<p><?php printf( wp_kses_post( __( '<strong>Error:</strong> Your current <a href="%s">WordPress Beta Tester plugin configuration</a> will downgrade your install to a previous version - please reconfigure it.', 'wordpress-beta-tester' ), admin_url( 'tools.php?page=wp_beta_tester' ) ) ); ?></p>
 			</div>
 			<?php
 		}
@@ -201,21 +201,33 @@ class wp_beta_tester {
 				</div>
 			<?php endif; ?>
 			<div class="updated fade">
-				<p><?php esc_html( printf( __( '%sPlease note:%s Once you have switched your website to one of these beta versions of software, it will not always be possible to downgrade, as the database structure may be updated during the development of a major release.', 'wordpress-beta-tester' ), '<strong>', '</strong>' ) ); ?></p>
+				<p><?php echo( wp_kses_post( __( '<strong>Please note:</strong> Once you have switched your website to one of these beta versions of software, it will not always be possible to downgrade, as the database structure may be updated during the development of a major release.', 'wordpress-beta-tester' ) ) ); ?></p>
 			</div>
 			<?php if ( 'development' !== $preferred->response ) : ?>
 				<div class="updated fade">
-					<p><?php esc_html( printf( __( '%sPlease note:%s There are no development builds of the beta stream you have choosen available, so you will receive normal update notifications.', 'wordpress-beta-tester' ), '<strong>', '</strong>' ) ); ?></p>
+					<p><?php echo( wp_kses_post( __( '<strong>Please note:</strong> There are no development builds of the beta stream you have chosen available, so you will receive normal update notifications.', 'wordpress-beta-tester' ) ) ); ?></p>
 				</div>
 			<?php endif; ?>
 			<?php $this->action_admin_head_plugins_php(); //Check configuration?>
 			<div>
-				<p><?php esc_html( printf( __( 'By their nature, these releases are unstable and should not be used anyplace where your data is important. So please <a href="%1$s">back up your database</a> before upgrading to a test release. In order to hear about the latest beta releases, your best bet is to watch the <a href="%2$s">development blog</a> and the <a href="%3$s">beta forum</a>.', 'wordpress-beta-tester' ),
-						_x( 'https://codex.wordpress.org/Backing_Up_Your_Database', 'Url to database backup instructions', 'wordpress-beta-tester' ),
-						'https://make.wordpress.org/core/',
-						_x( 'https://wordpress.org/support/forum/alphabeta', 'Url to beta support forum', 'wordpress-beta-tester' ) ) ); ?></p>
-				<p><?php esc_html( printf( __( 'Thank you for helping by testing WordPress. Please <a href="%s">report any bugs you find</a>.', 'wordpress-beta-tester' ),
-						'https://core.trac.wordpress.org/newticket' ) ); ?></p>
+				<p>
+				<?php
+				printf(
+					wp_kses_post( __( 'By their nature, these releases are unstable and should not be used anyplace where your data is important. So please <a href="%1$s">back up your database</a> before upgrading to a test release. In order to hear about the latest beta releases, your best bet is to watch the <a href="%2$s">development blog</a> and the <a href="%3$s">beta forum</a>.', 'wordpress-beta-tester' ) ),
+					_x( 'https://codex.wordpress.org/Backing_Up_Your_Database', 'URL to database backup instructions', 'wordpress-beta-tester' ),
+					'https://make.wordpress.org/core/',
+					_x( 'https://wordpress.org/support/forum/alphabeta', 'URL to beta support forum', 'wordpress-beta-tester' )
+				);
+				?>
+				</p>
+				<p>
+				<?php
+					printf(
+						wp_kses_post( __( 'Thank you for helping test WordPress. Please <a href="%s">report any bugs you find</a>.', 'wordpress-beta-tester' ) ),
+						'https://core.trac.wordpress.org/newticket'
+					);
+				?>
+				</p>
 
 				<p><?php esc_html_e( 'By default, your WordPress install uses the stable update stream. To return to this, please deactivate this plugin.', 'wordpress-beta-tester' ); ?></p>
 				<?php $action = is_multisite() ? 'edit.php?action=wp_beta_tester' : 'options.php'; ?>
@@ -239,7 +251,7 @@ class wp_beta_tester {
 												  class="tog" <?php checked( 'unstable', $stream ); ?> />
 										<?php esc_html_e( 'Bleeding edge nightlies', 'wordpress-beta-tester' ); ?>
 									</label></th>
-								<td><?php esc_html( printf( __( 'This is the bleeding edge development code from `trunk` which may be unstable at times. %sOnly use this if you really know what you are doing%s.', 'wordpress-beta-tester' ), '<em>', '</em>' ) ); ?></td>
+								<td><?php echo( wp_kses_post( __( 'This is the bleeding edge development code from `trunk` which may be unstable at times. <em>Only use this if you really know what you are doing</em>.', 'wordpress-beta-tester' ) ) ); ?></td>
 							</tr>
 						</table>
 					</fieldset>
@@ -247,7 +259,7 @@ class wp_beta_tester {
 											 value="<?php esc_html_e( 'Save Changes', 'wordpress-beta-tester' ); ?>" />
 					</p>
 				</form>
-				<p><?php esc_html( printf( __( 'Why don\'t you %shead on over and upgrade now%s.', 'wordpress-beta-tester' ), '<a href="update-core.php">', '</a>' ) ); ?></p>
+				<p><?php echo( wp_kses_post( __( 'Why don&#8217;t you <a href="update-core.php">head on over and upgrade now</a>.', 'wordpress-beta-tester' ), '', '</a>' ) ); ?></p>
 			</div>
 		</div>
 		<?php

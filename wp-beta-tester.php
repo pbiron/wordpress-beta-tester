@@ -79,6 +79,7 @@ class wp_beta_tester {
 				<p>
 				<?php
 				$admin_page = is_multisite() ? 'settings.php' : 'tools.php';
+				/* translators: %s: link to setting page */
 				printf( wp_kses_post( __( '<strong>Error:</strong> Your current <a href="%s">WordPress Beta Tester plugin configuration</a> will downgrade your install to a previous version - please reconfigure it.', 'wordpress-beta-tester' ), admin_url( $admin_page . '?page=wp_beta_tester' ) ) );
 				?>
 				</p>
@@ -221,6 +222,7 @@ class wp_beta_tester {
 				<p>
 				<?php
 				printf(
+					/* translators: 1: link to backing up database, 2: link to make.wp.org/core, 3: link to beta support forum */
 					wp_kses_post( __( 'By their nature, these releases are unstable and should not be used anyplace where your data is important. So please <a href="%1$s">back up your database</a> before upgrading to a test release. In order to hear about the latest beta releases, your best bet is to watch the <a href="%2$s">development blog</a> and the <a href="%3$s">beta forum</a>.', 'wordpress-beta-tester' ) ),
 					_x( 'https://codex.wordpress.org/Backing_Up_Your_Database', 'URL to database backup instructions', 'wordpress-beta-tester' ),
 					'https://make.wordpress.org/core/',
@@ -231,6 +233,7 @@ class wp_beta_tester {
 				<p>
 				<?php
 					printf(
+						/* translators: %s: link to new trac ticket */
 						wp_kses_post( __( 'Thank you for helping test WordPress. Please <a href="%s">report any bugs you find</a>.', 'wordpress-beta-tester' ) ),
 						'https://core.trac.wordpress.org/newticket'
 					);

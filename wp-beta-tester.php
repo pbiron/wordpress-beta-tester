@@ -4,14 +4,15 @@
 	Plugin URI: https://wordpress.org/plugins/wordpress-beta-tester/
 	Description: Allows you to easily upgrade to Beta releases.
 	Author: Peter Westwood
-	Version: 1.2.2
+	Version: 1.2.3
 	Network: true
 	Author URI: http://blog.ftwr.co.uk/
 	Text Domain: wordpress-beta-tester
 	License: GPL v2 or later
 */
 
-/*	Copyright 2009-2016 Peter Westwood (email : peter.westwood@ftwr.co.uk)
+/*
+  Copyright 2009-2016 Peter Westwood (email : peter.westwood@ftwr.co.uk)
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License, version 2, as
@@ -71,7 +72,7 @@ class wp_beta_tester {
 			set_site_transient( 'update_core', $st );
 		}
 		wp_version_check();
-		//Can output an error here if current config drives version backwards
+		// Can output an error here if current config drives version backwards
 		if ( $this->check_if_settings_downgrade() ) {
 			?>
 			<div id="message" class="error">
@@ -125,7 +126,7 @@ class wp_beta_tester {
 	}
 
 	public function action_update_option_wp_beta_tester_stream() {
-		//Our option has changed so update the cached information pronto.
+		// Our option has changed so update the cached information pronto.
 		do_action( 'wp_version_check' );
 	}
 
@@ -134,7 +135,7 @@ class wp_beta_tester {
 			require_once ABSPATH . 'wp-admin/includes/update.php';
 		}
 
-		//Validate that we have api data and if not get the normal data so we always have it.
+		// Validate that we have api data and if not get the normal data so we always have it.
 		$preferred = get_preferred_from_update_core();
 		if ( false === $preferred ) {
 			wp_version_check();
@@ -193,9 +194,11 @@ class wp_beta_tester {
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Beta Testing WordPress', 'wordpress-beta-tester' ); ?></h1>
-			<?php if ( ( isset( $_GET['updated'] ) && true == $_GET['updated'] ) ||
-			           ( isset( $_GET['settings-updated'] ) && true == $_GET['settings-updated'] )
-			): ?>
+			<?php
+			if ( ( isset( $_GET['updated'] ) && true == $_GET['updated'] ) ||
+				( isset( $_GET['settings-updated'] ) && true == $_GET['settings-updated'] )
+			) :
+			?>
 				<div class="updated">
 					<p><?php esc_html_e( 'Saved.', 'wordpress-beta-tester' ); ?></p>
 				</div>
@@ -208,7 +211,7 @@ class wp_beta_tester {
 					<p><?php echo( wp_kses_post( __( '<strong>Please note:</strong> There are no development builds of the beta stream you have chosen available, so you will receive normal update notifications.', 'wordpress-beta-tester' ) ) ); ?></p>
 				</div>
 			<?php endif; ?>
-			<?php $this->action_admin_head_plugins_php(); //Check configuration?>
+			<?php $this->action_admin_head_plugins_php(); // Check configuration ?>
 			<div>
 				<p>
 				<?php
@@ -239,24 +242,24 @@ class wp_beta_tester {
 						<table class="form-table">
 							<tr>
 								<th><label><input name="wp_beta_tester_stream"
-												  id="update-stream-point-nightlies" type="radio" value="point"
-												  class="tog" <?php checked( 'point', $stream ); ?> />
-										<?php esc_html_e( 'Point release nightlies', 'wordpress-beta-tester' ); ?>
+									id="update-stream-point-nightlies" type="radio" value="point"
+									class="tog" <?php checked( 'point', $stream ); ?> />
+									<?php esc_html_e( 'Point release nightlies', 'wordpress-beta-tester' ); ?>
 									</label></th>
-								<td><?php esc_html_e( 'This contains the work that is occurring on a branch in preparation for a x.x.x point release.  This should also be fairly stable but will be available before the branch is ready for beta.', 'wordpress-beta-tester' ); ?></td>
+								<td><?php esc_html_e( 'This contains the work that is occurring on a branch in preparation for a x.x.x point release.  This should also be fairly stable but will be available before the branch is ready for release.', 'wordpress-beta-tester' ); ?></td>
 							</tr>
 							<tr>
 								<th><label><input name="wp_beta_tester_stream"
-												  id="update-stream-bleeding-nightlies" type="radio" value="unstable"
-												  class="tog" <?php checked( 'unstable', $stream ); ?> />
-										<?php esc_html_e( 'Bleeding edge nightlies', 'wordpress-beta-tester' ); ?>
+									id="update-stream-bleeding-nightlies" type="radio" value="unstable"
+									class="tog" <?php checked( 'unstable', $stream ); ?> />
+									<?php esc_html_e( 'Bleeding edge nightlies', 'wordpress-beta-tester' ); ?>
 									</label></th>
 								<td><?php echo( wp_kses_post( __( 'This is the bleeding edge development code from `trunk` which may be unstable at times. <em>Only use this if you really know what you are doing</em>.', 'wordpress-beta-tester' ) ) ); ?></td>
 							</tr>
 						</table>
 					</fieldset>
 					<p class="submit"><input type="submit" class="button-primary"
-											 value="<?php esc_html_e( 'Save Changes', 'wordpress-beta-tester' ); ?>" />
+						value="<?php esc_html_e( 'Save Changes', 'wordpress-beta-tester' ); ?>" />
 					</p>
 				</form>
 				<p><?php echo( wp_kses_post( __( 'Why don&#8217;t you <a href="update-core.php">head on over and upgrade now</a>.', 'wordpress-beta-tester' ), '', '</a>' ) ); ?></p>

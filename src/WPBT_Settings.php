@@ -183,7 +183,6 @@ class WPBT_Settings {
 		?>
 		<fieldset>
 		<legend><?php esc_html_e( 'Please select the update stream you would like this website to use:', 'wordpress-beta-tester' ); ?></legend>
-		<table class="form-table">
 		<tr>
 			<th><label><input name="wp_beta_tester_stream" id="update-stream-point-nightlies" type="radio" value="point" class="tog" <?php checked( 'point', $stream ); ?> />
 			<?php esc_html_e( 'Point release nightlies', 'wordpress-beta-tester' ); ?>
@@ -196,7 +195,6 @@ class WPBT_Settings {
 			</label></th>
 			<td><?php echo( wp_kses_post( __( 'This is the bleeding edge development code from `trunk` which may be unstable at times. <em>Only use this if you really know what you are doing</em>.', 'wordpress-beta-tester' ) ) ); ?></td>
 		</tr>
-		</table>
 		</fieldset>
 		<?php
 	}

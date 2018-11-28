@@ -4,7 +4,7 @@ class WP_Beta_Tester {
 
 	public function __construct() {
 		$this->load_hooks();
-		$settings = new WBT_Settings( $this );
+		$settings = new WPBT_Settings( $this );
 		$settings->load_hooks();
 	}
 

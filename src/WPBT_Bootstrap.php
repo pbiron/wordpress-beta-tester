@@ -1,6 +1,6 @@
 <?php
 
-class WBT_Bootstrap {
+class WPBT_Bootstrap {
 
 
 	public function run() {
@@ -15,8 +15,8 @@ class WBT_Bootstrap {
 
 	protected function load_requires() {
 		require_once WP_BETA_TESTER_DIR . '/src/WP_Beta_Tester.php';
-		require_once WP_BETA_TESTER_DIR . '/src/WBT_Settings.php';
-		require_once WP_BETA_TESTER_DIR . '/src/WBT_WSOD.php';
+		require_once WP_BETA_TESTER_DIR . '/src/WPBT_Settings.php';
+		require_once WP_BETA_TESTER_DIR . '/src/WPBT_Extras.php';
 	}
 
 }

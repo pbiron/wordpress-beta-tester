@@ -1,12 +1,12 @@
 <?php
 
-class WBT_Settings {
+class WPBT_Settings {
 
 	protected $wp_beta_tester;
 
 	public function __construct( WP_Beta_Tester $wp_beta_tester ) {
 		$this->wp_beta_tester = $wp_beta_tester;
-		new WBT_WSOD();
+		new WPBT_Extras();
 		//$this->load_hooks();
 	}
 
@@ -25,6 +25,22 @@ class WBT_Settings {
 			'wp_beta_tester_options',
 			'wp_beta_tester_stream',
 			array( $this, 'validate_setting' )
+		);
+
+		add_settings_section(
+			'wp_beta_tester_core',
+			esc_html__( 'Core Settings', 'wordpress-beta-tester' ),
+			array( $this, 'print_core_settings_top' ),
+			'wp_beta_tester_core'
+		);
+
+		add_settings_field(
+			'core_test_settings',
+			null,
+			array( $this, 'core_radio_group' ),
+			'wp_beta_tester_core',
+			'wp_beta_tester_core',
+			array( esc_html__( 'Choose an update branch', 'wordpress-beta-tester' ) )
 		);
 	}
 
@@ -92,7 +108,7 @@ class WBT_Settings {
 	 * @return array
 	 */
 	private function settings_tabs() {
-		$tabs = array( 'wp_beta_tester_settings' => esc_html__( 'Beta Tester Settings', 'wordpress-beta-tester' ) );
+		$tabs = array( 'wp_beta_tester_settings' => esc_html__( 'WP Beta Tester Settings', 'wordpress-beta-tester' ) );
 
 		/**
 		 * Filter settings tabs.
@@ -122,7 +138,7 @@ class WBT_Settings {
 		echo '</h2>';
 	}
 
-	private function saved_settings() {
+	private function saved_settings_notice() {
 		if ( ( isset( $_GET['updated'] ) && true == $_GET['updated'] ) ||
 			( isset( $_GET['settings-updated'] ) && true == $_GET['settings-updated'] )
 		) {
@@ -132,7 +148,7 @@ class WBT_Settings {
 		}
 	}
 
-	private function print_settings_top() {
+	public function print_core_settings_top() {
 		$preferred = $this->wp_beta_tester->get_preferred_from_update_core();
 		if ( 'development' !== $preferred->response ) {
 			echo '<div class="updated fade">';
@@ -162,8 +178,33 @@ class WBT_Settings {
 		echo '</p></div>';
 	}
 
+	public function core_radio_group() {
+		$stream = get_site_option( 'wp_beta_tester_stream', 'point' );
+		?>
+		<fieldset>
+		<legend><?php esc_html_e( 'Please select the update stream you would like this website to use:', 'wordpress-beta-tester' ); ?></legend>
+		<table class="form-table">
+		<tr>
+			<th><label><input name="wp_beta_tester_stream" id="update-stream-point-nightlies" type="radio" value="point" class="tog" <?php checked( 'point', $stream ); ?> />
+			<?php esc_html_e( 'Point release nightlies', 'wordpress-beta-tester' ); ?>
+			</label></th>
+			<td><?php esc_html_e( 'This contains the work that is occurring on a branch in preparation for a x.x.x point release.  This should also be fairly stable but will be available before the branch is ready for release.', 'wordpress-beta-tester' ); ?></td>
+		</tr>
+		<tr>
+			<th><label><input name="wp_beta_tester_stream" id="update-stream-bleeding-nightlies" type="radio" value="unstable" class="tog" <?php checked( 'unstable', $stream ); ?> />
+			<?php esc_html_e( 'Bleeding edge nightlies', 'wordpress-beta-tester' ); ?>
+			</label></th>
+			<td><?php echo( wp_kses_post( __( 'This is the bleeding edge development code from `trunk` which may be unstable at times. <em>Only use this if you really know what you are doing</em>.', 'wordpress-beta-tester' ) ) ); ?></td>
+		</tr>
+		</table>
+		</fieldset>
+		<?php
+	}
+
 	public function create_settings_page() {
-		$this->saved_settings();
+		$this->saved_settings_notice();
+		$action = is_multisite() ? 'edit.php?action=wp_beta_tester' : 'options.php';
+		$tab    = isset( $_GET['tab'] ) ? $_GET['tab'] : 'wp_beta_tester_settings';
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Beta Testing WordPress', 'wordpress-beta-tester' ); ?></h1>
@@ -171,40 +212,16 @@ class WBT_Settings {
 			<div class="updated fade">
 				<p><?php echo( wp_kses_post( __( '<strong>Please note:</strong> Once you have switched your website to one of these beta versions of software, it will not always be possible to downgrade as the database structure may be updated during the development of a major release.', 'wordpress-beta-tester' ) ) ); ?></p>
 			</div>
-				<?php $action = is_multisite() ? 'edit.php?action=wp_beta_tester' : 'options.php'; ?>
-				<?php $tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'wp_beta_tester_settings'; ?>
 				<?php if ( 'wp_beta_tester_settings' === $tab ) : ?>
-					<?php $this->print_settings_top(); ?>
 				<form method="post" action="<?php esc_attr_e( $action ); ?>">
 					<?php settings_fields( 'wp_beta_tester_options' ); ?>
-					<fieldset>
-						<legend><?php esc_html_e( 'Please select the update stream you would like this website to use:', 'wordpress-beta-tester' ); ?></legend>
-						<?php $stream = get_site_option( 'wp_beta_tester_stream', 'point' ); ?>
-						<table class="form-table">
-							<tr>
-								<th><label><input name="wp_beta_tester_stream"
-									id="update-stream-point-nightlies" type="radio" value="point"
-									class="tog" <?php checked( 'point', $stream ); ?> />
-									<?php esc_html_e( 'Point release nightlies', 'wordpress-beta-tester' ); ?>
-									</label></th>
-								<td><?php esc_html_e( 'This contains the work that is occurring on a branch in preparation for a x.x.x point release.  This should also be fairly stable but will be available before the branch is ready for release.', 'wordpress-beta-tester' ); ?></td>
-							</tr>
-							<tr>
-								<th><label><input name="wp_beta_tester_stream"
-									id="update-stream-bleeding-nightlies" type="radio" value="unstable"
-									class="tog" <?php checked( 'unstable', $stream ); ?> />
-									<?php esc_html_e( 'Bleeding edge nightlies', 'wordpress-beta-tester' ); ?>
-									</label></th>
-								<td><?php echo( wp_kses_post( __( 'This is the bleeding edge development code from `trunk` which may be unstable at times. <em>Only use this if you really know what you are doing</em>.', 'wordpress-beta-tester' ) ) ); ?></td>
-							</tr>
-						</table>
-					</fieldset>
+					<?php do_settings_sections( 'wp_beta_tester_core' ); ?>
+					<?php //$this->core_radio_group(); ?>
 					<p class="submit"><input type="submit" class="button-primary"
 						value="<?php esc_html_e( 'Save Changes', 'wordpress-beta-tester' ); ?>" />
 					</p>
 				</form>
 				<?php endif; ?>
-
 			</div>
 		</div>
 		<?php

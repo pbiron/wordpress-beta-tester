@@ -271,7 +271,7 @@ class wp_beta_tester {
 						value="<?php esc_html_e( 'Save Changes', 'wordpress-beta-tester' ); ?>" />
 					</p>
 				</form>
-				<p><?php echo( wp_kses_post( __( 'Why don&#8217;t you <a href="update-core.php">head on over and upgrade now</a>.', 'wordpress-beta-tester' ), '', '</a>' ) ); ?></p>
+				<p><?php echo( wp_kses_post( __( 'Why don&#8217;t you <a href="update-core.php">head on over and upgrade now</a>.', 'wordpress-beta-tester' ) ) ); ?></p>
 			</div>
 		</div>
 		<?php
@@ -282,8 +282,7 @@ class wp_beta_tester {
 add_action( 'plugins_loaded', 'load_beta_tester_plugin' );
 
 function load_beta_tester_plugin() {
-	global $wp_beta_tester_instance;
-	$wp_beta_tester_instance = new wp_beta_tester();
+	new wp_beta_tester();
 }
 
 // Clear down

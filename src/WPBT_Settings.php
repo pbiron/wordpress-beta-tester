@@ -35,7 +35,6 @@ class WPBT_Settings {
 		);
 	}
 
-
 	public function update_settings() {
 		if ( isset( $_POST['option_page'] ) ) {
 			if ( 'wp_beta_tester_options' === $_POST['option_page'] ) {

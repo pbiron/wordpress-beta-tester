@@ -35,19 +35,51 @@ class WPBT_Extras {
 			array( $this, 'checkbox_setting' ),
 			'wp_beta_tester_extras',
 			'wp_beta_tester_extras',
-			array( esc_html__( 'Dude, fix this', 'wordpress-beta-tester' ) )
+			array(
+				'id' => 'checked',
+				'title' => 'Dude, where\'s my car?',
+			)
 		);
 	}
 
-	public function print_extra_settings_top() {
-		echo 'Now is the time for all good men...';
+	public function validate_setting($setting){
+		return $setting;
 	}
 
-	public function checkbox_setting() {
-		echo 'Checkbox here';
+	public function print_extra_settings_top() {
+		echo 'This area is for extra special beta testing.';
+	}
+
+		/**
+	 * Get the settings option array and print one of its values.
+	 *
+	 * @param $args
+	 */
+	public function checkbox_setting($args) {
+		$options = get_site_option( 'wp_beta_tester_extras' );
+		//$checked = isset( static::$options[ $args['id'] ] ) ? static::$options[ $args['id'] ] : null;
+		$checked = $options;
+		?>
+		<label for="<?php esc_attr_e( $args['id'] ); ?>">
+			<input type="checkbox" name="wp-beta-tester[<?php esc_attr_e( $args['id'] ); ?>]" value="1" <?php checked( '1', $checked ); ?> >
+			<?php echo $args['title']; ?>
+		</label>
+		<?php
 	}
 
 	public function add_admin_page($tab, $action){
-		echo 'Extras Admin page goes here.';
+		?>
+		<div>
+			<?php if ( 'wp_beta_tester_extras' === $tab ) : ?>
+			<form method="post" action="<?php esc_attr_e( $action ); ?>">
+				<?php settings_fields( 'wp_beta_tester_extras' ); ?>
+				<?php do_settings_sections( 'wp_beta_tester_extras' ); ?>
+				<p class="submit"><input type="submit" class="button-primary"
+					value="<?php esc_html_e( 'Save Changes', 'wordpress-beta-tester' ); ?>" />
+				</p>
+			</form>
+			<?php endif; ?>
+		</div>
+		<?php
 	}
 }

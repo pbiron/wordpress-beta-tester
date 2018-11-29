@@ -36,13 +36,13 @@ class WPBT_Extras {
 			'wp_beta_tester_extras',
 			'wp_beta_tester_extras',
 			array(
-				'id' => 'checked',
+				'id'    => 'checked',
 				'title' => 'Dude, where\'s my car?',
 			)
 		);
 	}
 
-	public function validate_setting($setting){
+	public function validate_setting( $setting ) {
 		return $setting;
 	}
 
@@ -55,11 +55,12 @@ class WPBT_Extras {
 	 *
 	 * @param $args
 	 */
-	public function checkbox_setting($args) {
+	public function checkbox_setting( $args ) {
 		$options = get_site_option( 'wp_beta_tester_extras' );
 		//$checked = isset( static::$options[ $args['id'] ] ) ? static::$options[ $args['id'] ] : null;
 		$checked = $options;
 		?>
+		<style> .form-table th { display:none; } </style>
 		<label for="<?php esc_attr_e( $args['id'] ); ?>">
 			<input type="checkbox" name="wp-beta-tester[<?php esc_attr_e( $args['id'] ); ?>]" value="1" <?php checked( '1', $checked ); ?> >
 			<?php echo $args['title']; ?>
@@ -67,7 +68,7 @@ class WPBT_Extras {
 		<?php
 	}
 
-	public function add_admin_page($tab, $action){
+	public function add_admin_page( $tab, $action ) {
 		?>
 		<div>
 			<?php if ( 'wp_beta_tester_extras' === $tab ) : ?>

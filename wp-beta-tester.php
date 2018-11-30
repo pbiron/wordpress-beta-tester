@@ -12,7 +12,7 @@
  * Author URI: https://blog.ftwr.co.uk/
  * Text Domain: wordpress-beta-tester
  * License: GPL v2 or later
- * License URI:
+ * License URI: https://www.opensource.org/licenses/GPL-2.0
  * GitHub Plugin URI: https://github.com/afragen/wordpress-beta-tester
  */
 

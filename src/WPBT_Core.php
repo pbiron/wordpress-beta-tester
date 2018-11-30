@@ -89,13 +89,14 @@ class WPBT_Core {
 		echo( wp_kses_post( __( 'By default, your WordPress install uses the stable update stream. To return to this, please deactivate this plugin and re-install from the <a href="update-core.php">WordPress Updates</a> page.', 'wordpress-beta-tester' ) ) );
 		echo '</p><p>';
 		echo( wp_kses_post( __( 'Why don&#8217;t you <a href="update-core.php">head on over and upgrade now</a>.', 'wordpress-beta-tester' ) ) );
+		echo '</p><p>';
+		esc_html_e( 'Please select the update stream you would like this website to use:', 'wordpress-beta-tester' );
 		echo '</p></div>';
 	}
 
 	public function core_radio_group() {
 		?>
 		<fieldset>
-		<legend><?php esc_html_e( 'Please select the update stream you would like this website to use:', 'wordpress-beta-tester' ); ?></legend>
 		<tr>
 			<th><label><input name="wp-beta-tester" id="update-stream-point-nightlies"   type="radio" value="point" class="tog" <?php checked( 'point', self::$options['stream'] ); ?> />
 			<?php esc_html_e( 'Point release nightlies', 'wordpress-beta-tester' ); ?>

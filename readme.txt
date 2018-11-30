@@ -25,6 +25,10 @@ PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 
 == Changelog ==
 
+= 2.0.0 =
+* dramatically refactored to put distinct process into separate classes
+* allows for multiple settings tabs for addtional settings
+
 = 1.2.6 =
 * remove extraneous code
 * add GitHub Plugin URI header

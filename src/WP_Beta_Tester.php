@@ -44,7 +44,6 @@ class WP_Beta_Tester {
 		}
 	}
 
-
 	public function filter_http_request( $result, $args, $url ) {
 		if ( $result || isset( $args['_beta_tester'] ) ) {
 			return $result;
@@ -131,6 +130,5 @@ class WP_Beta_Tester {
 		global $pagenow;
 		return in_array( $pagenow, $pages );
 	}
-
 
 }

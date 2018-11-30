@@ -7,20 +7,25 @@ class WPBT_Core {
 	public function __construct( $wp_beta_tester, $options ) {
 		self::$options        = $options;
 		$this->wp_beta_tester = $wp_beta_tester;
+		$this->load_hooks();
+	}
+
+	public function load_hooks() {
 		add_filter( 'wp_beta_tester_add_settings_tabs', array( $this, 'add_settings_tab' ) );
 		add_action( 'wp_beta_tester_add_settings', array( $this, 'add_settings' ) );
 		add_action( 'wp_beta_tester_add_admin_page', array( $this, 'add_admin_page' ), 10, 2 );
+		add_action( 'wp_beta_tester_update_settings', array( $this, 'save_settings' ) );
 	}
 
 	public function add_settings_tab( $tabs ) {
-		return array_merge( (array) $tabs, array( 'wp_beta_tester_settings' => esc_html__( 'WP Beta Tester Settings', 'wordpress-beta-tester' ) ) );
+		return array_merge( (array) $tabs, array( 'wp_beta_tester_core' => esc_html__( 'WP Beta Tester Settings', 'wordpress-beta-tester' ) ) );
 	}
 
 	public function add_settings() {
 		register_setting(
-			'wp_beta_tester_options',
-			'wp_beta_tester_stream',
-			array( $this, 'validate_setting' )
+			'wp_beta_tester',
+			'wp_beta_tester_core',
+			array( 'WPBT_Setting', 'sanitize' )
 		);
 
 		add_settings_section(
@@ -31,17 +36,30 @@ class WPBT_Core {
 		);
 
 		add_settings_field(
-			'core_test_settings',
+			'core_settings',
 			null,
 			array( $this, 'core_radio_group' ),
 			'wp_beta_tester_core',
 			'wp_beta_tester_core',
 			array( esc_html__( 'Choose an update branch', 'wordpress-beta-tester' ) )
 		);
-
 	}
-	protected function validate_setting( $setting ) {
-		return ( in_array( $setting, array( 'point', 'unstable' ), true ) ? $setting : 'point' );
+
+	public function save_settings( $post_data ) {
+		if ( isset( $post_data['option_page'] ) &&
+			'wp_beta_tester_core' === $post_data['option_page']
+		) {
+			$options                 = isset( $post_data['wp-beta-tester'] )
+				? $post_data['wp-beta-tester']
+				: array();
+			self::$options['stream'] = WPBT_Settings::sanitize( $options );
+			update_site_option( 'wp_beta_tester', (array) self::$options );
+			add_filter( 'wp_beta_tester_save_redirect', array( $this, 'save_redirect_page' ) );
+		}
+	}
+
+	public function save_redirect_page( $option_page ) {
+		return array_merge( $option_page, array( 'wp_beta_tester_core' ) );
 	}
 
 	public function print_core_settings_top() {
@@ -75,18 +93,17 @@ class WPBT_Core {
 	}
 
 	public function core_radio_group() {
-		$stream = get_site_option( 'wp_beta_tester_stream', 'point' );
 		?>
 		<fieldset>
 		<legend><?php esc_html_e( 'Please select the update stream you would like this website to use:', 'wordpress-beta-tester' ); ?></legend>
 		<tr>
-			<th><label><input name="wp_beta_tester_stream" id="update-stream-point-nightlies"   type="radio" value="point" class="tog" <?php checked( 'point', $stream ); ?> />
+			<th><label><input name="wp-beta-tester" id="update-stream-point-nightlies"   type="radio" value="point" class="tog" <?php checked( 'point', self::$options['stream'] ); ?> />
 			<?php esc_html_e( 'Point release nightlies', 'wordpress-beta-tester' ); ?>
 			</label></th>
 			<td><?php esc_html_e( 'This contains the work that is occurring on a branch in preparation for a x.x.x point release. This should also be fairly stable but will be available before the branch is ready for release.', 'wordpress-beta-tester' ); ?></td>
 		</tr>
 		<tr>
-			<th><label><input name="wp_beta_tester_stream" id="update-stream-bleeding-nightlies"    type="radio" value="unstable" class="tog" <?php checked( 'unstable', $stream ); ?> />
+			<th><label><input name="wp-beta-tester" id="update-stream-bleeding-nightlies"    type="radio" value="unstable" class="tog" <?php checked( 'unstable', self::$options['stream'] ); ?> />
 			<?php esc_html_e( 'Bleeding edge nightlies', 'wordpress-beta-tester' ); ?>
 			</label></th>
 			<td><?php echo( wp_kses_post( __( 'This is the bleeding edge development code from `trunk` which may be unstable at times. <em>Only use this if you really know what you are doing</em>.', 'wordpress-beta-tester' ) ) ); ?></td>
@@ -98,9 +115,9 @@ class WPBT_Core {
 	public function add_admin_page( $tab, $action ) {
 		?>
 		<div>
-			<?php if ( 'wp_beta_tester_settings' === $tab ) : ?>
+			<?php if ( 'wp_beta_tester_core' === $tab ) : ?>
 			<form method="post" action="<?php esc_attr_e( $action ); ?>">
-				<?php settings_fields( 'wp_beta_tester_options' ); ?>
+				<?php settings_fields( 'wp_beta_tester_core' ); ?>
 				<?php do_settings_sections( 'wp_beta_tester_core' ); ?>
 				<p class="submit"><input type="submit" class="button-primary"
 					value="<?php esc_html_e( 'Save Changes', 'wordpress-beta-tester' ); ?>" />

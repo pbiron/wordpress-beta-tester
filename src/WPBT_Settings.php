@@ -17,12 +17,11 @@ class WPBT_Settings {
 		add_action( 'admin_init', array( $this, 'add_settings' ) );
 		add_action( is_multisite() ? 'network_admin_menu' : 'admin_menu', array( $this, 'add_plugin_page' ) );
 		add_action( 'network_admin_edit_wp_beta_tester', array( $this, 'update_settings' ) );
-		//add_action( 'admin_init', [ $this, 'update_settings' ] );
+		add_action( 'admin_init', array( $this, 'update_settings' ) );
 
 		add_action( 'admin_head-plugins.php', array( $this, 'action_admin_head_plugins_php' ) );
 		add_action( 'admin_head-update-core.php', array( $this, 'action_admin_head_plugins_php' ) );
 	}
-
 
 	public function add_plugin_page() {
 		$parent     = is_multisite() ? 'settings.php' : 'tools.php';
@@ -39,23 +38,55 @@ class WPBT_Settings {
 	}
 
 	public function update_settings() {
-		if ( isset( $_POST['option_page'] ) ) {
-			if ( 'wp_beta_tester_options' === $_POST['option_page'] ) {
-				update_site_option( 'wp_beta_tester_stream', $this->validate_setting( $_POST['wp_beta_tester_stream'] ) );
-			}
+		/**
+		 * Save $options in add-on classes.
+		 *
+		 * @since 2.0.0
+		 */
+		do_action( 'wp_beta_tester_update_settings', $_POST );
 
-			$redirect_url = is_multisite() ? network_admin_url( 'settings.php' ) : admin_url( 'options-general.php' );
-			$location     = add_query_arg(
+		$this->redirect_on_save();
+	}
+
+	/**
+	 * Redirect to correct Settings tab on Save.
+	 *
+	 * @param string $option_page
+	 */
+	protected function redirect_on_save() {
+		/**
+		 * Filter to add to $option_page array.
+		 *
+		 * @since 2.0.0
+		 * @return array
+		 */
+		$option_page = apply_filters( 'wp_beta_tester_save_redirect', array( 'wp_beta_tester' ) );
+		$update      = false;
+
+		if ( ( isset( $_POST['action'] ) && 'update' === $_POST['action'] ) &&
+			( isset( $_POST['option_page'] ) && in_array( $_POST['option_page'], $option_page, true ) )
+		) {
+			$update = true;
+		}
+
+		$redirect_url = is_multisite() ? network_admin_url( 'settings.php' ) : admin_url( 'tools.php' );
+
+		if ( $update ) {
+			$query = isset( $_POST['_wp_http_referer'] ) ? parse_url( $_POST['_wp_http_referer'], PHP_URL_QUERY ) : null;
+			parse_str( $query, $arr );
+			$arr['tab'] = ! empty( $arr['tab'] ) ? $arr['tab'] : 'wp_beta_tester_core';
+
+			$location = add_query_arg(
 				array(
 					'page'    => 'wp_beta_tester',
-					'updated' => 'true',
+					'tab'     => $arr['tab'],
+					'updated' => $update,
 				),
 				$redirect_url
 			);
 			wp_redirect( $location );
 			exit;
 		}
-
 	}
 
 	public function action_admin_head_plugins_php() {
@@ -103,7 +134,7 @@ class WPBT_Settings {
 	 * @access private
 	 */
 	private function options_tabs() {
-		$current_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'wp_beta_tester_settings';
+		$current_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'wp_beta_tester_core_settings';
 		echo '<h2 class="nav-tab-wrapper">';
 		foreach ( $this->settings_tabs() as $key => $name ) {
 			$active = ( $current_tab === $key ) ? 'nav-tab-active' : '';
@@ -129,7 +160,7 @@ class WPBT_Settings {
 	public function create_settings_page() {
 		$this->saved_settings_notice();
 		$action = is_multisite() ? 'edit.php?action=wp_beta_tester' : 'options.php';
-		$tab    = isset( $_GET['tab'] ) ? $_GET['tab'] : 'wp_beta_tester_settings';
+		$tab    = isset( $_GET['tab'] ) ? $_GET['tab'] : 'wp_beta_tester_core';
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Beta Testing WordPress', 'wordpress-beta-tester' ); ?></h1>
@@ -151,4 +182,41 @@ class WPBT_Settings {
 		do_action( 'wp_beta_tester_add_admin_page', $tab, $action );
 		echo '</div>';
 	}
+
+		/**
+	 * Sanitize each setting field as needed.
+	 *
+	 * @param array $input Contains all settings fields as array keys
+	 *
+	 * @return array
+	 */
+	public static function sanitize( $input ) {
+		$new_input = array();
+		if ( ! is_array( $input ) ) {
+			$new_input = sanitize_text_field( $input );
+		} else {
+			foreach ( array_keys( (array) $input ) as $id ) {
+				$new_input[ sanitize_text_field( $id ) ] = sanitize_text_field( $input[ $id ] );
+			}
+		}
+
+		return $new_input;
+	}
+
+		/**
+	 * Get the settings option array and print one of its values.
+	 *
+	 * @param $args
+	 */
+	public static function checkbox_setting( $args ) {
+		$checked = isset( static::$options[ $args['id'] ] ) ? static::$options[ $args['id'] ] : null;
+		?>
+		<style> .form-table th { display:none; } </style>
+		<label for="<?php esc_attr_e( $args['id'] ); ?>">
+			<input type="checkbox" name="wp-beta-tester[<?php esc_attr_e( $args['id'] ); ?>]" value="1" <?php checked( '1', $checked ); ?> >
+			<?php echo $args['title']; ?>
+		</label>
+		<?php
+	}
+
 }

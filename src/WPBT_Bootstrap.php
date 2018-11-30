@@ -1,8 +1,6 @@
 <?php
 
 class WPBT_Bootstrap {
-
-
 	public function run() {
 		add_action( 'init', array( $this, 'load_textdomain' ) );
 		$this->load_requires();
@@ -19,5 +17,4 @@ class WPBT_Bootstrap {
 		require_once WP_BETA_TESTER_DIR . '/src/WPBT_Core.php';
 		require_once WP_BETA_TESTER_DIR . '/src/WPBT_Extras.php';
 	}
-
 }

@@ -3,8 +3,9 @@
 class WP_Beta_Tester {
 
 	public function __construct() {
+		$options = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
 		$this->load_hooks();
-		$settings = new WPBT_Settings( $this );
+		$settings = new WPBT_Settings( $this, $options );
 		$settings->load_hooks();
 	}
 
@@ -82,7 +83,7 @@ class WP_Beta_Tester {
 	}
 
 	protected function mangle_wp_version() {
-		$stream     = get_site_option( 'wp_beta_tester_stream', 'point' );
+		$options    = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
 		$preferred  = $this->get_preferred_from_update_core();
 		$wp_version = get_bloginfo( 'version' );
 
@@ -94,7 +95,7 @@ class WP_Beta_Tester {
 
 		$versions = array_map( 'intval', explode( '.', $preferred->current ) );
 
-		switch ( $stream ) {
+		switch ( $options['stream'] ) {
 			case 'point':
 				$versions[2] = isset( $versions[2] ) ? $versions[2] + 1 : 1;
 				$wp_version  = $versions[0] . '.' . $versions[1] . '.' . $versions[2] . '-wp-beta-tester';

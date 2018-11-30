@@ -2,9 +2,10 @@
 
 class WPBT_Extras {
 
-	protected $wp_beta_tester;
+	protected static $options;
 
-	public function __construct( $wp_beta_tester ) {
+	public function __construct( $wp_beta_tester, $options ) {
+		self::$options        = $options;
 		$this->wp_beta_tester = $wp_beta_tester;
 		add_filter( 'wp_beta_tester_add_settings_tabs', array( $this, 'add_settings_tab' ) );
 		add_action( 'wp_beta_tester_add_settings', array( $this, 'add_settings' ) );

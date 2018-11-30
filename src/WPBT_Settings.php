@@ -4,10 +4,13 @@ class WPBT_Settings {
 
 	protected $wp_beta_tester;
 
-	public function __construct( WP_Beta_Tester $wp_beta_tester ) {
+	protected static $options;
+
+	public function __construct( WP_Beta_Tester $wp_beta_tester, $options ) {
+		self::$options        = $options;
 		$this->wp_beta_tester = $wp_beta_tester;
-		new WPBT_Core( $wp_beta_tester );
-		new WPBT_Extras( $wp_beta_tester );
+		new WPBT_Core( $wp_beta_tester, $options );
+		new WPBT_Extras( $wp_beta_tester, $options );
 	}
 
 	public function load_hooks() {

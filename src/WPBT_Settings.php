@@ -209,7 +209,7 @@ class WPBT_Settings {
 	 * @param $args
 	 */
 	public static function checkbox_setting( $args ) {
-		$checked = isset( static::$options[ $args['id'] ] ) ? static::$options[ $args['id'] ] : null;
+		$checked = isset( self::$options[ $args['id'] ] ) ? self::$options[ $args['id'] ] : null;
 		?>
 		<style> .form-table th { display:none; } </style>
 		<label for="<?php esc_attr_e( $args['id'] ); ?>">

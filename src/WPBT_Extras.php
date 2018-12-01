@@ -56,9 +56,11 @@ class WPBT_Extras {
 		) {
 			$filtered_options = array_filter(
 				self::$options,
-				function ( $e ) {
-						return '1' !== $e;
-				}
+				array( $this, 'filter_save_settings' )
+				// TODO: uncomment for PHP 5.3
+				//function ( $e ) {
+				//		return '1' !== $e;
+				//}
 			);
 
 			$options = isset( $post_data['wp-beta-tester'] )
@@ -69,6 +71,11 @@ class WPBT_Extras {
 			update_site_option( 'wp_beta_tester', (array) $options );
 			add_filter( 'wp_beta_tester_save_redirect', array( $this, 'save_redirect_page' ) );
 		}
+	}
+
+	// TODO: simplify for PHP 5.3
+	private function filter_save_settings( $e ) {
+		return '1' !== $e;
 	}
 
 	public function save_redirect_page( $option_page ) {

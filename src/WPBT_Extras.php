@@ -4,7 +4,7 @@ class WPBT_Extras {
 
 	protected static $options;
 
-	public function __construct( $wp_beta_tester, $options ) {
+	public function __construct( WP_Beta_Tester $wp_beta_tester, $options ) {
 		self::$options        = $options;
 		$this->wp_beta_tester = $wp_beta_tester;
 		$this->load_hooks();

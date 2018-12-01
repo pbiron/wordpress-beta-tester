@@ -162,7 +162,6 @@ class WPBT_Settings {
 		}
 	}
 
-	// TODO: update to anonymous function for PHP 5.3
 	public function add_settings() {
 		do_action( 'wp_beta_tester_add_settings' );
 	}
@@ -228,5 +227,4 @@ class WPBT_Settings {
 		</label>
 		<?php
 	}
-
 }

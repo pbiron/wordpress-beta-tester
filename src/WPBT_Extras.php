@@ -54,14 +54,7 @@ class WPBT_Extras {
 		if ( isset( $post_data['option_page'] ) &&
 			'wp_beta_tester_extras' === $post_data['option_page']
 		) {
-			$filtered_options = array_filter(
-				self::$options,
-				array( $this, 'filter_save_settings' )
-				// TODO: uncomment for PHP 5.3
-				//function ( $e ) {
-				//		return '1' !== $e;
-				//}
-			);
+			$filtered_options = array_filter( self::$options, array( $this, 'filter_save_settings' ) );
 
 			$options = isset( $post_data['wp-beta-tester'] )
 				? $post_data['wp-beta-tester']
@@ -77,7 +70,6 @@ class WPBT_Extras {
 		return '1' !== $checked;
 	}
 
-	// TODO: update to anonymous function for PHP 5.3
 	public function save_redirect_page( $option_page ) {
 		return array_merge( $option_page, array( 'wp_beta_tester_extras' ) );
 	}

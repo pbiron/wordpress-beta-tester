@@ -1,6 +1,7 @@
 <?php
 
 class WPBT_Bootstrap {
+
 	public function run() {
 		add_action( 'init', array( $this, 'load_textdomain' ) );
 		$this->load_requires();

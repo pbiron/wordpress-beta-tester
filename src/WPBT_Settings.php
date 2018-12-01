@@ -37,6 +37,11 @@ class WPBT_Settings {
 		);
 	}
 
+	/**
+	 * Calls individuals settings class save methods.
+	 *
+	 * @return void
+	 */
 	public function update_settings() {
 		/**
 		 * Save $options in add-on classes.
@@ -49,7 +54,7 @@ class WPBT_Settings {
 	}
 
 	/**
-	 * Redirect to correct Settings tab on Save.
+	 * Redirect to correct Settings/Tools tab on Save.
 	 *
 	 * @param string $option_page
 	 */
@@ -109,9 +114,7 @@ class WPBT_Settings {
 
 	/**
 	 * Define tabs for Settings page.
-	 * By defining in a method, strings can be translated.
 	 *
-	 * @access private
 	 * @return array
 	 */
 	private function settings_tabs() {
@@ -143,6 +146,11 @@ class WPBT_Settings {
 		echo '</h2>';
 	}
 
+	/**
+	 * Create 'Saved' notice for saved settings.
+	 *
+	 * @return void
+	 */
 	private function saved_settings_notice() {
 		if ( ( isset( $_GET['updated'] ) && true == $_GET['updated'] ) ||
 			( isset( $_GET['settings-updated'] ) && true == $_GET['settings-updated'] )
@@ -153,6 +161,7 @@ class WPBT_Settings {
 		}
 	}
 
+	// TODO: update to anonymous function for PHP 5.3
 	public function add_settings() {
 		do_action( 'wp_beta_tester_add_settings' );
 	}
@@ -173,7 +182,7 @@ class WPBT_Settings {
 		/**
 		 * Action hook to add admin page data to appropriate $tab.
 		 *
-		 * @since 8.0.0
+		 * @since 2.0.0
 		 *
 		 * @param string $tab    Name of tab.
 		 * @param string $action Save action for appropriate WordPress installation.
@@ -183,7 +192,7 @@ class WPBT_Settings {
 		echo '</div>';
 	}
 
-		/**
+	/**
 	 * Sanitize each setting field as needed.
 	 *
 	 * @param array $input Contains all settings fields as array keys
@@ -203,10 +212,10 @@ class WPBT_Settings {
 		return $new_input;
 	}
 
-		/**
+	/**
 	 * Get the settings option array and print one of its values.
 	 *
-	 * @param $args
+	 * @param array $args 'id' and 'title'
 	 */
 	public static function checkbox_setting( $args ) {
 		$checked = isset( self::$options[ $args['id'] ] ) ? self::$options[ $args['id'] ] : null;

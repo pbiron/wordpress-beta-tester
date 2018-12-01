@@ -61,6 +61,7 @@ class WP_Beta_Tester {
 		return wp_remote_get( $url, $args );
 	}
 
+	// TODO: update to anonymous function for PHP 5.3
 	public function action_update_option_wp_beta_tester_stream() {
 		// Our option has changed so update the cached information pronto.
 		do_action( 'wp_version_check' );

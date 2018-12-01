@@ -58,6 +58,7 @@ class WPBT_Core {
 		}
 	}
 
+	// TODO: update to anonymous function for PHP 5.3
 	public function save_redirect_page( $option_page ) {
 		return array_merge( $option_page, array( 'wp_beta_tester_core' ) );
 	}

@@ -73,11 +73,12 @@ class WPBT_Extras {
 		}
 	}
 
-	// TODO: simplify for PHP 5.3
+	// TODO: update to anonymous function for PHP 5.3
 	private function filter_save_settings( $e ) {
 		return '1' !== $e;
 	}
 
+	// TODO: update to anonymous function for PHP 5.3
 	public function save_redirect_page( $option_page ) {
 		return array_merge( $option_page, array( 'wp_beta_tester_extras' ) );
 	}

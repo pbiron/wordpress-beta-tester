@@ -7,7 +7,7 @@
  * Plugin URI: https://wordpress.org/plugins/wordpress-beta-tester/
  * Description: Allows you to easily upgrade to Beta releases.
  * Author: Peter Westwood, Andy Fragen
- * Version: 1.2.6.2
+ * Version: 1.2.6.3
  * Network: true
  * Author URI: https://blog.ftwr.co.uk/
  * Text Domain: wordpress-beta-tester

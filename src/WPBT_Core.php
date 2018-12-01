@@ -89,8 +89,6 @@ class WPBT_Core {
 		echo '</p><p>';
 		echo( wp_kses_post( __( 'By default, your WordPress install uses the stable update stream. To return to this, please deactivate this plugin and re-install from the <a href="update-core.php">WordPress Updates</a> page.', 'wordpress-beta-tester' ) ) );
 		echo '</p><p>';
-		echo( wp_kses_post( __( 'Why don&#8217;t you <a href="update-core.php">head on over and upgrade now</a>.', 'wordpress-beta-tester' ) ) );
-		echo '</p><p>';
 		esc_html_e( 'Please select the update stream you would like this website to use:', 'wordpress-beta-tester' );
 		echo '</p></div>';
 	}

@@ -73,9 +73,8 @@ class WPBT_Extras {
 		}
 	}
 
-	// TODO: update to anonymous function for PHP 5.3
-	private function filter_save_settings( $e ) {
-		return '1' !== $e;
+	private function filter_save_settings( $checked ) {
+		return '1' !== $checked;
 	}
 
 	// TODO: update to anonymous function for PHP 5.3

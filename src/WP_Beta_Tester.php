@@ -165,15 +165,4 @@ class WP_Beta_Tester {
 
 		return version_compare( $wp_mangled_version[0], $wp_real_version[0], 'lt' );
 	}
-
-	/**
-	 * Check current page.
-	 *
-	 * @param array $pages
-	 * @return bool
-	 */
-	public function is_current_page( array $pages ) {
-		global $pagenow;
-		return in_array( $pagenow, $pages );
-	}
 }

@@ -20,6 +20,8 @@ class WP_Beta_Tester {
 		$this->load_hooks();
 		$settings = new WPBT_Settings( $this, $options );
 		$settings->run();
+		// TODO: I really want to do this, but have to wait for PHP 5.4
+		//( new WPBT_Settings( $this, $options ) )->run();
 	}
 
 	/**

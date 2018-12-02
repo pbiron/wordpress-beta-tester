@@ -47,6 +47,9 @@ class WPBT_Settings {
 		$wpbt_core->load_hooks();
 		$wpbt_extras = new WPBT_Extras( $this->wp_beta_tester, self::$options );
 		$wpbt_extras->load_hooks();
+		// TODO: I really want to do this, but have to wait for PHP 5.4
+		//( new WPBT_Core( $this->wp_beta_tester, self::$options ) )->load_hooks();
+		//( new WPBT_Extras( $this->wp_beta_tester, self::$options ) )->load_hooks();
 	}
 
 	/**

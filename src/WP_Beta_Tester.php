@@ -19,7 +19,7 @@ class WP_Beta_Tester {
 		$options = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
 		$this->load_hooks();
 		$settings = new WPBT_Settings( $this, $options );
-		$settings->load_hooks();
+		$settings->run();
 	}
 
 	/**

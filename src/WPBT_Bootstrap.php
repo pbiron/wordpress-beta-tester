@@ -18,7 +18,8 @@ class WPBT_Bootstrap {
 	public function run() {
 		add_action( 'init', array( $this, 'load_textdomain' ) );
 		$this->load_requires();
-		new WP_Beta_Tester();
+		$wpbt = new WP_Beta_Tester();
+		$wpbt->run();
 	}
 
 	/**

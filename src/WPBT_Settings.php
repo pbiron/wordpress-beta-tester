@@ -36,6 +36,17 @@ class WPBT_Settings {
 		$this->wp_beta_tester = $wp_beta_tester;
 	}
 
+	/**
+	 * Load up the Settings.
+	 *
+	 * @return void
+	 */
+	public function run() {
+		$this->load_hooks();
+		$wpbt_core = new WPBT_Core( $this->wp_beta_tester, self::$options );
+		$wpbt_core->load_hooks();
+		$wpbt_extras = new WPBT_Extras( $this->wp_beta_tester, self::$options );
+		$wpbt_extras->load_hooks();
 	}
 
 	/**

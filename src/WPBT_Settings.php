@@ -19,8 +19,8 @@ class WPBT_Settings {
 		add_action( 'network_admin_edit_wp_beta_tester', array( $this, 'update_settings' ) );
 		add_action( 'admin_init', array( $this, 'update_settings' ) );
 
-		add_action( 'admin_head-plugins.php', array( $this, 'action_admin_head_plugins_php' ) );
-		add_action( 'admin_head-update-core.php', array( $this, 'action_admin_head_plugins_php' ) );
+		add_action( 'admin_head-plugins.php', array( $this->wp_beta_tester, 'action_admin_head_plugins_php' ) );
+		add_action( 'admin_head-update-core.php', array( $this->wp_beta_tester, 'action_admin_head_plugins_php' ) );
 	}
 
 	public function add_plugin_page() {
@@ -91,24 +91,6 @@ class WPBT_Settings {
 			);
 			wp_redirect( $location );
 			exit;
-		}
-	}
-
-	public function action_admin_head_plugins_php() {
-		// Workaround the check throttling in wp_version_check()
-		$st = get_site_transient( 'update_core' );
-		if ( is_object( $st ) ) {
-			$st->last_checked = 0;
-			set_site_transient( 'update_core', $st );
-		}
-		wp_version_check();
-		// Can output an error here if current config drives version backwards
-		if ( $this->wp_beta_tester->check_if_settings_downgrade() ) {
-			echo '<div id="message" class="error"><p>';
-			$admin_page = is_multisite() ? 'settings.php' : 'tools.php';
-			/* translators: %s: link to setting page */
-			printf( wp_kses_post( __( '<strong>Error:</strong> Your current <a href="%s">WordPress Beta Tester plugin configuration</a> will downgrade your install to a previous version - please reconfigure it.', 'wordpress-beta-tester' ) ), admin_url( $admin_page . '?page=wp_beta_tester&tab=wp_beta_tester_core' ) );
-			echo '</p></div>';
 		}
 	}
 

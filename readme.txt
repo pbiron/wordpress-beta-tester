@@ -2,7 +2,7 @@
 Tags: beta, advanced, testing
 Contributors: westi, mlteal, afragen
 Tested up to: 5.0
-Requires at least: 3.0.5
+Requires at least: 3.1
 Stable Tag: 1.2.6
 License: GPLv2
 License URI: https://www.opensource.org/licenses/GPL-2.0

@@ -150,9 +150,7 @@ class WPBT_Extras {
 			<form method="post" action="<?php esc_attr_e( $action ); ?>">
 				<?php settings_fields( 'wp_beta_tester_extras' ); ?>
 				<?php do_settings_sections( 'wp_beta_tester_extras' ); ?>
-				<p class="submit"><input type="submit" class="button-primary"
-					value="<?php esc_html_e( 'Save Changes', 'wordpress-beta-tester' ); ?>" />
-				</p>
+				<?php submit_button(); ?>
 			</form>
 			<?php endif; ?>
 		</div>

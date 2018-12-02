@@ -1,15 +1,40 @@
 <?php
+/**
+ * WordPress Beta Tester
+ *
+ * @package WordPress_Beta_Tester
+ * @author Andy Fragen, original author Peter Westwood.
+ * @license GPLv2+
+ * @copyright 2009-2016 Peter Westwood (email : peter.westwood@ftwr.co.uk)
+ */
 
 class WPBT_Extras {
 
+	/**
+	 * Placeholder for saved options.
+	 *
+	 * @var $options
+	 */
 	protected static $options;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param WP_Beta_Tester $wp_beta_tester
+	 * @param array $options
+	 * @return void
+	 */
 	public function __construct( WP_Beta_Tester $wp_beta_tester, $options ) {
 		self::$options        = $options;
 		$this->wp_beta_tester = $wp_beta_tester;
 		$this->load_hooks();
 	}
 
+	/**
+	 * Load hooks.
+	 *
+	 * @return void
+	 */
 	public function load_hooks() {
 		add_filter( 'wp_beta_tester_add_settings_tabs', array( $this, 'add_settings_tab' ) );
 		add_action( 'wp_beta_tester_add_settings', array( $this, 'add_settings' ) );
@@ -17,10 +42,21 @@ class WPBT_Extras {
 		add_action( 'wp_beta_tester_update_settings', array( $this, 'save_settings' ) );
 	}
 
+	/**
+	 * Add class settings tab.
+	 *
+	 * @param array $tabs
+	 * @return void
+	 */
 	public function add_settings_tab( $tabs ) {
 		return array_merge( $tabs, array( 'wp_beta_tester_extras' => esc_html__( 'Extra Settings', 'wordpress-beta-tester' ) ) );
 	}
 
+	/**
+	 * Setup Settings API.
+	 *
+	 * @return void
+	 */
 	public function add_settings() {
 		register_setting(
 			'wp_beta_tester',
@@ -50,6 +86,12 @@ class WPBT_Extras {
 
 	}
 
+	/**
+	 * Save settings.
+	 *
+	 * @param mixed $post_data
+	 * @return void
+	 */
 	public function save_settings( $post_data ) {
 		if ( isset( $post_data['option_page'] ) &&
 			'wp_beta_tester_extras' === $post_data['option_page']
@@ -66,18 +108,42 @@ class WPBT_Extras {
 		}
 	}
 
+	/**
+	 * Filter saved setting to remove unchecked checkboxes.
+	 *
+	 * @param array $checked
+	 * @return void
+	 */
 	private function filter_save_settings( $checked ) {
 		return '1' !== $checked;
 	}
 
+	/**
+	 * Redirect page/tab after saving options.
+	 *
+	 * @param mixed $option_page
+	 * @return void
+	 */
 	public function save_redirect_page( $option_page ) {
 		return array_merge( $option_page, array( 'wp_beta_tester_extras' ) );
 	}
 
+	/**
+	 * Print settings section information.
+	 *
+	 * @return void
+	 */
 	public function print_extra_settings_top() {
 		echo 'This area is for extra special beta testing.';
 	}
 
+	/**
+	 * Create core settings page.
+	 *
+	 * @param array $tab
+	 * @param string $action
+	 * @return void
+	 */
 	public function add_admin_page( $tab, $action ) {
 		?>
 		<div>

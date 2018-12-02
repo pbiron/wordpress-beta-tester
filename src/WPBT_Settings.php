@@ -1,9 +1,27 @@
 <?php
+/**
+ * WordPress Beta Tester
+ *
+ * @package WordPress_Beta_Tester
+ * @author Andy Fragen, original author Peter Westwood.
+ * @license GPLv2+
+ * @copyright 2009-2016 Peter Westwood (email : peter.westwood@ftwr.co.uk)
+ */
 
 class WPBT_Settings {
 
+	/**
+	 * Placeholder for main class.
+	 *
+	 * @var WP_Beta_Tester $wp_beta_tester
+	 */
 	protected $wp_beta_tester;
 
+	/**
+	 * Placeholder for saved options.
+	 *
+	 * @var $options
+	 */
 	protected static $options;
 
 	public function __construct( WP_Beta_Tester $wp_beta_tester, $options ) {
@@ -13,6 +31,11 @@ class WPBT_Settings {
 		new WPBT_Extras( $wp_beta_tester, $options );
 	}
 
+	/**
+	 * Load hooks.
+	 *
+	 * @return void
+	 */
 	public function load_hooks() {
 		add_action( 'admin_init', array( $this, 'add_settings' ) );
 		add_action( is_multisite() ? 'network_admin_menu' : 'admin_menu', array( $this, 'add_plugin_page' ) );
@@ -23,6 +46,11 @@ class WPBT_Settings {
 		add_action( 'admin_head-update-core.php', array( $this->wp_beta_tester, 'action_admin_head_plugins_php' ) );
 	}
 
+	/**
+	 * Add plugin menu to Tools or Settings.
+	 *
+	 * @return void
+	 */
 	public function add_plugin_page() {
 		$parent     = is_multisite() ? 'settings.php' : 'tools.php';
 		$capability = is_multisite() ? 'manage_network' : 'manage_options';
@@ -144,10 +172,25 @@ class WPBT_Settings {
 		}
 	}
 
+	/**
+	 * Creates a placeholder for added classes settings.
+	 *
+	 * @return void
+	 */
 	public function add_settings() {
+		/**
+		 * Action hook to add settings.
+		 *
+		 * @since 2.0.0
+		 */
 		do_action( 'wp_beta_tester_add_settings' );
 	}
 
+	/**
+	 * Create the template for all settings pages.
+	 *
+	 * @return void
+	 */
 	public function create_settings_page() {
 		$this->saved_settings_notice();
 		$action = is_multisite() ? 'edit.php?action=wp_beta_tester' : 'options.php';

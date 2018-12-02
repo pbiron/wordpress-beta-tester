@@ -1,7 +1,20 @@
 <?php
+/**
+ * WordPress Beta Tester
+ *
+ * @package WordPress_Beta_Tester
+ * @author Andy Fragen, original author Peter Westwood.
+ * @license GPLv2+
+ * @copyright 2009-2016 Peter Westwood (email : peter.westwood@ftwr.co.uk)
+ */
 
 class WP_Beta_Tester {
 
+	/**
+	 * Constructor.
+	 *
+	 * @return void
+	 */
 	public function __construct() {
 		$options = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
 		$this->load_hooks();
@@ -9,6 +22,11 @@ class WP_Beta_Tester {
 		$settings->load_hooks();
 	}
 
+	/**
+	 * Load hooks.
+	 *
+	 * @return void
+	 */
 	protected function load_hooks() {
 		add_action(
 			'update_option_wp_beta_tester_stream',
@@ -20,6 +38,11 @@ class WP_Beta_Tester {
 		add_filter( 'pre_http_request', array( $this, 'filter_http_request' ), 10, 3 );
 	}
 
+	/**
+	 * Check and display notice if 'update' really downgrade.
+	 *
+	 * @return void
+	 */
 	public function action_admin_head_plugins_php() {
 		// Workaround the check throttling in wp_version_check()
 		$st = get_site_transient( 'update_core' );
@@ -38,6 +61,14 @@ class WP_Beta_Tester {
 		}
 	}
 
+	/**
+	 * Filter 'pre_http_request' to add beta-tester API check.
+	 *
+	 * @param mixed $result
+	 * @param mixed $args
+	 * @param mixed $url
+	 * @return void
+	 */
 	public function filter_http_request( $result, $args, $url ) {
 		if ( $result || isset( $args['_beta_tester'] ) ) {
 			return $result;
@@ -55,12 +86,20 @@ class WP_Beta_Tester {
 		return wp_remote_get( $url, $args );
 	}
 
-	// TODO: update to anonymous function for PHP 5.3
+	/**
+	 * Our option has changed so update the cached information pronto.
+	 *
+	 * @return void
+	 */
 	public function action_update_option_wp_beta_tester_stream() {
-		// Our option has changed so update the cached information pronto.
 		do_action( 'wp_version_check' );
 	}
 
+	/**
+	 * Get preferred update version from core.
+	 *
+	 * @return void
+	 */
 	public function get_preferred_from_update_core() {
 		if ( ! function_exists( 'get_preferred_from_update_core' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/update.php';
@@ -76,6 +115,11 @@ class WP_Beta_Tester {
 		return $preferred;
 	}
 
+	/**
+	 * Get modified WP version to pass to API check.
+	 *
+	 * @return void
+	 */
 	protected function mangle_wp_version() {
 		$options    = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
 		$preferred  = $this->get_preferred_from_update_core();
@@ -107,6 +151,11 @@ class WP_Beta_Tester {
 		return $wp_version;
 	}
 
+	/**
+	 * Returns whether beta is really downgrade.
+	 *
+	 * @return void
+	 */
 	public function check_if_settings_downgrade() {
 		global $wp_version;
 		$wp_real_version    = explode( '-', $wp_version );
@@ -125,5 +174,4 @@ class WP_Beta_Tester {
 		global $pagenow;
 		return in_array( $pagenow, $pages );
 	}
-
 }

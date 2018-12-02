@@ -1,13 +1,18 @@
 <?php
 /**
- * Copyright 2009-2016 Peter Westwood (email : peter.westwood@ftwr.co.uk)
+ * WordPress Beta Tester
+ *
+ * @package WordPress_Beta_Tester
+ * @author Andy Fragen, original author Peter Westwood.
+ * @license GPLv2+
+ * @copyright 2009-2016 Peter Westwood (email : peter.westwood@ftwr.co.uk)
  */
 /**
  * Plugin Name: WordPress Beta Tester
  * Plugin URI: https://wordpress.org/plugins/wordpress-beta-tester/
  * Description: Allows you to easily upgrade to Beta releases.
  * Author: Peter Westwood, Andy Fragen
- * Version: 1.2.6.3
+ * Version: 1.2.6.4
  * Network: true
  * Author URI: https://blog.ftwr.co.uk/
  * Text Domain: wordpress-beta-tester

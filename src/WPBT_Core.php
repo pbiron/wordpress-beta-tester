@@ -27,7 +27,6 @@ class WPBT_Core {
 	public function __construct( WP_Beta_Tester $wp_beta_tester, $options ) {
 		self::$options        = $options;
 		$this->wp_beta_tester = $wp_beta_tester;
-		$this->load_hooks();
 	}
 
 	/**

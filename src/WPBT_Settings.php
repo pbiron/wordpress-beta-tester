@@ -24,11 +24,18 @@ class WPBT_Settings {
 	 */
 	protected static $options;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param WP_Beta_Tester $wp_beta_tester
+	 * @param mixed $options
+	 * @return void
+	 */
 	public function __construct( WP_Beta_Tester $wp_beta_tester, $options ) {
 		self::$options        = $options;
 		$this->wp_beta_tester = $wp_beta_tester;
-		new WPBT_Core( $wp_beta_tester, $options );
-		new WPBT_Extras( $wp_beta_tester, $options );
+	}
+
 	}
 
 	/**

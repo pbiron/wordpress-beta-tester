@@ -11,11 +11,11 @@
 class WP_Beta_Tester {
 
 	/**
-	 * Constructor.
+	 * Rev up the engines.
 	 *
 	 * @return void
 	 */
-	public function __construct() {
+	public function run() {
 		$options = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
 		$this->load_hooks();
 		$settings = new WPBT_Settings( $this, $options );

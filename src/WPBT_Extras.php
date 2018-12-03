@@ -95,13 +95,13 @@ class WPBT_Extras {
 		if ( isset( $post_data['option_page'] ) &&
 			'wp_beta_tester_extras' === $post_data['option_page']
 		) {
-			$filtered_options = array_filter( self::$options, array( $this, 'filter_save_settings' ) );
-
 			$options = isset( $post_data['wp-beta-tester'] )
 				? $post_data['wp-beta-tester']
 				: array();
 			$options = WPBT_Settings::sanitize( $options );
-			$options = array_merge( $filtered_options, $options );
+			$this->update_constants( self::$options, $options );
+			$filtered_options = array_filter( self::$options, array( $this, 'filter_save_settings' ) );
+			$options          = array_merge( $filtered_options, $options );
 			update_site_option( 'wp_beta_tester', (array) $options );
 			add_filter( 'wp_beta_tester_save_redirect', array( $this, 'save_redirect_page' ) );
 		}
@@ -115,6 +115,37 @@ class WPBT_Extras {
 	 */
 	private function filter_save_settings( $checked ) {
 		return '1' !== $checked;
+	}
+
+	/**
+	 * Update Feature Flag constants in wp-config.php.
+	 *
+	 * @uses https://github.com/wp-cli/wp-config-transformer
+	 *
+	 * @param array $old Current value of self::$options.
+	 * @param mixed $new New value of $options.
+	 * @return void
+	 */
+	private function update_constants( $old, $new ) {
+		$remove = array_diff_assoc( $old, $new );
+		$add    = array_diff_assoc( $new, $old );
+
+		if ( ! empty( $add ) ) {
+			// Use class WPConfigTransformer to add constant.
+			$config_transformer = new WPConfigTransformer( ABSPATH . 'wp-config.php' );
+			foreach ( array_keys( $add ) as $constant ) {
+				$feature_flag = 'FEATURE_' . strtoupper( $constant );
+				$config_transformer->add( 'constant', $feature_flag, 'true' );
+			}
+		}
+		if ( ! empty( $remove ) ) {
+			// Use class WPConfigTransformer to remove constant.
+			$config_transformer = new WPConfigTransformer( ABSPATH . 'wp-config.php' );
+			foreach ( array_keys( $remove ) as $constant ) {
+				$feature_flag = 'FEATURE_' . strtoupper( $constant );
+				$config_transformer->remove( 'constant', $feature_flag );
+			}
+		}
 	}
 
 	/**

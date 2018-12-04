@@ -81,6 +81,8 @@ PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 * Update screenshot.
 * Fix a couple typos.
 
+= See old-changelog.txt for previous changelog items =
+
 == Installation ==
 
 1. Upload to your plugins folder, usually `wp-content/plugins/`

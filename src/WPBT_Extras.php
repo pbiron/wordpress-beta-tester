@@ -134,15 +134,15 @@ class WPBT_Extras {
 			// Use class WPConfigTransformer to add constant.
 			$config_transformer = new WPConfigTransformer( ABSPATH . 'wp-config.php' );
 			foreach ( array_keys( $add ) as $constant ) {
-				$feature_flag = 'FEATURE_' . strtoupper( $constant );
-				$config_transformer->add( 'constant', $feature_flag, 'true' );
+				$feature_flag = strtoupper( 'feature_' . $constant );
+				$config_transformer->add( 'constant', $feature_flag, 'true', array( 'raw' => true ) );
 			}
 		}
 		if ( ! empty( $remove ) ) {
 			// Use class WPConfigTransformer to remove constant.
 			$config_transformer = new WPConfigTransformer( ABSPATH . 'wp-config.php' );
 			foreach ( array_keys( $remove ) as $constant ) {
-				$feature_flag = 'FEATURE_' . strtoupper( $constant );
+				$feature_flag = strtoupper( 'feature_' . $constant );
 				$config_transformer->remove( 'constant', $feature_flag );
 			}
 		}

@@ -43,6 +43,6 @@ class WPBT_Bootstrap {
 		require_once WP_BETA_TESTER_DIR . '/src/WPBT_Settings.php';
 		require_once WP_BETA_TESTER_DIR . '/src/WPBT_Core.php';
 		require_once WP_BETA_TESTER_DIR . '/src/WPBT_Extras.php';
-		require_once WP_BETA_TESTER_DIR . '/vendor/wp-cli/wp-config-transformer/src/WPConfigTransformer.php';
+		require_once WP_BETA_TESTER_DIR . '/vendor/WPConfigTransformer.php';
 	}
 }

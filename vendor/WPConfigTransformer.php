@@ -3,7 +3,7 @@
 /**
  * Transforms a wp-config.php file.
  */
-class WPConfigTransformer {
+class WPBT_WPConfigTransformer {
 
 	/**
 	 * Path to the wp-config.php file.

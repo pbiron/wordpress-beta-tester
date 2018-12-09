@@ -187,7 +187,7 @@ class WPBT_Settings {
 			( isset( $_GET['settings-updated'] ) && true == $_GET['settings-updated'] )
 		) {
 			echo '<div class="updated"><p>';
-			echo esc_html__( 'Saved.', 'wordpress-beta-tester' );
+			esc_html_e( 'Saved.', 'wordpress-beta-tester' );
 			echo( '<span style="padding:0 2em;">' . wp_kses_post( __( 'Why don&#8217;t you <a href="update-core.php">head on over and upgrade now</a>.', 'wordpress-beta-tester' ) ) . '</span>' );
 			echo '</p></div>';
 		}

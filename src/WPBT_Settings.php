@@ -59,7 +59,7 @@ class WPBT_Settings {
 	 */
 	public function load_hooks() {
 		add_action( 'admin_init', array( $this, 'add_settings' ) );
-		add_action( is_multisite() ? 'network_admin_menu' : 'admin_menu', array( $this, 'add_plugin_page' ) );
+		add_action( is_multisite() ? 'network_admin_menu' : 'admin_menu', array( $this, 'add_plugin_menu' ) );
 		add_action( 'network_admin_edit_wp_beta_tester', array( $this, 'update_settings' ) );
 		add_action( 'admin_init', array( $this, 'update_settings' ) );
 
@@ -72,7 +72,7 @@ class WPBT_Settings {
 	 *
 	 * @return void
 	 */
-	public function add_plugin_page() {
+	public function add_plugin_menu() {
 		$parent     = is_multisite() ? 'settings.php' : 'tools.php';
 		$capability = is_multisite() ? 'manage_network' : 'manage_options';
 

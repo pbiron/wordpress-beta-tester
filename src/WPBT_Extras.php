@@ -82,7 +82,6 @@ class WPBT_Extras {
 				'title' => 'Help test Servehappy\'s WSOD, Trac #44458',
 			)
 		);
-
 	}
 
 	/**

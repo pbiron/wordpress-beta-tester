@@ -78,7 +78,7 @@ class WPBT_Extras {
 			'wp_beta_tester_extras',
 			'wp_beta_tester_extras',
 			array(
-				'id'    => 'wsod',
+				'id'    => 'trac44458',
 				'title' => 'Help test Servehappy\'s WSOD, Trac #44458',
 			)
 		);

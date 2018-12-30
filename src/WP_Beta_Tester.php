@@ -82,8 +82,8 @@ class WP_Beta_Tester {
 		// It's a core-update request.
 		$args['_beta_tester'] = true;
 
-		global $wp_version;
-		$url = str_replace( 'version=' . $wp_version, 'version=' . $this->mangle_wp_version(), $url );
+		$wp_version = get_bloginfo( 'version' );
+		$url        = str_replace( 'version=' . $wp_version, 'version=' . $this->mangle_wp_version(), $url );
 
 		return wp_remote_get( $url, $args );
 	}
@@ -159,7 +159,7 @@ class WP_Beta_Tester {
 	 * @return void
 	 */
 	public function check_if_settings_downgrade() {
-		global $wp_version;
+		$wp_version         = get_bloginfo( 'version' );
 		$wp_real_version    = explode( '-', $wp_version );
 		$wp_mangled_version = explode( '-', $this->mangle_wp_version() );
 

@@ -52,7 +52,6 @@ class WP_Beta_Tester {
 			$st->last_checked = 0;
 			set_site_transient( 'update_core', $st );
 		}
-		wp_version_check();
 		// Can output an error here if current config drives version backwards
 		if ( $this->check_if_settings_downgrade() ) {
 			echo '<div id="message" class="error"><p>';

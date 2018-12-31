@@ -143,7 +143,7 @@ class WPBT_Extras {
 
 	/**
 	 * Filter saved setting to remove unchecked checkboxes.
-	 * //TODO: convert to anonymous function.
+	 * // TODO: convert to anonymous function.
 	 *
 	 * @param array $checked
 	 * @return void

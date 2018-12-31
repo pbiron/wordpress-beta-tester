@@ -105,6 +105,7 @@ class WPBT_Bootstrap {
 
 	/**
 	 * <sarcasm>Poor man's autoloader.</sarcasm>
+	 * // TODO: replace with composer's autoload.
 	 *
 	 * @return void
 	 */

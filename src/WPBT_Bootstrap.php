@@ -73,6 +73,8 @@ class WPBT_Bootstrap {
 	/**
 	 * Run on plugin activation.
 	 *
+	 * Delete 'update_core' transient and add any saved extra settings to wp-config.php.
+	 *
 	 * @return void
 	 */
 	public function activate() {
@@ -83,6 +85,8 @@ class WPBT_Bootstrap {
 
 	/**
 	 * Run on plugin deactivation.
+	 *
+	 * Delete 'update_core' transient and remove any extras settings from wp-config.php.
 	 *
 	 * @return void
 	 */

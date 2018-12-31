@@ -22,6 +22,8 @@ class WPBT_Bootstrap {
 		$wpbt->run();
 		// TODO: I really want to do this, but have to wait for PHP 5.4
 		//( new WP_Beta_Tester() )->run();
+		register_activation_hook( $this->file, array( $this, 'activate' ) );
+		register_deactivation_hook( $this->file, array( $this, 'deactivate' ) );
 	}
 
 	/**
@@ -31,6 +33,39 @@ class WPBT_Bootstrap {
 	 */
 	public function load_textdomain() {
 		load_plugin_textdomain( 'wordpress-beta-tester' );
+	}
+
+	/**
+	 * Run on plugin activation.
+	 *
+	 * @return void
+	 */
+	public function activate() {
+		delete_site_transient( 'update_core' );
+		$wpbt_extras = $this->load_wpbt_extras();
+		$wpbt_extras->activate();
+	}
+
+	/**
+	 * Run on plugin deactivation.
+	 *
+	 * @return void
+	 */
+	public function deactivate() {
+		delete_site_transient( 'update_core' );
+		$wpbt_extras = $this->load_wpbt_extras();
+		$wpbt_extras->deactivate();
+	}
+
+	/**
+	 * Load class WPBT_Extras.
+	 *
+	 * @return void
+	 */
+	private function load_wpbt_extras() {
+		$options = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
+		$wpbt    = new WP_Beta_Tester( __FILE__ );
+		return new WPBT_Extras( $wpbt, $options );
 	}
 
 	/**

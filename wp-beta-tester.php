@@ -34,9 +34,3 @@ function load_beta_tester_plugin() {
 	//( new WPBT_Bootstrap() )->run();
 }
 
-// Clear down
-function wordpress_beta_tester_deactivate_or_activate() {
-	delete_site_transient( 'update_core' );
-}
-register_activation_hook( __FILE__, 'wordpress_beta_tester_deactivate_or_activate' );
-register_deactivation_hook( __FILE__, 'wordpress_beta_tester_deactivate_or_activate' );

@@ -42,6 +42,41 @@ class WPBT_Extras {
 	}
 
 	/**
+	 * Run on activation hook.
+	 *
+	 * @return void
+	 */
+	public function activate() {
+		$add = array_filter( self::$options, array( $this, 'get_checked_options' ) );
+		if ( ! empty( $add ) ) {
+			$this->add_constants( $add );
+		}
+	}
+
+	/**
+	 * Run on deactivation hook.
+	 *
+	 * @return void
+	 */
+	public function deactivate() {
+		$remove = array_filter( self::$options, array( $this, 'get_checked_options' ) );
+		if ( ! empty( $remove ) ) {
+			$this->remove_constants( $remove );
+		}
+	}
+
+	/**
+	 * Filter saved settings to get checked options.
+	 * //TODO: convert to anonymous function.
+	 *
+	 * @param mixed $checked
+	 * @return void
+	 */
+	private function get_checked_options( $checked ) {
+		return '1' === $checked;
+	}
+
+	/**
 	 * Add class settings tab.
 	 *
 	 * @param array $tabs
@@ -108,6 +143,7 @@ class WPBT_Extras {
 
 	/**
 	 * Filter saved setting to remove unchecked checkboxes.
+	 * //TODO: convert to anonymous function.
 	 *
 	 * @param array $checked
 	 * @return void
@@ -119,8 +155,6 @@ class WPBT_Extras {
 	/**
 	 * Update Feature Flag constants in wp-config.php.
 	 *
-	 * @uses https://github.com/wp-cli/wp-config-transformer
-	 *
 	 * @param array $old Current value of self::$options.
 	 * @param mixed $new New value of $options.
 	 * @return void
@@ -130,20 +164,50 @@ class WPBT_Extras {
 		$add    = array_diff_assoc( $new, $old );
 
 		if ( ! empty( $add ) ) {
-			// Use class WPConfigTransformer to add constant.
-			$config_transformer = new WPBT_WPConfigTransformer( ABSPATH . 'wp-config.php' );
-			foreach ( array_keys( $add ) as $constant ) {
-				$feature_flag = strtoupper( 'wp_beta_tester_' . $constant );
-				$config_transformer->add( 'constant', $feature_flag, 'true', array( 'raw' => true ) );
-			}
+			$this->add_constants( $add );
 		}
 		if ( ! empty( $remove ) ) {
-			// Use class WPConfigTransformer to remove constant.
-			$config_transformer = new WPBT_WPConfigTransformer( ABSPATH . 'wp-config.php' );
-			foreach ( array_keys( $remove ) as $constant ) {
-				$feature_flag = strtoupper( 'wp_beta_tester_' . $constant );
-				$config_transformer->remove( 'constant', $feature_flag );
-			}
+			$this->remove_constants( $remove );
+		}
+	}
+
+	/**
+	 * Add constants to wp-config.php file.
+	 *
+	 * @uses https://github.com/wp-cli/wp-config-transformer
+	 *
+	 * @param array $add
+	 * @return void
+	 */
+	private function add_constants( $add ) {
+		$config_transformer = new WPBT_WPConfigTransformer( ABSPATH . 'wp-config.php' );
+		foreach ( array_keys( $add ) as $constant ) {
+			$feature_flag = strtoupper( 'wp_beta_tester_' . $constant );
+			$config_transformer->update(
+				'constant',
+				$feature_flag,
+				'true',
+				array(
+					'raw'       => true,
+					'normalize' => true,
+				)
+			);
+		}
+	}
+
+	/**
+	 * Remove constants from wp-config.php file.
+	 *
+	 * @uses https://github.com/wp-cli/wp-config-transformer
+	 *
+	 * @param array $remove
+	 * @return void
+	 */
+	private function remove_constants( $remove ) {
+		$config_transformer = new WPBT_WPConfigTransformer( ABSPATH . 'wp-config.php' );
+		foreach ( array_keys( $remove ) as $constant ) {
+			$feature_flag = strtoupper( 'wp_beta_tester_' . $constant );
+			$config_transformer->remove( 'constant', $feature_flag );
 		}
 	}
 

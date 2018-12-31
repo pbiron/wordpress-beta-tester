@@ -42,41 +42,6 @@ class WPBT_Extras {
 	}
 
 	/**
-	 * Run on activation hook.
-	 *
-	 * @return void
-	 */
-	public function activate() {
-		$add = array_filter( self::$options, array( $this, 'get_checked_options' ) );
-		if ( ! empty( $add ) ) {
-			$this->add_constants( $add );
-		}
-	}
-
-	/**
-	 * Run on deactivation hook.
-	 *
-	 * @return void
-	 */
-	public function deactivate() {
-		$remove = array_filter( self::$options, array( $this, 'get_checked_options' ) );
-		if ( ! empty( $remove ) ) {
-			$this->remove_constants( $remove );
-		}
-	}
-
-	/**
-	 * Filter saved settings to get checked options.
-	 * //TODO: convert to anonymous function.
-	 *
-	 * @param mixed $checked
-	 * @return void
-	 */
-	private function get_checked_options( $checked ) {
-		return '1' === $checked;
-	}
-
-	/**
 	 * Add class settings tab.
 	 *
 	 * @param array $tabs
@@ -150,6 +115,41 @@ class WPBT_Extras {
 	 */
 	private function filter_save_settings( $checked ) {
 		return '1' !== $checked;
+	}
+
+	/**
+	 * Run on activation hook.
+	 *
+	 * @return void
+	 */
+	public function activate() {
+		$add = array_filter( self::$options, array( $this, 'get_checked_options' ) );
+		if ( ! empty( $add ) ) {
+			$this->add_constants( $add );
+		}
+	}
+
+	/**
+	 * Run on deactivation hook.
+	 *
+	 * @return void
+	 */
+	public function deactivate() {
+		$remove = array_filter( self::$options, array( $this, 'get_checked_options' ) );
+		if ( ! empty( $remove ) ) {
+			$this->remove_constants( $remove );
+		}
+	}
+
+	/**
+	 * Filter saved settings to get checked options.
+	 * // TODO: convert to anonymous function.
+	 *
+	 * @param mixed $checked
+	 * @return void
+	 */
+	private function get_checked_options( $checked ) {
+		return '1' === $checked;
 	}
 
 	/**

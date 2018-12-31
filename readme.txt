@@ -21,7 +21,7 @@ For the more adventurous there is the option to switch to the bleeding edge (tru
 
 Don't forget to backup before you start!
 
-== Extra Settings ==
+### Extra Settings
 
 The **Extra Settings** tab may contain choices for testing features in trunk that require constants to be set. A checked feature will add a constant to the user's `wp-config.php` file in the format as follows:
 

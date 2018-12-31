@@ -11,6 +11,23 @@
 class WP_Beta_Tester {
 
 	/**
+	 * Holds main plugin file.
+	 *
+	 * @var $file
+	 */
+	public $file;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param string $file Main plugin file.
+	 * @return void
+	 */
+	public function __construct( $file ) {
+		$this->file = $file;
+	}
+
+	/**
 	 * Rev up the engines.
 	 *
 	 * @return void

@@ -21,12 +21,25 @@ For the more adventurous there is the option to switch to the bleeding edge (tru
 
 Don't forget to backup before you start!
 
+== Extra Settings ==
+
+The **Extra Settings** tab may contain choices for testing features in trunk that require constants to be set. A checked feature will add a constant to the user's `wp-config.php` file in the format as follows:
+
+`define( 'WP_BETA_TESTER_{$feature}', true );`
+
+Unchecking the feature will remove the constant.
+
+This plugin resets the constants in `wp-config.php` on plugin activation and removes them on plugin deactivation.
+
+If no settings are present there is no testing to be done that requires this feature.
+
 PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 
 == Changelog ==
 
 = 2.0.0 =
-* dramatically refactored to put distinct process into separate classes
+* near complete re-write to use more OOPy practices
+* put distinct process into separate classes
 * allows for multiple settings tabs for addtional settings
 
 = 1.2.6 =

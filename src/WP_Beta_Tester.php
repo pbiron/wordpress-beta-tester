@@ -35,10 +35,10 @@ class WP_Beta_Tester {
 	public function run() {
 		$options = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
 		$this->load_hooks();
-		$settings = new WPBT_Settings( $this, $options );
-		$settings->run();
 		// TODO: I really want to do this, but have to wait for PHP 5.4
 		//( new WPBT_Settings( $this, $options ) )->run();
+		$settings = new WPBT_Settings( $this, $options );
+		$settings->run();
 	}
 
 	/**

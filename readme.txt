@@ -106,4 +106,5 @@ PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 
 == Screenshots ==
 
-1. This shows the administration page for the plugin
+1. This shows the main administration page for the plugin
+2. This shows the Extra Settings page for the plugin

@@ -156,7 +156,7 @@ class WPBT_Extras {
 	 * Update Feature Flag constants in wp-config.php.
 	 *
 	 * @param array $old Current value of self::$options.
-	 * @param mixed $new New value of $options.
+	 * @param array $new New value of $options.
 	 * @return void
 	 */
 	private function update_constants( $old, $new ) {

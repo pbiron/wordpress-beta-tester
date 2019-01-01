@@ -42,7 +42,7 @@ class WPBT_Bootstrap {
 	 * @return void
 	 */
 	public function run() {
-		$this->load_requires();
+		$this->load_requires(); // TODO: replace with composer's autoload.
 		$this->load_hooks();
 		// TODO: I really want to do this, but have to wait for PHP 5.4
 		//( new WP_Beta_Tester( $this->file ) )->run();

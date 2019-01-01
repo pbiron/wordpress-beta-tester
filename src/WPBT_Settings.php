@@ -112,7 +112,7 @@ class WPBT_Settings {
 		 * Filter to add to $option_page array.
 		 *
 		 * @since 2.0.0
-		 * @return array
+		 * @param array Default array.
 		 */
 		$option_page = apply_filters( 'wp_beta_tester_save_redirect', array( 'wp_beta_tester' ) );
 		$update      = false;

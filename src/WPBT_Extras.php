@@ -72,14 +72,14 @@ class WPBT_Extras {
 
 		// Example with WSOD.
 		add_settings_field(
-			'extras_settings',
+			'trac44458',
 			null,
 			array( 'WPBT_Settings', 'checkbox_setting' ),
 			'wp_beta_tester_extras',
 			'wp_beta_tester_extras',
 			array(
 				'id'    => 'trac44458',
-				'title' => 'Help test Servehappy\'s WSOD, Trac #44458',
+				'title' => esc_html__( 'Help test Servehappy\'s WSOD, Trac #44458', 'wordpress-beta-tester' ),
 			)
 		);
 	}

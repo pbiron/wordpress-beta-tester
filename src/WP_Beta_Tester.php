@@ -174,7 +174,7 @@ class WP_Beta_Tester {
 	 *
 	 * @return void
 	 */
-	public function check_if_settings_downgrade() {
+	protected function check_if_settings_downgrade() {
 		$wp_version         = get_bloginfo( 'version' );
 		$wp_real_version    = explode( '-', $wp_version );
 		$wp_mangled_version = explode( '-', $this->mangle_wp_version() );

@@ -227,7 +227,7 @@ class WPBT_Extras {
 	 * @return void
 	 */
 	public function print_extra_settings_top() {
-		echo 'This area is for extra special beta testing.';
+		esc_html_e( 'This area is for extra special beta testing. If nothing is present there are no additional features that need testing.', 'wordpress-beta-tester' );
 	}
 
 	/**

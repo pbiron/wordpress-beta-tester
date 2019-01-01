@@ -8,6 +8,9 @@
  * @copyright 2009-2016 Peter Westwood (email : peter.westwood@ftwr.co.uk)
  */
 
+/**
+ * WPBT_Settings
+ */
 class WPBT_Settings {
 
 	/**
@@ -27,8 +30,8 @@ class WPBT_Settings {
 	/**
 	 * Constructor.
 	 *
-	 * @param WP_Beta_Tester $wp_beta_tester
-	 * @param mixed $options
+	 * @param WP_Beta_Tester $wp_beta_tester Instance of class WP_Beta_Tester
+	 * @param mixed          $options Saved site options.
 	 * @return void
 	 */
 	public function __construct( WP_Beta_Tester $wp_beta_tester, $options ) {
@@ -44,8 +47,8 @@ class WPBT_Settings {
 	public function run() {
 		$this->load_hooks();
 		// TODO: I really want to do this, but have to wait for PHP 5.4
-		//( new WPBT_Core( $this->wp_beta_tester, self::$options ) )->load_hooks();
-		//( new WPBT_Extras( $this->wp_beta_tester, self::$options ) )->load_hooks();
+		// ( new WPBT_Core( $this->wp_beta_tester, self::$options ) )->load_hooks();
+		// ( new WPBT_Extras( $this->wp_beta_tester, self::$options ) )->load_hooks();
 		$wpbt_core = new WPBT_Core( $this->wp_beta_tester, self::$options );
 		$wpbt_core->load_hooks();
 		$wpbt_extras = new WPBT_Extras( $this->wp_beta_tester, self::$options );
@@ -104,8 +107,6 @@ class WPBT_Settings {
 
 	/**
 	 * Redirect to correct Settings/Tools tab on Save.
-	 *
-	 * @param string $option_page
 	 */
 	protected function redirect_on_save() {
 		/**
@@ -126,7 +127,7 @@ class WPBT_Settings {
 		$redirect_url = is_multisite() ? network_admin_url( 'settings.php' ) : admin_url( 'tools.php' );
 
 		if ( $update ) {
-			$query = isset( $_POST['_wp_http_referer'] ) ? parse_url( $_POST['_wp_http_referer'], PHP_URL_QUERY ) : null;
+			$query = isset( $_POST['_wp_http_referer'] ) ? wp_parse_url( $_POST['_wp_http_referer'], PHP_URL_QUERY ) : null;
 			parse_str( $query, $arr );
 			$arr['tab'] = ! empty( $arr['tab'] ) ? $arr['tab'] : 'wp_beta_tester_core';
 
@@ -138,7 +139,7 @@ class WPBT_Settings {
 				),
 				$redirect_url
 			);
-			wp_redirect( $location );
+			wp_safe_redirect( $location );
 			exit;
 		}
 	}
@@ -166,13 +167,14 @@ class WPBT_Settings {
 	 * Provides the heading for the settings page.
 	 *
 	 * @access private
+	 * @return void
 	 */
 	private function options_tabs() {
 		$current_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'wp_beta_tester_core_settings';
 		echo '<h2 class="nav-tab-wrapper">';
 		foreach ( $this->settings_tabs() as $key => $name ) {
 			$active = ( $current_tab === $key ) ? 'nav-tab-active' : '';
-			echo '<a class="nav-tab ' . $active . '" href="?page=wp_beta_tester&tab=' . $key . '">' . $name . '</a>';
+			echo( wp_kses_post( '<a class="nav-tab ' . $active . '" href="?page=wp_beta_tester&tab=' . $key . '">' . $name . '</a>' ) );
 		}
 		echo '</h2>';
 	}
@@ -269,7 +271,7 @@ class WPBT_Settings {
 		<style> .form-table th { display:none; } </style>
 		<label for="<?php esc_attr_e( $args['id'] ); ?>">
 			<input type="checkbox" name="wp-beta-tester[<?php esc_attr_e( $args['id'] ); ?>]" value="1" <?php checked( '1', $checked ); ?> >
-			<?php echo $args['title']; ?>
+			<?php esc_attr_e( $args['title'] ); ?>
 		</label>
 		<?php
 	}

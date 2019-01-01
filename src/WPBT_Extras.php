@@ -8,6 +8,9 @@
  * @copyright 2009-2016 Peter Westwood (email : peter.westwood@ftwr.co.uk)
  */
 
+/**
+ * WPBT_Extras
+ */
 class WPBT_Extras {
 
 	/**
@@ -20,8 +23,8 @@ class WPBT_Extras {
 	/**
 	 * Constructor.
 	 *
-	 * @param WP_Beta_Tester $wp_beta_tester
-	 * @param array $options
+	 * @param WP_Beta_Tester $wp_beta_tester Instance of class WP_Beta_Tester.
+	 * @param array          $options Site options.
 	 * @return void
 	 */
 	public function __construct( WP_Beta_Tester $wp_beta_tester, $options ) {
@@ -44,8 +47,8 @@ class WPBT_Extras {
 	/**
 	 * Add class settings tab.
 	 *
-	 * @param array $tabs
-	 * @return void
+	 * @param array $tabs Settings tabs.
+	 * @return array
 	 */
 	public function add_settings_tab( $tabs ) {
 		return array_merge( $tabs, array( 'wp_beta_tester_extras' => esc_html__( 'Extra Settings', 'wordpress-beta-tester' ) ) );
@@ -87,7 +90,7 @@ class WPBT_Extras {
 	/**
 	 * Save settings.
 	 *
-	 * @param mixed $post_data
+	 * @param mixed $post_data $_POST data.
 	 * @return void
 	 */
 	public function save_settings( $post_data ) {
@@ -110,8 +113,8 @@ class WPBT_Extras {
 	 * Filter saved setting to remove unchecked checkboxes.
 	 * // TODO: convert to anonymous function.
 	 *
-	 * @param array $checked
-	 * @return void
+	 * @param array $checked Options.
+	 * @return bool
 	 */
 	private function get_unchecked_options( $checked ) {
 		return '1' !== $checked;
@@ -145,8 +148,8 @@ class WPBT_Extras {
 	 * Filter saved settings to get checked options.
 	 * // TODO: convert to anonymous function.
 	 *
-	 * @param mixed $checked
-	 * @return void
+	 * @param mixed $checked Option.
+	 * @return bool
 	 */
 	private function get_checked_options( $checked ) {
 		return '1' === $checked;
@@ -176,7 +179,7 @@ class WPBT_Extras {
 	 *
 	 * @uses https://github.com/wp-cli/wp-config-transformer
 	 *
-	 * @param array $add
+	 * @param array $add Constants to add to wp-config.php.
 	 * @return void
 	 */
 	private function add_constants( $add ) {
@@ -200,7 +203,7 @@ class WPBT_Extras {
 	 *
 	 * @uses https://github.com/wp-cli/wp-config-transformer
 	 *
-	 * @param array $remove
+	 * @param array $remove Constants to remove from wp-config.php.
 	 * @return void
 	 */
 	private function remove_constants( $remove ) {
@@ -214,8 +217,8 @@ class WPBT_Extras {
 	/**
 	 * Redirect page/tab after saving options.
 	 *
-	 * @param mixed $option_page
-	 * @return void
+	 * @param mixed $option_page Settings page.
+	 * @return array
 	 */
 	public function save_redirect_page( $option_page ) {
 		return array_merge( $option_page, array( 'wp_beta_tester_extras' ) );
@@ -233,8 +236,8 @@ class WPBT_Extras {
 	/**
 	 * Create core settings page.
 	 *
-	 * @param array $tab
-	 * @param string $action
+	 * @param array  $tab Settings tab.
+	 * @param string $action Form action.
 	 * @return void
 	 */
 	public function add_admin_page( $tab, $action ) {

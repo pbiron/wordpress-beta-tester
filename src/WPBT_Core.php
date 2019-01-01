@@ -8,6 +8,9 @@
  * @copyright 2009-2016 Peter Westwood (email : peter.westwood@ftwr.co.uk)
  */
 
+/**
+ * WPBT_Core
+ */
 class WPBT_Core {
 
 	/**
@@ -20,8 +23,8 @@ class WPBT_Core {
 	/**
 	 * Constructor.
 	 *
-	 * @param WP_Beta_Tester $wp_beta_tester
-	 * @param array $options
+	 * @param WP_Beta_Tester $wp_beta_tester Instance of class WP_Beta_Tester.
+	 * @param array          $options Site options.
 	 * @return void
 	 */
 	public function __construct( WP_Beta_Tester $wp_beta_tester, $options ) {
@@ -44,7 +47,7 @@ class WPBT_Core {
 	/**
 	 * Add settings tab for class.
 	 *
-	 * @param array $tabs
+	 * @param array $tabs Settings tabs.
 	 * @return array
 	 */
 	public function add_settings_tab( $tabs ) {
@@ -83,7 +86,7 @@ class WPBT_Core {
 	/**
 	 * Save settings.
 	 *
-	 * @param mixed $post_data
+	 * @param mixed $post_data $_POST data.
 	 * @return void
 	 */
 	public function save_settings( $post_data ) {
@@ -102,8 +105,8 @@ class WPBT_Core {
 	/**
 	 * Redirect page/tab after saving options.
 	 *
-	 * @param mixed $option_page
-	 * @return void
+	 * @param array $option_page Settings tabs.
+	 * @return array
 	 */
 	public function save_redirect_page( $option_page ) {
 		return array_merge( $option_page, array( 'wp_beta_tester_core' ) );
@@ -127,9 +130,9 @@ class WPBT_Core {
 		printf(
 			/* translators: 1: link to backing up database, 2: link to make.wp.org/core, 3: link to beta support forum */
 			wp_kses_post( __( 'By their nature, these releases are unstable and should not be used anyplace where your data is important. So please <a href="%1$s">back up your database</a> before upgrading to a test release. In order to hear about the latest beta releases, your best bet is to watch the <a href="%2$s">development blog</a> and the <a href="%3$s">beta forum</a>.', 'wordpress-beta-tester' ) ),
-			_x( 'https://codex.wordpress.org/Backing_Up_Your_Database', 'URL to database backup instructions', 'wordpress-beta-tester' ),
+			esc_url( _x( 'https://codex.wordpress.org/Backing_Up_Your_Database', 'URL to database backup instructions', 'wordpress-beta-tester' ) ),
 			'https://make.wordpress.org/core/',
-			_x( 'https://wordpress.org/support/forum/alphabeta', 'URL to beta support forum', 'wordpress-beta-tester' )
+			esc_url( _x( 'https://wordpress.org/support/forum/alphabeta', 'URL to beta support forum', 'wordpress-beta-tester' ) )
 		);
 		echo '</p><p>';
 		printf(
@@ -171,8 +174,8 @@ class WPBT_Core {
 	/**
 	 * Create core settings page.
 	 *
-	 * @param array $tab
-	 * @param string $action
+	 * @param array  $tab Settings tab.
+	 * @param string $action Settings form action.
 	 * @return void
 	 */
 	public function add_admin_page( $tab, $action ) {

@@ -1,4 +1,12 @@
 <?php
+/**
+ * WordPress Beta Tester
+ *
+ * @package WordPress_Beta_Tester
+ * @author Andy Fragen, original author Peter Westwood.
+ * @license GPLv2+
+ * @copyright 2009-2016 Peter Westwood (email : peter.westwood@ftwr.co.uk)
+ */
 
 /**
  * Fired when the plugin is uninstalled.

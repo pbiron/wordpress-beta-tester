@@ -8,6 +8,9 @@
  * @copyright 2009-2016 Peter Westwood (email : peter.westwood@ftwr.co.uk)
  */
 
+/**
+ * WPBT_Bootstrap
+ */
 class WPBT_Bootstrap {
 
 	/**
@@ -28,7 +31,6 @@ class WPBT_Bootstrap {
 	 * Constructor.
 	 *
 	 * @param string $file Main plugin file.
-	 * @param string $dir Main plugin directory.
 	 * @return void
 	 */
 	public function __construct( $file ) {
@@ -45,7 +47,7 @@ class WPBT_Bootstrap {
 		$this->load_requires(); // TODO: replace with composer's autoload.
 		$this->load_hooks();
 		// TODO: I really want to do this, but have to wait for PHP 5.4
-		//( new WP_Beta_Tester( $this->file ) )->run();
+		// ( new WP_Beta_Tester( $this->file ) )->run();
 		$wpbt = new WP_Beta_Tester( $this->file );
 		$wpbt->run();
 	}
@@ -99,7 +101,7 @@ class WPBT_Bootstrap {
 	/**
 	 * Load class WPBT_Extras.
 	 *
-	 * @return void
+	 * @return /stdClass Instance of class WPBT_Extras.
 	 */
 	private function load_wpbt_extras() {
 		$options = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );

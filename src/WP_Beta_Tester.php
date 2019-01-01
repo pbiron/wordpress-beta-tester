@@ -8,6 +8,9 @@
  * @copyright 2009-2016 Peter Westwood (email : peter.westwood@ftwr.co.uk)
  */
 
+/**
+ * WP_Beta_Tester
+ */
 class WP_Beta_Tester {
 
 	/**
@@ -36,7 +39,7 @@ class WP_Beta_Tester {
 		$options = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
 		$this->load_hooks();
 		// TODO: I really want to do this, but have to wait for PHP 5.4
-		//( new WPBT_Settings( $this, $options ) )->run();
+		// ( new WPBT_Settings( $this, $options ) )->run();
 		$settings = new WPBT_Settings( $this, $options );
 		$settings->run();
 	}
@@ -74,7 +77,7 @@ class WP_Beta_Tester {
 			echo '<div id="message" class="error"><p>';
 			$admin_page = is_multisite() ? 'settings.php' : 'tools.php';
 			/* translators: %s: link to setting page */
-			printf( wp_kses_post( __( '<strong>Error:</strong> Your current <a href="%s">WordPress Beta Tester plugin configuration</a> will downgrade your install to a previous version - please reconfigure it.', 'wordpress-beta-tester' ) ), admin_url( $admin_page . '?page=wp_beta_tester&tab=wp_beta_tester_core' ) );
+			printf( wp_kses_post( __( '<strong>Error:</strong> Your current <a href="%s">WordPress Beta Tester plugin configuration</a> will downgrade your install to a previous version - please reconfigure it.', 'wordpress-beta-tester' ) ), esc_url( admin_url( $admin_page . '?page=wp_beta_tester&tab=wp_beta_tester_core' ) ) );
 			echo '</p></div>';
 		}
 	}
@@ -82,10 +85,10 @@ class WP_Beta_Tester {
 	/**
 	 * Filter 'pre_http_request' to add beta-tester API check.
 	 *
-	 * @param mixed $result
-	 * @param mixed $args
-	 * @param mixed $url
-	 * @return void
+	 * @param mixed  $result $result from filter.
+	 * @param array  $args Array of filter args.
+	 * @param string $url URL from filter.
+	 * @return /stdClass Output from wp_remote_get().
 	 */
 	public function filter_http_request( $result, $args, $url ) {
 		if ( $result || isset( $args['_beta_tester'] ) ) {
@@ -116,7 +119,7 @@ class WP_Beta_Tester {
 	/**
 	 * Get preferred update version from core.
 	 *
-	 * @return void
+	 * @return /stdClass
 	 */
 	public function get_preferred_from_update_core() {
 		if ( ! function_exists( 'get_preferred_from_update_core' ) ) {
@@ -136,7 +139,7 @@ class WP_Beta_Tester {
 	/**
 	 * Get modified WP version to pass to API check.
 	 *
-	 * @return void
+	 * @return string $wp_version
 	 */
 	protected function mangle_wp_version() {
 		$options    = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
@@ -172,7 +175,7 @@ class WP_Beta_Tester {
 	/**
 	 * Returns whether beta is really downgrade.
 	 *
-	 * @return void
+	 * @return bool
 	 */
 	protected function check_if_settings_downgrade() {
 		$wp_version         = get_bloginfo( 'version' );

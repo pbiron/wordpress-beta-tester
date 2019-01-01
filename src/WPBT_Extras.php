@@ -99,7 +99,7 @@ class WPBT_Extras {
 				: array();
 			$options = WPBT_Settings::sanitize( $options );
 			$this->update_constants( self::$options, $options );
-			$filtered_options = array_filter( self::$options, array( $this, 'filter_save_settings' ) );
+			$filtered_options = array_filter( self::$options, array( $this, 'get_unchecked_options' ) );
 			$options          = array_merge( $filtered_options, $options );
 			update_site_option( 'wp_beta_tester', (array) $options );
 			add_filter( 'wp_beta_tester_save_redirect', array( $this, 'save_redirect_page' ) );
@@ -113,7 +113,7 @@ class WPBT_Extras {
 	 * @param array $checked
 	 * @return void
 	 */
-	private function filter_save_settings( $checked ) {
+	private function get_unchecked_options( $checked ) {
 		return '1' !== $checked;
 	}
 

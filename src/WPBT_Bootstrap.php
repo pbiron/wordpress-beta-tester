@@ -89,7 +89,8 @@ class WPBT_Bootstrap {
 	 */
 	public function activate() {
 		delete_site_transient( 'update_core' );
-		$wpbt_extras = $this->load_wpbt_extras();
+		$wpbt        = new WP_Beta_Tester( $this->file );
+		$wpbt_extras = new WPBT_Extras( $wpbt, $this->options );
 		$wpbt_extras->activate();
 	}
 
@@ -102,19 +103,9 @@ class WPBT_Bootstrap {
 	 */
 	public function deactivate() {
 		delete_site_transient( 'update_core' );
-		$wpbt_extras = $this->load_wpbt_extras();
+		$wpbt        = new WP_Beta_Tester( $this->file );
+		$wpbt_extras = new WPBT_Extras( $wpbt, $this->options );
 		$wpbt_extras->deactivate();
-	}
-
-	/**
-	 * Load class WPBT_Extras.
-	 *
-	 * @return /stdClass Instance of class WPBT_Extras.
-	 */
-	private function load_wpbt_extras() {
-		$options = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
-		$wpbt    = new WP_Beta_Tester( $this->file );
-		return new WPBT_Extras( $wpbt, $options );
 	}
 
 	/**

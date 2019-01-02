@@ -184,17 +184,13 @@ class WPBT_Extras {
 	 */
 	private function add_constants( $add ) {
 		$config_transformer = new WPBT_WPConfigTransformer( ABSPATH . 'wp-config.php' );
+		$config_args        = array(
+			'raw'       => true,
+			'normalize' => true,
+		);
 		foreach ( array_keys( $add ) as $constant ) {
 			$feature_flag = strtoupper( 'wp_beta_tester_' . $constant );
-			$config_transformer->update(
-				'constant',
-				$feature_flag,
-				'true',
-				array(
-					'raw'       => true,
-					'normalize' => true,
-				)
-			);
+			$config_transformer->update( 'constant', $feature_flag, 'true', $config_args );
 		}
 	}
 

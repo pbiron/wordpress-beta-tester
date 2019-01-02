@@ -32,7 +32,7 @@ class WPBT_Bootstrap {
 	 *
 	 * @var $options
 	 */
-	protected $options;
+	protected static $options;
 
 	/**
 	 * Constructor.
@@ -43,7 +43,7 @@ class WPBT_Bootstrap {
 	public function __construct( $file ) {
 		$this->file    = $file;
 		$this->dir     = dirname( $file );
-		$this->options = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
+		self::$options = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
 	}
 
 	/**
@@ -57,7 +57,7 @@ class WPBT_Bootstrap {
 		// TODO: I really want to do this, but have to wait for PHP 5.4
 		// ( new WP_Beta_Tester( $this->file ) )->run( $this->options );
 		$wpbt = new WP_Beta_Tester( $this->file );
-		$wpbt->run( $this->options );
+		$wpbt->run( self::$options );
 	}
 
 	/**
@@ -90,7 +90,7 @@ class WPBT_Bootstrap {
 	public function activate() {
 		delete_site_transient( 'update_core' );
 		$wpbt        = new WP_Beta_Tester( $this->file );
-		$wpbt_extras = new WPBT_Extras( $wpbt, $this->options );
+		$wpbt_extras = new WPBT_Extras( $wpbt, self::$options );
 		$wpbt_extras->activate();
 	}
 
@@ -104,7 +104,7 @@ class WPBT_Bootstrap {
 	public function deactivate() {
 		delete_site_transient( 'update_core' );
 		$wpbt        = new WP_Beta_Tester( $this->file );
-		$wpbt_extras = new WPBT_Extras( $wpbt, $this->options );
+		$wpbt_extras = new WPBT_Extras( $wpbt, self::$options );
 		$wpbt_extras->deactivate();
 	}
 

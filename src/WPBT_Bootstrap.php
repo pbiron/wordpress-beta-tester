@@ -28,14 +28,22 @@ class WPBT_Bootstrap {
 	protected $dir;
 
 	/**
+	 * Holds plugin options.
+	 *
+	 * @var $options
+	 */
+	protected $options;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param string $file Main plugin file.
 	 * @return void
 	 */
 	public function __construct( $file ) {
-		$this->file = $file;
-		$this->dir  = dirname( $file );
+		$this->file    = $file;
+		$this->dir     = dirname( $file );
+		$this->options = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
 	}
 
 	/**
@@ -47,9 +55,9 @@ class WPBT_Bootstrap {
 		$this->load_requires(); // TODO: replace with composer's autoload.
 		$this->load_hooks();
 		// TODO: I really want to do this, but have to wait for PHP 5.4
-		// ( new WP_Beta_Tester( $this->file ) )->run();
+		// ( new WP_Beta_Tester( $this->file ) )->run( $this->options );
 		$wpbt = new WP_Beta_Tester( $this->file );
-		$wpbt->run();
+		$wpbt->run( $this->options );
 	}
 
 	/**

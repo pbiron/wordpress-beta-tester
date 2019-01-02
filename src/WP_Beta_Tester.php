@@ -35,8 +35,7 @@ class WP_Beta_Tester {
 	 *
 	 * @return void
 	 */
-	public function run() {
-		$options = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
+	public function run( $options ) {
 		$this->load_hooks();
 		// TODO: I really want to do this, but have to wait for PHP 5.4
 		// ( new WPBT_Settings( $this, $options ) )->run();

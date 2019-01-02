@@ -105,7 +105,7 @@ class WPBT_Bootstrap {
 	 */
 	private function load_wpbt_extras() {
 		$options = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
-		$wpbt    = new WP_Beta_Tester( __FILE__ );
+		$wpbt    = new WP_Beta_Tester( $this->file );
 		return new WPBT_Extras( $wpbt, $options );
 	}
 

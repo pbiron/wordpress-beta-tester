@@ -33,6 +33,7 @@ class WP_Beta_Tester {
 	/**
 	 * Rev up the engines.
 	 *
+	 * @param array $options Plugin options.
 	 * @return void
 	 */
 	public function run( $options ) {

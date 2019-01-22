@@ -111,7 +111,6 @@ class WPBT_Extras {
 
 	/**
 	 * Filter saved setting to remove unchecked checkboxes.
-	 * // TODO: convert to anonymous function.
 	 *
 	 * @param array $checked Options.
 	 * @return bool
@@ -146,7 +145,6 @@ class WPBT_Extras {
 
 	/**
 	 * Filter saved settings to get checked options.
-	 * // TODO: convert to anonymous function.
 	 *
 	 * @param mixed $checked Option.
 	 * @return bool

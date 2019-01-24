@@ -170,7 +170,7 @@ class WPBT_Settings {
 	 * @return void
 	 */
 	private function options_tabs() {
-		$current_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'wp_beta_tester_core_settings';
+		$current_tab = isset( $_GET['tab'] ) ? esc_attr( $_GET['tab'] ) : 'wp_beta_tester_core_settings';
 		echo '<h2 class="nav-tab-wrapper">';
 		foreach ( $this->settings_tabs() as $key => $name ) {
 			$active = ( $current_tab === $key ) ? 'nav-tab-active' : '';
@@ -217,7 +217,7 @@ class WPBT_Settings {
 	public function create_settings_page() {
 		$this->saved_settings_notice();
 		$action = is_multisite() ? 'edit.php?action=wp_beta_tester' : 'options.php';
-		$tab    = isset( $_GET['tab'] ) ? $_GET['tab'] : 'wp_beta_tester_core';
+		$tab    = isset( $_GET['tab'] ) ? esc_attr( $_GET['tab'] ) : 'wp_beta_tester_core';
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Beta Testing WordPress', 'wordpress-beta-tester' ); ?></h1>

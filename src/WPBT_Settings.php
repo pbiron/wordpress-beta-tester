@@ -170,7 +170,7 @@ class WPBT_Settings {
 	 * @return void
 	 */
 	private function options_tabs() {
-		$current_tab = isset( $_GET['tab'] ) ? esc_attr( $_GET['tab'] ) : 'wp_beta_tester_core_settings';
+		$current_tab = isset( $_GET['tab'] ) ? esc_attr( $_GET['tab'] ) : 'wp_beta_tester_core';
 		echo '<h2 class="nav-tab-wrapper">';
 		foreach ( $this->settings_tabs() as $key => $name ) {
 			$active = ( $current_tab === $key ) ? 'nav-tab-active' : '';

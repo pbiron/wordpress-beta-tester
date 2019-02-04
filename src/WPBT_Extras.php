@@ -21,6 +21,13 @@ class WPBT_Extras {
 	protected static $options;
 
 	/**
+	 * Holds `wp-config.php` file path.
+	 *
+	 * @var string
+	 */
+	protected static $config_path;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param WP_Beta_Tester $wp_beta_tester Instance of class WP_Beta_Tester.
@@ -29,6 +36,7 @@ class WPBT_Extras {
 	 */
 	public function __construct( WP_Beta_Tester $wp_beta_tester, $options ) {
 		self::$options        = $options;
+		self::$config_path    = $this->get_config_path();
 		$this->wp_beta_tester = $wp_beta_tester;
 	}
 
@@ -42,6 +50,34 @@ class WPBT_Extras {
 		add_action( 'wp_beta_tester_add_settings', array( $this, 'add_settings' ) );
 		add_action( 'wp_beta_tester_add_admin_page', array( $this, 'add_admin_page' ), 10, 2 );
 		add_action( 'wp_beta_tester_update_settings', array( $this, 'save_settings' ) );
+	}
+
+	/**
+	 * Get the `wp-config.php` file path.
+	 *
+	 * The config file may reside one level above ABSPATH but is not part of another installation.
+	 *
+	 * @see wp-load.php#L26-L42
+	 *
+	 * @return string $config_path
+	 */
+	public function get_config_path() {
+		$config_path = ABSPATH . 'wp-config.php';
+
+		if ( ! file_exists( $config_path ) ) {
+			if ( @file_exists( dirname( ABSPATH ) . '/wp-config.php' ) && ! @file_exists( dirname( ABSPATH ) . '/wp-settings.php' ) ) {
+				$config_path = dirname( ABSPATH ) . '/wp-config.php';
+			}
+		}
+
+		/**
+		 * Filter the config file path.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string $config_path
+		 */
+		return apply_filters( 'wp_beta_tester_config_path', $config_path );
 	}
 
 	/**
@@ -181,7 +217,7 @@ class WPBT_Extras {
 	 * @return void
 	 */
 	private function add_constants( $add ) {
-		$config_transformer = new WPBT_WPConfigTransformer( ABSPATH . 'wp-config.php' );
+		$config_transformer = new WPBT_WPConfigTransformer( self::$config_path );
 		$config_args        = array(
 			'raw'       => true,
 			'normalize' => true,
@@ -201,7 +237,7 @@ class WPBT_Extras {
 	 * @return void
 	 */
 	private function remove_constants( $remove ) {
-		$config_transformer = new WPBT_WPConfigTransformer( ABSPATH . 'wp-config.php' );
+		$config_transformer = new WPBT_WPConfigTransformer( self::$config_path );
 		foreach ( array_keys( $remove ) as $constant ) {
 			$feature_flag = strtoupper( 'wp_beta_tester_' . $constant );
 			$config_transformer->remove( 'constant', $feature_flag );

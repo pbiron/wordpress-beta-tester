@@ -29,7 +29,7 @@ The **Extra Settings** tab may contain choices for testing features in trunk tha
 
 Unchecking the feature will remove the constant.
 
-This plugin resets the constants in `wp-config.php` on plugin activation and removes them on plugin deactivation.
+This plugin resets the constants in `wp-config.php` on plugin activation and removes them on plugin deactivation. Use the filter `wp_beta_tester_config_path` to return a non-standard `wp-config.php` file path.
 
 If no settings are present there is no testing to be done that requires this feature.
 

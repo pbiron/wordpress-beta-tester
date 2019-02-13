@@ -9,16 +9,17 @@
  */
 
 /**
- * Plugin Name: WordPress Beta Tester
- * Plugin URI: https://wordpress.org/plugins/wordpress-beta-tester/
- * Description: Allows you to easily upgrade to Beta releases.
- * Author: Peter Westwood, Andy Fragen
- * Version: 1.2.6.18
- * Network: true
- * Author URI: https://blog.ftwr.co.uk/
- * Text Domain: wordpress-beta-tester
- * License: GPL v2 or later
- * License URI: https://www.opensource.org/licenses/GPL-2.0
+ * Plugin Name:       WordPress Beta Tester
+ * Plugin URI:        https://wordpress.org/plugins/wordpress-beta-tester/
+ * Description:       Allows you to easily upgrade to Beta releases.
+ * Author:            Peter Westwood, Andy Fragen
+ * Version:           1.2.6.19
+ * Network:           true
+ * Author URI:        https://blog.ftwr.co.uk/
+ * Text Domain:       wordpress-beta-tester
+ * Domain Path:       /languages
+ * License:           GPL v2 or later
+ * License URI:       https://www.opensource.org/licenses/GPL-2.0
  * GitHub Plugin URI: https://github.com/afragen/wordpress-beta-tester
  */
 

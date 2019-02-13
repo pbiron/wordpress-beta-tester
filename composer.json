@@ -43,5 +43,10 @@
         "classmap": [
             "src/"
         ]
+    },
+    "scripts": {
+        "post-update-cmd": [
+            "wp i18n make-pot . languages/wordpress-beta-tester.pot"
+        ]
     }
 }

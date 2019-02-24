@@ -52,6 +52,7 @@ class WPBT_Bootstrap {
 	 * @return void
 	 */
 	public function run() {
+		// require_once $this->dir . '/vendor/autoload.php';
 		$this->load_requires(); // TODO: replace with composer's autoload.
 		$this->load_hooks();
 		// TODO: I really want to do this, but have to wait for PHP 5.4

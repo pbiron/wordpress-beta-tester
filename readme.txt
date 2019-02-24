@@ -1,9 +1,9 @@
 === WordPress Beta Tester  ===
 Tags: beta, advanced, testing
 Contributors: westi, mlteal, afragen
-Tested up to: 5.0
-Requires at least: 3.0.5
-Stable Tag: 1.2.6
+Tested up to: 5.1
+Requires at least: 3.1
+Stable Tag: 2.0.0
 License: GPLv2
 License URI: https://www.opensource.org/licenses/GPL-2.0
 Requires PHP: 5.2.4
@@ -21,9 +21,26 @@ For the more adventurous there is the option to switch to the bleeding edge (tru
 
 Don't forget to backup before you start!
 
+### Extra Settings
+
+The **Extra Settings** tab may contain choices for testing features in trunk that require constants to be set. A checked feature will add a constant to the user's `wp-config.php` file in the format as follows:
+
+`define( 'WP_BETA_TESTER_{$feature}', true );`
+
+Unchecking the feature will remove the constant.
+
+This plugin resets the constants in `wp-config.php` on plugin activation and removes them on plugin deactivation. Use the filter `wp_beta_tester_config_path` to return a non-standard `wp-config.php` file path.
+
+If no settings are present there is no testing to be done that requires this feature.
+
 PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 
 == Changelog ==
+
+= 2.0.0 =
+* near complete re-write to use more OOPy practices
+* put distinct process into separate classes
+* allows for multiple settings tabs for addtional settings
 
 = 1.2.6 =
 * remove extraneous code
@@ -77,70 +94,7 @@ PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 * Update screenshot.
 * Fix a couple typos.
 
-= 0.99 =
-* Add support for HTTPS urls on WP.org as well as non-HTTPS ones.
-
-= 0.98 =
-* Unforce HTTPS for all api.wordpress.org requests.
-
-= 0.97 =
-* Force HTTPS for all api.wordpress.org requests.
-
-= 0.96 =
-* WordPress 3.4.x compatibility fixes
-
-= 0.95 =
-* Further WordPress 3.2 compatibility fixes from nacin
-* Addition of activate and deactivate hooks to clear down the update core transient.
-
-= 0.94 =
-* WordPress 3.2 compatibility fixes from dd32
-
-= 0.93 =
-* Fixed a bug in the point release nightlies stream whereby we displayed the downgrade message erroneously
-
-= 0.92 =
-* Add support for converting WordPress mu installs over to WordPress 3.0 RC 1 dev track
-
-= 0.91 =
-* Fix bug which causes the message to always display
-
-= 0.90 =
-* Added a big error message to warn people that there configuration is going to downgrade the version of WordPress they have installed
-
-= 0.81 =
-* Fixed an issue in the version mangling for the bleeding edge develpment track which didn't handle the x.9 => y.0 transition
-* Added translation files for Albanian and French.
-
-= 0.8 =
-* Fixed noticed on dashboard after upgrade and before the update api data was refreshed
-* Added translation files for German, Bosnian, Italian, Polish and Romanian.
-
-= 0.7 =
-* Completed support for translations
-* Added translation files for Japanese
-* Fixed issue with calls to get_preferred_from_update_core() when running on a cron hook.
-
-= 0.6 =
-* Update the code to validate the returned upgrade url so as to ensure that we only offer to upgrade to builds that exist.
-
-= 0.5 =
-* Initial Release containing support for switching your blog to point release nightlies or bleeding edge nightlies
-
-== Upgrade Notice ==
-
-= 0.97 =
-* This update forces https for all WordPress.org API requests please report issues here: http://core.trac.wordpress.org/ticket/18577
-
-= 0.95 =
-* Further WordPress 3.2 compatibility fixes from nacin
-
-= 0.94 =
-* WordPress 3.2 compatibility fixes from dd32
-
-= 0.92 =
-Added support for upgrading WordPress MU to WordPress 3.0 dev builds using built-in upgrader.
-Updated Russian language pack.
+= See old-changelog.txt for previous changelog items =
 
 == Installation ==
 
@@ -152,4 +106,5 @@ Updated Russian language pack.
 
 == Screenshots ==
 
-1. This shows the administration page for the plugin
+1. This shows the main administration page for the plugin
+2. This shows the Extra Settings page for the plugin

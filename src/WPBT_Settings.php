@@ -270,7 +270,7 @@ class WPBT_Settings {
 		?>
 		<style> .form-table th { display:none; } </style>
 		<label for="<?php esc_attr_e( $args['id'] ); ?>">
-			<input type="checkbox" id="<?php esc_attr_e( $args['id'] ); ?>" name="wp-beta-tester[<?php esc_attr_e( $args['id'] ); ?>]" value="1" <?php checked( '1', $checked ); ?> >
+			<input type="checkbox" name="wp-beta-tester[<?php esc_attr_e( $args['id'] ); ?>]" value="1" <?php checked( '1', $checked ); ?> >
 			<?php esc_attr_e( $args['title'] ); ?>
 		</label>
 		<?php

@@ -37,6 +37,9 @@ PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 
 == Changelog ==
 
+= 2.0.1=
+* a11y fixes for settings tabs
+
 = 2.0.2 =
 * a11y fixes for checkbox, thanks @audrasjb
 

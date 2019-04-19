@@ -171,12 +171,12 @@ class WPBT_Settings {
 	 */
 	private function options_tabs() {
 		$current_tab = isset( $_GET['tab'] ) ? esc_attr( $_GET['tab'] ) : 'wp_beta_tester_core';
-		echo '<h2 class="nav-tab-wrapper">';
+		echo '<nav class="nav-tab-wrapper" aria-label="Secondary menu">';
 		foreach ( $this->settings_tabs() as $key => $name ) {
 			$active = ( $current_tab === $key ) ? 'nav-tab-active' : '';
 			echo( wp_kses_post( '<a class="nav-tab ' . $active . '" href="?page=wp_beta_tester&tab=' . $key . '">' . $name . '</a>' ) );
 		}
-		echo '</h2>';
+		echo '</nav>';
 	}
 
 	/**

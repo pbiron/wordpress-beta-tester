@@ -1,9 +1,9 @@
 === WordPress Beta Tester  ===
 Tags: beta, advanced, testing
 Contributors: westi, mlteal, afragen
-Tested up to: 5.1
+Tested up to: 5.2
 Requires at least: 3.1
-Stable Tag: 2.0.2
+Stable Tag: 2.0.3
 License: GPLv2
 License URI: https://www.opensource.org/licenses/GPL-2.0
 Requires PHP: 5.2.4
@@ -37,8 +37,9 @@ PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 
 == Changelog ==
 
-= 2.0.1=
+= 2.0.3 =
 * a11y fixes for settings tabs
+* update `wp-cli/wp-config-transformer`
 
 = 2.0.2 =
 * a11y fixes for checkbox, thanks @audrasjb

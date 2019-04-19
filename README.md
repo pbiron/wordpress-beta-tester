@@ -1,7 +1,7 @@
 # WordPress Beta Tester
 * Tags: beta, advanced, testing
 * Contributors: [westi](https://github.com/westi), [mlteal](https://github.com/mlteal), [afragen](https://github.com/afragen)
-* Tested up to: 5.1
+* Tested up to: 5.2
 * Requires at least: 3.1
 * Stable Tag: master
 * License: GPLv2

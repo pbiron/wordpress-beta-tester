@@ -1,5 +1,5 @@
 [unreleased]
-* add update version to settings page text
+* add update version information to settings page text
 
 #### 2.0.3
 * a11y fixes for settings tabs

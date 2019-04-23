@@ -30,7 +30,7 @@ class WPBT_Settings {
 	/**
 	 * Constructor.
 	 *
-	 * @param WP_Beta_Tester $wp_beta_tester Instance of class WP_Beta_Tester
+	 * @param WP_Beta_Tester $wp_beta_tester Instance of class WP_Beta_Tester.
 	 * @param mixed          $options Saved site options.
 	 * @return void
 	 */

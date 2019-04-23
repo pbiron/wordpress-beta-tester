@@ -66,7 +66,7 @@ class WP_Beta_Tester {
 	 * @return void
 	 */
 	public function action_admin_head_plugins_php() {
-		// Workaround the check throttling in wp_version_check()
+		// Workaround the check throttling in wp_version_check().
 		$st = get_site_transient( 'update_core' );
 		if ( is_object( $st ) ) {
 			$st->last_checked = 0;
@@ -74,7 +74,7 @@ class WP_Beta_Tester {
 		}
 		wp_version_check();
 
-		// Can output an error here if current config drives version backwards
+		// Can output an error here if current config drives version backwards.
 		if ( $this->check_if_settings_downgrade() ) {
 			echo '<div id="message" class="error"><p>';
 			$admin_page = is_multisite() ? 'settings.php' : 'tools.php';

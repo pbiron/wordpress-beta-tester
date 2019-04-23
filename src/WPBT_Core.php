@@ -145,7 +145,7 @@ class WPBT_Core {
 		echo '</p><p>';
 		printf(
 			/* translators: %s: update version */
-			wp_kses_post( 'Currently set to update to version %s.', 'wordpress-beta-tester' ),
+			wp_kses_post( 'Currently your site is set to update to version %s.', 'wordpress-beta-tester' ),
 			esc_attr( $preferred->version )
 		);
 		echo '</p><p>';

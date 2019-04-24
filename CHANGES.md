@@ -1,4 +1,6 @@
 [unreleased]
+
+#### 2.0.4
 * add update version information to settings page text
 
 #### 2.0.3

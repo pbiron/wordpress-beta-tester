@@ -4,7 +4,7 @@ Tags: beta, advanced, testing
 Contributors: westi, mlteal, afragen
 Tested up to: 5.2
 Requires at least: 3.1
-Stable Tag: 2.0.3
+Stable Tag: 2.0.4
 License: GPLv2
 License URI: https://www.opensource.org/licenses/GPL-2.0
 Requires PHP: 5.2.4
@@ -37,6 +37,9 @@ If no settings are present there is no testing to be done that requires this fea
 PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 
 ## Changelog
+
+#### 2.0.4
+* add update version information to settings page text
 
 #### 2.0.3
 * a11y fixes for settings tabs

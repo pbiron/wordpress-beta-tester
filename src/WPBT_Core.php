@@ -124,7 +124,7 @@ class WPBT_Core {
 			echo '<p>' . wp_kses_post( __( '<strong>Please note:</strong> There are no development builds of the beta stream you have chosen available, so you will receive normal update notifications.', 'wordpress-beta-tester' ) ) . '</p>';
 			echo '</div>';
 		}
-		$this->wp_beta_tester->action_admin_head_plugins_php(); // Check configuration
+		$this->wp_beta_tester->action_admin_head_plugins_php(); // Check configuration.
 
 		echo '<div><p>';
 		printf(
@@ -142,6 +142,12 @@ class WPBT_Core {
 		);
 		echo '</p><p>';
 		echo( wp_kses_post( __( 'By default, your WordPress install uses the stable update stream. To return to this, please deactivate this plugin and re-install from the <a href="update-core.php">WordPress Updates</a> page.', 'wordpress-beta-tester' ) ) );
+		echo '</p><p>';
+		printf(
+			/* translators: %s: update version */
+			wp_kses_post( 'Currently your site is set to update to version %s.', 'wordpress-beta-tester' ),
+			esc_attr( $preferred->version )
+		);
 		echo '</p><p>';
 		esc_html_e( 'Please select the update stream you would like this website to use:', 'wordpress-beta-tester' );
 		echo '</p></div>';

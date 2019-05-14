@@ -1,5 +1,5 @@
 .DS_Store
 .idea
-.plugins_svnignore
+.svnignore
 vendor/composer
 vendor/autoload.php

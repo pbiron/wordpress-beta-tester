@@ -273,6 +273,11 @@ class WPBT_Settings {
 		<label for="<?php esc_attr_e( $args['id'] ); ?>">
 			<input type="checkbox" id="<?php esc_attr_e( $args['id'] ); ?>" name="wp-beta-tester[<?php esc_attr_e( $args['id'] ); ?>]" value="1" <?php checked( '1', $checked ); ?> >
 			<?php esc_attr_e( $args['title'] ); ?>
+			<?php
+			if ( isset( $args['description'] ) ) {
+				echo '<p class="description">' . esc_attr__( $args['description'] ) . '</p>';
+			}
+			?>
 		</label>
 		<?php
 	}

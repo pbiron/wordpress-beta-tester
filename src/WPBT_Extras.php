@@ -123,8 +123,9 @@ class WPBT_Extras {
 			'wp_beta_tester_extras',
 			'wp_beta_tester_email',
 			array(
-				'id'    => 'skip_autoupdate_email',
-				'title' => esc_html__( 'Skip successful autoupdate emails.', 'wordpress-beta-tester' ),
+				'id'          => 'skip_autoupdate_email',
+				'title'       => esc_html__( 'Skip successful autoupdate emails.', 'wordpress-beta-tester' ),
+				'description' => esc_html__( 'Disable sending emails to the admin user for successful autoupdates. Only emails indicating failures of the autoupdate process are sent.', 'wordpress-beta-tester' ),
 			)
 		);
 
@@ -136,8 +137,9 @@ class WPBT_Extras {
 			'wp_beta_tester_extras',
 			'wp_beta_tester_new_feature_testing',
 			array(
-				'id'    => 'example',
-				'title' => esc_html__( 'Just an example. Look in `wp-config.php` for results.', 'wordpress-beta-tester' ),
+				'id'          => 'example',
+				'title'       => esc_html__( 'Just an example.', 'wordpress-beta-tester' ),
+				'description' => esc_html__( 'Look in `wp-config.php` for results.', 'wordpress-beta-tester' ),
 			)
 		);
 	}

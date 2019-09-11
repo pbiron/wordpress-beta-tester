@@ -24,7 +24,7 @@ Don't forget to backup before you start!
 
 ### Extra Settings
 
-There is a setting to **Skip successful autoupdate emails**.
+There is a setting to **Skip successful autoupdate emails**.  It functions to disable sending emails to the admin user for successful autoupdates. Only emails indicating failures of the autoupdate process are sent.
 
 The **Extra Settings** tab may contain choices for testing new features in trunk that require constants to be set. A checked feature will add a constant to the user's `wp-config.php` file in the format as follows:
 

@@ -2,7 +2,7 @@
 
 Tags: beta, advanced, testing
 Contributors: westi, mlteal, afragen
-Tested up to: 5.2
+Tested up to: 5.3
 Requires at least: 3.1
 Stable Tag: 2.0.4
 License: GPLv2

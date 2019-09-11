@@ -55,7 +55,7 @@ class WPBT_Bootstrap {
 		// require_once $this->dir . '/vendor/autoload.php';
 		$this->load_requires(); // TODO: replace with composer's autoload.
 		$this->load_hooks();
-		// TODO: I really want to do this, but have to wait for PHP 5.4
+		// TODO: I really want to do this, but have to wait for PHP 5.4.
 		// ( new WP_Beta_Tester( $this->file ) )->run( $this->options );
 		$wpbt = new WP_Beta_Tester( $this->file );
 		$wpbt->run( self::$options );

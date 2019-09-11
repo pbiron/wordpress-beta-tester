@@ -244,7 +244,7 @@ class WPBT_Settings {
 	/**
 	 * Sanitize each setting field as needed.
 	 *
-	 * @param array $input Contains all settings fields as array keys
+	 * @param array $input Contains all settings fields as array keys.
 	 *
 	 * @return array
 	 */
@@ -264,7 +264,7 @@ class WPBT_Settings {
 	/**
 	 * Get the settings option array and print one of its values.
 	 *
-	 * @param array $args 'id' and 'title'
+	 * @param array $args 'id' and 'title'.
 	 */
 	public static function checkbox_setting( $args ) {
 		$checked = isset( self::$options[ $args['id'] ] ) ? self::$options[ $args['id'] ] : null;

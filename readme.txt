@@ -26,6 +26,8 @@ Don't forget to backup before you start!
 
 There is a setting to **Skip successful autoupdate emails**.
 
+The **Extra Settings** tab may contain choices for testing new features in trunk that require constants to be set. A checked feature will add a constant to the user's `wp-config.php` file in the format as follows:
+
 `define( 'WP_BETA_TESTER_{$feature}', true );`
 
 Unchecking the feature will remove the constant.

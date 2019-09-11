@@ -109,6 +109,13 @@ class WPBT_Extras {
 			'wp_beta_tester_extras'
 		);
 
+		add_settings_section(
+			'wp_beta_tester_new_feature_testing',
+			esc_html__( 'New Feature Testing', 'wordpress-beta-tester' ),
+			array( $this, 'print_new_feature_testing_top' ),
+			'wp_beta_tester_extras'
+		);
+
 		add_settings_field(
 			'skip_autoupdate_email',
 			null,
@@ -127,7 +134,7 @@ class WPBT_Extras {
 			null,
 			array( 'WPBT_Settings', 'checkbox_setting' ),
 			'wp_beta_tester_extras',
-			'wp_beta_tester_extras',
+			'wp_beta_tester_new_feature_testing',
 			array(
 				'id'    => 'example',
 				'title' => esc_html__( 'Just an example. Look in `wp-config.php` for results.', 'wordpress-beta-tester' ),
@@ -270,11 +277,11 @@ class WPBT_Extras {
 	}
 
 	/**
-	 * Print settings section information.
+	 * Print new feature testing section information.
 	 *
 	 * @return void
 	 */
-	public function print_extra_settings_top() {
+	public function print_new_feature_testing_top() {
 		esc_html_e( 'This area is for extra special beta testing. If nothing is present there are no additional features that need testing. Features will set constants in the `wp-config.php` file.', 'wordpress-beta-tester' );
 	}
 

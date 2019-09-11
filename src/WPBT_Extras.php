@@ -103,10 +103,22 @@ class WPBT_Extras {
 		);
 
 		add_settings_section(
-			'wp_beta_tester_extras',
-			esc_html__( 'Extra Settings', 'wordpress-beta-tester' ),
-			array( $this, 'print_extra_settings_top' ),
+			'wp_beta_tester_email',
+			null,
+			null,
 			'wp_beta_tester_extras'
+		);
+
+		add_settings_field(
+			'skip_autoupdate_email',
+			null,
+			array( 'WPBT_Settings', 'checkbox_setting' ),
+			'wp_beta_tester_extras',
+			'wp_beta_tester_email',
+			array(
+				'id'    => 'skip_autoupdate_email',
+				'title' => esc_html__( 'Skip successful autoupdate emails.', 'wordpress-beta-tester' ),
+			)
 		);
 
 		// Example.
@@ -197,6 +209,9 @@ class WPBT_Extras {
 	 * @return void
 	 */
 	private function update_constants( $old, $new ) {
+		unset( $new['skip_autoupdate_email'] );
+		unset( $old['skip_autoupdate_email'] );
+
 		$remove = array_diff_assoc( $old, $new );
 		$add    = array_diff_assoc( $new, $old );
 
@@ -282,5 +297,45 @@ class WPBT_Extras {
 			<?php endif; ?>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Skip successful autoupdate emails.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @return void
+	 */
+	public function skip_autoupdate_email() {
+		if ( ! isset( self::$options['skip_autoupdate_email'] ) ) {
+			return;
+		}
+		// Disable update emails on success.
+		add_filter(
+			'auto_core_update_send_email',
+			function( $true, $type ) {
+				$true = 'success' === $type ? false : $true;
+				return $true;
+			},
+			10,
+			2
+		);
+
+		// Disable sending debug email if no failures.
+		add_filter(
+			'automatic_updates_debug_email',
+			function( $email, $failures ) {
+				$empty_email = [
+					'to'      => null,
+					'subject' => null,
+					'body'    => null,
+					'headers' => null,
+				];
+				$email       = 0 === $failures ? $empty_email : $email;
+				return $email;
+			},
+			10,
+			2
+		);
 	}
 }

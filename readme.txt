@@ -24,7 +24,7 @@ Don't forget to backup before you start!
 
 ### Extra Settings
 
-The **Extra Settings** tab may contain choices for testing features in trunk that require constants to be set. A checked feature will add a constant to the user's `wp-config.php` file in the format as follows:
+There is a setting to **Skip successful autoupdate emails**.
 
 `define( 'WP_BETA_TESTER_{$feature}', true );`
 
@@ -37,6 +37,9 @@ If no settings are present there is no testing to be done that requires this fea
 PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 
 ## Changelog
+
+#### 2.x.x
+* add extra setting to skip successful autoupdate emails
 
 #### 2.0.4
 * add update version information to settings page text

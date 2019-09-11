@@ -53,6 +53,7 @@ class WPBT_Settings {
 		$wpbt_core->load_hooks();
 		$wpbt_extras = new WPBT_Extras( $this->wp_beta_tester, self::$options );
 		$wpbt_extras->load_hooks();
+		$wpbt_extras->skip_autoupdate_email();
 	}
 
 	/**

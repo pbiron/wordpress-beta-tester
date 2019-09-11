@@ -1,4 +1,5 @@
 [unreleased]
+* add extra setting to skip successful autoupdate emails
 
 #### 2.0.4
 * add update version information to settings page text

@@ -4,7 +4,7 @@ Tags: beta, advanced, testing
 Contributors: westi, mlteal, afragen
 Tested up to: 5.3
 Requires at least: 3.1
-Stable Tag: 2.0.4
+Stable Tag: 2.1.0
 License: GPLv2
 License URI: https://www.opensource.org/licenses/GPL-2.0
 Requires PHP: 5.2.4
@@ -40,8 +40,10 @@ PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 
 ## Changelog
 
-#### 2.x.x
+#### 2.1.0 / 2019-09-17
 * add extra setting to skip successful autoupdate emails
+* add description to checkbox settings
+* composer update
 
 #### 2.0.4
 * add update version information to settings page text

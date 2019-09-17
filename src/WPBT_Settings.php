@@ -53,6 +53,7 @@ class WPBT_Settings {
 		$wpbt_core->load_hooks();
 		$wpbt_extras = new WPBT_Extras( $this->wp_beta_tester, self::$options );
 		$wpbt_extras->load_hooks();
+		$wpbt_extras->skip_autoupdate_email();
 	}
 
 	/**
@@ -243,7 +244,7 @@ class WPBT_Settings {
 	/**
 	 * Sanitize each setting field as needed.
 	 *
-	 * @param array $input Contains all settings fields as array keys
+	 * @param array $input Contains all settings fields as array keys.
 	 *
 	 * @return array
 	 */
@@ -263,7 +264,7 @@ class WPBT_Settings {
 	/**
 	 * Get the settings option array and print one of its values.
 	 *
-	 * @param array $args 'id' and 'title'
+	 * @param array $args 'id' and 'title'.
 	 */
 	public static function checkbox_setting( $args ) {
 		$checked = isset( self::$options[ $args['id'] ] ) ? self::$options[ $args['id'] ] : null;
@@ -272,6 +273,11 @@ class WPBT_Settings {
 		<label for="<?php esc_attr_e( $args['id'] ); ?>">
 			<input type="checkbox" id="<?php esc_attr_e( $args['id'] ); ?>" name="wp-beta-tester[<?php esc_attr_e( $args['id'] ); ?>]" value="1" <?php checked( '1', $checked ); ?> >
 			<?php esc_attr_e( $args['title'] ); ?>
+			<?php
+			if ( isset( $args['description'] ) ) {
+				echo '<p class="description">' . esc_attr__( $args['description'] ) . '</p>';
+			}
+			?>
 		</label>
 		<?php
 	}

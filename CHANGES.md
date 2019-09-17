@@ -1,5 +1,10 @@
 [unreleased]
 
+#### 2.1.0 / 2019-09-17
+* add extra setting to skip successful autoupdate emails
+* add description to checkbox settings
+* composer update
+
 #### 2.0.4
 * add update version information to settings page text
 

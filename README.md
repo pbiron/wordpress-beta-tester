@@ -1,7 +1,7 @@
 # WordPress Beta Tester
 * Tags: beta, advanced, testing
 * Contributors: [westi](https://github.com/westi), [mlteal](https://github.com/mlteal), [afragen](https://github.com/afragen)
-* Tested up to: 5.2
+* Tested up to: 5.3
 * Requires at least: 3.1
 * Stable Tag: master
 * License: GPLv2
@@ -23,7 +23,9 @@ Don't forget to backup before you start!
 
 ### Extra Settings
 
-The **Extra Settings** tab may contain choices for testing features in trunk that require constants to be set. A checked feature will add a constant to the user's `wp-config.php` file in the format as follows:
+There is a setting to **Skip successful autoupdate emails**. It functions to disable sending emails to the admin user for successful autoupdates. Only emails indicating failures of the autoupdate process are sent.
+
+The **Extra Settings** tab may contain choices for testing new features in trunk that require constants to be set. A checked feature will add a constant to the user's `wp-config.php` file in the format as follows:
 
 `define( 'WP_BETA_TESTER_{$feature}', true );`
 

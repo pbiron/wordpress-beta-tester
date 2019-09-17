@@ -103,10 +103,30 @@ class WPBT_Extras {
 		);
 
 		add_settings_section(
-			'wp_beta_tester_extras',
-			esc_html__( 'Extra Settings', 'wordpress-beta-tester' ),
-			array( $this, 'print_extra_settings_top' ),
+			'wp_beta_tester_email',
+			null,
+			null,
 			'wp_beta_tester_extras'
+		);
+
+		add_settings_section(
+			'wp_beta_tester_new_feature_testing',
+			esc_html__( 'New Feature Testing', 'wordpress-beta-tester' ),
+			array( $this, 'print_new_feature_testing_top' ),
+			'wp_beta_tester_extras'
+		);
+
+		add_settings_field(
+			'skip_autoupdate_email',
+			null,
+			array( 'WPBT_Settings', 'checkbox_setting' ),
+			'wp_beta_tester_extras',
+			'wp_beta_tester_email',
+			array(
+				'id'          => 'skip_autoupdate_email',
+				'title'       => esc_html__( 'Skip successful autoupdate emails.', 'wordpress-beta-tester' ),
+				'description' => esc_html__( 'Disable sending emails to the admin user for successful autoupdates. Only emails indicating failures of the autoupdate process are sent.', 'wordpress-beta-tester' ),
+			)
 		);
 
 		// Example.
@@ -115,10 +135,11 @@ class WPBT_Extras {
 			null,
 			array( 'WPBT_Settings', 'checkbox_setting' ),
 			'wp_beta_tester_extras',
-			'wp_beta_tester_extras',
+			'wp_beta_tester_new_feature_testing',
 			array(
-				'id'    => 'example',
-				'title' => esc_html__( 'Just an example. Look in `wp-config.php` for results.', 'wordpress-beta-tester' ),
+				'id'          => 'example',
+				'title'       => esc_html__( 'Just an example.', 'wordpress-beta-tester' ),
+				'description' => esc_html__( 'Look in `wp-config.php` for results.', 'wordpress-beta-tester' ),
 			)
 		);
 	}
@@ -197,6 +218,9 @@ class WPBT_Extras {
 	 * @return void
 	 */
 	private function update_constants( $old, $new ) {
+		unset( $new['skip_autoupdate_email'] );
+		unset( $old['skip_autoupdate_email'] );
+
 		$remove = array_diff_assoc( $old, $new );
 		$add    = array_diff_assoc( $new, $old );
 
@@ -255,11 +279,11 @@ class WPBT_Extras {
 	}
 
 	/**
-	 * Print settings section information.
+	 * Print new feature testing section information.
 	 *
 	 * @return void
 	 */
-	public function print_extra_settings_top() {
+	public function print_new_feature_testing_top() {
 		esc_html_e( 'This area is for extra special beta testing. If nothing is present there are no additional features that need testing. Features will set constants in the `wp-config.php` file.', 'wordpress-beta-tester' );
 	}
 
@@ -282,5 +306,45 @@ class WPBT_Extras {
 			<?php endif; ?>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Skip successful autoupdate emails.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @return void
+	 */
+	public function skip_autoupdate_email() {
+		if ( ! isset( self::$options['skip_autoupdate_email'] ) ) {
+			return;
+		}
+		// Disable update emails on success.
+		add_filter(
+			'auto_core_update_send_email',
+			function( $true, $type ) {
+				$true = 'success' === $type ? false : $true;
+				return $true;
+			},
+			10,
+			2
+		);
+
+		// Disable sending debug email if no failures.
+		add_filter(
+			'automatic_updates_debug_email',
+			function( $email, $failures ) {
+				$empty_email = [
+					'to'      => null,
+					'subject' => null,
+					'body'    => null,
+					'headers' => null,
+				];
+				$email       = 0 === $failures ? $empty_email : $email;
+				return $email;
+			},
+			10,
+			2
+		);
 	}
 }

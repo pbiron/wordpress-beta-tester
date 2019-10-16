@@ -116,11 +116,11 @@ class WPBT_Bootstrap {
 	 * @return void
 	 */
 	public function load_requires() {
-		require_once $this->dir . '/src/WP_Beta_Tester.php';
-		require_once $this->dir . '/src/WPBT_Settings.php';
-		require_once $this->dir . '/src/WPBT_Core.php';
-		require_once $this->dir . '/src/WPBT_Extras.php';
-		require_once $this->dir . '/src/WPBT_Beta_RC.php';
+		require_once $this->dir . '/src/WPBT/WP_Beta_Tester.php';
+		require_once $this->dir . '/src/WPBT/WPBT_Settings.php';
+		require_once $this->dir . '/src/WPBT/WPBT_Core.php';
+		require_once $this->dir . '/src/WPBT/WPBT_Extras.php';
+		require_once $this->dir . '/src/WPBT/WPBT_Beta_RC.php';
 		require_once $this->dir . '/vendor/WPConfigTransformer.php';
 	}
 }

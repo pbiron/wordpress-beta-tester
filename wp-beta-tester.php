@@ -30,7 +30,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-require_once dirname( __FILE__ ) . '/src/WPBT_Bootstrap.php';
+require_once dirname( __FILE__ ) . '/src/WPBT/WPBT_Bootstrap.php';
 // TODO: I really want to do this, but have to wait for PHP 5.4
 // ( new WPBT_Bootstrap( __FILE__ ) )->run();
 $wp_beta_tester_bootstrap = new WPBT_Bootstrap( __FILE__ );

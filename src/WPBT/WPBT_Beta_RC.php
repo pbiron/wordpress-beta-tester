@@ -1,7 +1,6 @@
 <?php
 
 /**
- * Plugin Name: SHC WordPress Beta/RC Tester
  * Description: Limit core updates to next Beta/RC release if currently running a Beta/RC release
  * Version: 0.1.0
  * Author: Paul V. Biron/Sparrow Hawk Computing

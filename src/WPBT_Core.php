@@ -173,6 +173,13 @@ class WPBT_Core {
 			</label></th>
 			<td><?php echo( wp_kses_post( __( 'This is the bleeding edge development code from `trunk` which may be unstable at times. <em>Only use this if you really know what you are doing</em>.', 'wordpress-beta-tester' ) ) ); ?></td>
 		</tr>
+		<tr>
+			<th><label><input name="wp-beta-tester" id="update-stream-beta-rc"    type="radio" value="beta-rc" class="tog" <?php checked( 'beta-rc', self::$options['stream'] ); ?> />
+			<?php esc_html_e( 'Beta/RC releases only', 'wordpress-beta-tester' ); ?>
+			</label></th>
+			<td><?php echo( wp_kses_post( __( 'This is for the Beta/RC releases only of development code from `trunk` or a x.x.x point release. It takes your currently running version as a starting point. If on `trunk` it will only update to beta/RC releases of `trunk`. If on point releases then it will only update to beta/RC releases of point releases.', 'wordpress-beta-tester' ) ) ); ?></td>
+		</tr>
+
 		</fieldset>
 		<?php
 	}

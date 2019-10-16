@@ -169,6 +169,11 @@ class WP_Beta_Tester {
 				}
 				$wp_version = $versions[0] . '.' . $versions[1] . '-wp-beta-tester';
 				break;
+			case 'beta-rc':
+				$wp_version   = isset( $versions[3] )
+				? $wp_version = $versions[0] . '.' . $versions[1] . '.' . $versions[2] . '-wp-beta-tester'
+				: $wp_version = $versions[0] . '.' . $versions[1] . '-wp-beta-tester';
+				break;
 		}
 
 		return $wp_version;

@@ -120,6 +120,7 @@ class WPBT_Bootstrap {
 		require_once $this->dir . '/src/WPBT_Settings.php';
 		require_once $this->dir . '/src/WPBT_Core.php';
 		require_once $this->dir . '/src/WPBT_Extras.php';
+		require_once $this->dir . '/src/WPBT_Beta_RC.php';
 		require_once $this->dir . '/vendor/WPConfigTransformer.php';
 	}
 }

@@ -41,6 +41,7 @@ class WP_Beta_Tester {
 		// TODO: I really want to do this, but have to wait for PHP 5.4
 		// ( new WPBT_Settings( $this, $options ) )->run();
 		$settings = new WPBT_Settings( $this, $options );
+		new WPBT_Beta_RC();
 		$settings->run();
 	}
 
@@ -154,7 +155,13 @@ class WP_Beta_Tester {
 			return $wp_version;
 		}
 
-		$versions = array_map( 'intval', explode( '.', $preferred->current ) );
+		if ( 0 === strpos( '/beta-rc/', $options['stream' ] ) &&
+				version_compare( $preferred->current, $wp_version, 'lt' ) ) {
+			$versions = array_map( 'intval', explode( '.', $wp_version ) );
+		}
+		else {
+			$versions = array_map( 'intval', explode( '.', $preferred->current ) );
+		}
 
 		switch ( $options['stream'] ) {
 			case 'point':

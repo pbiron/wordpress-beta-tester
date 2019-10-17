@@ -47,8 +47,8 @@ class WPBT_Settings {
 	public function run() {
 		$this->load_hooks();
 		// TODO: I really want to do this, but have to wait for PHP 5.4
-		// ( new WPBT_Core( $this->wp_beta_tester, self::$options ) )->load_hooks();
-		// ( new WPBT_Extras( $this->wp_beta_tester, self::$options ) )->load_hooks();
+		// TODO: ( new WPBT_Core( $this->wp_beta_tester, self::$options ) )->load_hooks();
+		// TODO: ( new WPBT_Extras( $this->wp_beta_tester, self::$options ) )->load_hooks();
 		$wpbt_core = new WPBT_Core( $this->wp_beta_tester, self::$options );
 		$wpbt_core->load_hooks();
 		$wpbt_extras = new WPBT_Extras( $this->wp_beta_tester, self::$options );

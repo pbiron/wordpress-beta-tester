@@ -155,11 +155,10 @@ class WP_Beta_Tester {
 			return $wp_version;
 		}
 
-		if ( 0 === strpos( '/beta-rc/', $options['stream' ] ) &&
+		if ( 0 === strpos( $options['stream'], 'beta-rc' ) &&
 				version_compare( $preferred->current, $wp_version, 'lt' ) ) {
 			$versions = array_map( 'intval', explode( '.', $wp_version ) );
-		}
-		else {
+		} else {
 			$versions = array_map( 'intval', explode( '.', $preferred->current ) );
 		}
 

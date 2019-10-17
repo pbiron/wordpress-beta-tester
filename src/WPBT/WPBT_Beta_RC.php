@@ -1,4 +1,12 @@
 <?php
+/**
+ * WordPress Beta Tester
+ *
+ * @package WordPress_Beta_Tester
+ * @author Andy Fragen, original author Peter Westwood.
+ * @license GPLv2+
+ * @copyright 2009-2016 Peter Westwood (email : peter.westwood@ftwr.co.uk)
+ */
 
 /**
  * Author: Paul V. Biron/Sparrow Hawk Computing
@@ -41,7 +49,7 @@ class WPBT_Beta_RC {
 	 *
 	 * @var string
 	 */
-	static $version_regex = '^(\d+\.\d+(\.\d+)?)-(alpha|beta|RC)(\d+|\d*-\d+)?$';
+	protected static $version_regex = '^(\d+\.\d+(\.\d+)?)-(alpha|beta|RC)(\d+|\d*-\d+)?$';
 
 	/**
 	 * Used to store the URL(s) for the next beta/RC download packages.
@@ -73,12 +81,29 @@ class WPBT_Beta_RC {
 	 *
 	 * @since 0.1.0
 	 */
-	function __construct() {
-		global $wp_version;
+	public function __construct() {
+		$this->load_hooks();
+		$this->get_next_packages();
+	}
 
+	/**
+	 * Load hooks for Beta/RC.
+	 *
+	 * @return void
+	 */
+	protected function load_hooks() {
 		add_filter( 'http_response', array( $this, 'update_to_beta_or_rc_releases' ), 10, 3 );
 		// set priority to 11 so that we fire after the function core hooks into this filter.
 		add_filter( 'update_footer', array( $this, 'update_footer' ), 11 );
+	}
+
+	/**
+	 * Get next available package URLs.
+	 *
+	 * @return array
+	 */
+	public function get_next_packages() {
+		global $wp_version;
 
 		// beta/RC downloads, when available, are at a URL matching this pattern.
 		$beta_rc_download_url_pattern = 'https://wordpress.org/wordpress-%s-%s%s.zip';
@@ -88,7 +113,7 @@ class WPBT_Beta_RC {
 		preg_match( '@' . self::$version_regex . '@', $wp_version, $matches );
 
 		// see the DocBlock of self::$version_regex for what those parts are.
-		$version    = $matches[1];
+		$version = $matches[1];
 
 		$package_type = $matches[3];
 		$next         = intval( $matches[4] ) + 1;
@@ -98,9 +123,9 @@ class WPBT_Beta_RC {
 			case 'alpha':
 				// when running alpha, we check for both the first beta and the first RC.
 				// check the RC1 package first.
-				// @todo do we really want to check for RC1?  The only way it would be found
-				//       is if someone downgraded a site to an alpha after beta1 was
-				//       was released.
+				// TODO: do we really want to check for RC1?  The only way it would be found
+				// TODO: is if someone downgraded a site to an alpha after beta1 was
+				// TODO: was released.
 				$this->next_package_urls[ "{$version}-RC1" ]   = sprintf( $beta_rc_download_url_pattern, $version, 'RC', 1 );
 				$this->next_package_urls[ "{$version}-beta1" ] = sprintf( $beta_rc_download_url_pattern, $version, 'beta', 1 );
 
@@ -135,7 +160,7 @@ class WPBT_Beta_RC {
 	 *
 	 * @filter http_response
 	 */
-	function update_to_beta_or_rc_releases( $response, $parsed_args, $url ) {
+	public function update_to_beta_or_rc_releases( $response, $parsed_args, $url ) {
 		if ( is_wp_error( $response ) ||
 				! preg_match( '@^https?://api.wordpress.org/core/version-check/@', $url ) ||
 				200 !== wp_remote_retrieve_response_code( $response ) ) {
@@ -225,7 +250,7 @@ class WPBT_Beta_RC {
 	 * @param string $url URL of a beta/RC release package.
 	 * @return bool
 	 */
-	protected function next_package_exists( $url ) {
+	private function next_package_exists( $url ) {
 		$response = wp_remote_head( $url );
 
 		return ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response );
@@ -243,7 +268,7 @@ class WPBT_Beta_RC {
 	 *
 	 * @filter update_footer
 	 */
-	function update_footer( $content = '' ) {
+	public function update_footer( $content = '' ) {
 		if ( $this->found ) {
 			// we found the next beta/RC package, so no need to "fake" the
 			// footer message.
@@ -251,7 +276,7 @@ class WPBT_Beta_RC {
 			return $content;
 		}
 
-		add_filter( "pre_site_transient_update_core", array( $this, 'add_minimal_development_response' ), 10, 2 );
+		add_filter( 'pre_site_transient_update_core', array( $this, 'add_minimal_development_response' ), 10, 2 );
 
 		$content = core_update_footer();
 
@@ -265,23 +290,23 @@ class WPBT_Beta_RC {
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param mixed $pre_site_transient The default value to return if the site
-	 *                                  transient does not exist. Any value other
-	 *                                  than false will short-circuit the retrieval
-	 *                                  of the transient, and return the returned value.
-	 * @param string $transient 	    Transient name.
+	 * @param mixed  $pre_site_transient The default value to return if the site
+	 *                                   transient does not exist. Any value other
+	 *                                   than false will short-circuit the retrieval
+	 *                                   of the transient, and return the returned value.
+	 * @param string $transient          Transient name.
 	 * @return mixed
 	 *
 	 * @filter pre_site_transient_update_core
 	 */
-	function add_minimal_development_response( $pre_site_transient, $transient ) {
+	public function add_minimal_development_response( $pre_site_transient, $transient ) {
 		$from_api = new stdClass();
-		$update = new stdClass();
+		$update   = new stdClass();
 		// a "minimal" response is one with the `response`, `current` and
 		// `locale` properties.
 		$update->response = 'development';
-		$update->current = get_bloginfo( 'version' );
-		$update->locale = get_locale();
+		$update->current  = get_bloginfo( 'version' );
+		$update->locale   = get_locale();
 
 		$from_api->updates = array(
 			$update,

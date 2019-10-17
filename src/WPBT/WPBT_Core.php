@@ -147,7 +147,7 @@ class WPBT_Core {
 		printf(
 			/* translators: %s: update version */
 			wp_kses_post( __( 'Currently your site is set to update to version %s.', 'wordpress-beta-tester' ) ),
-			esc_attr( $preferred->version )
+			'<strong>' . esc_attr( $preferred->version ) . '</strong>'
 		);
 		echo '</p><p>';
 		esc_html_e( 'Please select the update stream you would like this website to use:', 'wordpress-beta-tester' );

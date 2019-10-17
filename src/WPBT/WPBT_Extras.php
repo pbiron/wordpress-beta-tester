@@ -334,12 +334,12 @@ class WPBT_Extras {
 		add_filter(
 			'automatic_updates_debug_email',
 			function( $email, $failures ) {
-				$empty_email = [
+				$empty_email = array(
 					'to'      => null,
 					'subject' => null,
 					'body'    => null,
 					'headers' => null,
-				];
+				);
 				$email       = 0 === $failures ? $empty_email : $email;
 				return $email;
 			},

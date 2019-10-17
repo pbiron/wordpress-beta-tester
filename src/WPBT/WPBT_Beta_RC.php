@@ -119,7 +119,7 @@ class WPBT_Beta_RC {
 				break;
 		}
 
-		return;
+		return $this->next_package_urls;
 	}
 
 	/**

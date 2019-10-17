@@ -143,6 +143,7 @@ class WPBT_Core {
 		echo '</p><p>';
 		echo( wp_kses_post( __( 'By default, your WordPress install uses the stable update stream. To return to this, please deactivate this plugin and re-install from the <a href="update-core.php">WordPress Updates</a> page.', 'wordpress-beta-tester' ) ) );
 		echo '</p><p>';
+		$preferred->version = ( 0 === strpos( static::$options['stream'], 'beta-rc' ) ) ? key( $this->wp_beta_tester->next_package_urls ) : $preferred->version;
 		printf(
 			/* translators: %s: update version */
 			wp_kses_post( __( 'Currently your site is set to update to version %s.', 'wordpress-beta-tester' ) ),

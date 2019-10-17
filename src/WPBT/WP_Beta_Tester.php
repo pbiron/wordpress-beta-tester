@@ -21,6 +21,13 @@ class WP_Beta_Tester {
 	public $file;
 
 	/**
+	 * Holds Beta/RC next packages.
+	 *
+	 * @var array
+	 */
+	public $next_package_urls = array();
+
+	/**
 	 * Constructor.
 	 *
 	 * @param string $file Main plugin file.
@@ -40,9 +47,11 @@ class WP_Beta_Tester {
 		$this->load_hooks();
 		// TODO: I really want to do this, but have to wait for PHP 5.4
 		// ( new WPBT_Settings( $this, $options ) )->run();
+		// ( new WPBT_Beta_RC( $this ) )->get_next_packages();
 		$settings = new WPBT_Settings( $this, $options );
-		new WPBT_Beta_RC();
 		$settings->run();
+		$beta_rc                 = new WPBT_Beta_RC();
+		$this->next_package_urls = $beta_rc->get_next_packages();
 	}
 
 	/**

@@ -118,13 +118,13 @@ class WPBT_Core {
 	 * @return void
 	 */
 	public function print_core_settings_top() {
+		$this->wp_beta_tester->action_admin_head_plugins_php(); // Check configuration.
 		$preferred = $this->wp_beta_tester->get_preferred_from_update_core();
 		if ( 'development' !== $preferred->response ) {
 			echo '<div class="updated fade">';
 			echo '<p>' . wp_kses_post( __( '<strong>Please note:</strong> There are no development builds of the beta stream you have chosen available, so you will receive normal update notifications.', 'wordpress-beta-tester' ) ) . '</p>';
 			echo '</div>';
 		}
-		$this->wp_beta_tester->action_admin_head_plugins_php(); // Check configuration.
 
 		echo '<div><p>';
 		printf(

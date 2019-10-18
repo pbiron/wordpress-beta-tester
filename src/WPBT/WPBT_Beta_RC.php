@@ -120,7 +120,7 @@ class WPBT_Beta_RC {
 		$version = $matches[1];
 
 		$package_type = $matches[3];
-		$next         = intval( $matches[4] ) + 1;
+		$next         = isset( $matches[4] ) ? intval( $matches[4] ) + 1 : null;
 
 		// construct the URLs for the next beta/RC release.
 		switch ( $package_type ) {

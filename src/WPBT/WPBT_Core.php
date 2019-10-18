@@ -125,7 +125,8 @@ class WPBT_Core {
 			echo '<p>' . wp_kses_post( __( '<strong>Please note:</strong> There are no development builds of the beta stream you have chosen available, so you will receive normal update notifications.', 'wordpress-beta-tester' ) ) . '</p>';
 			echo '</div>';
 		}
-		$next_package       = array_key_last( $this->wp_beta_tester->next_package_urls );
+		$next_package       = array_reverse( array_keys( $this->wp_beta_tester->next_package_urls ) );
+		$next_package       = array_pop( $next_package );
 		$preferred->version = ( 0 === strpos( static::$options['stream'], 'beta-rc' ) || ! preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) ? $next_package : $preferred->version;
 
 		echo '<div><p>';

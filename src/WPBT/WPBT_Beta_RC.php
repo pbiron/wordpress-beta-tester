@@ -9,19 +9,13 @@
  */
 
 /**
+ * Class WPBT_Beta_RC
  * Author: Paul V. Biron/Sparrow Hawk Computing
  * Author Email: paul@sparrowhawkcomputing.com
  * Author URL: https://sparrowhawkcomputing.com
  */
 
 defined( 'ABSPATH' ) || die;
-
-$options = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
-if ( 0 !== strpos( $options['stream'], 'beta-rc' ) ) {
-	// not on the beta-rc stream.
-	// nothing to do, so bail (essentially, we'll be back to stock beta-tester behavior).
-	return;
-}
 
 /**
  * Class to modify the response to the Core Update API to include the next beta/RC
@@ -86,6 +80,10 @@ class WPBT_Beta_RC {
 	 * @since 2.2.0
 	 */
 	public function __construct() {
+		if ( ! preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) {
+			return;
+		}
+
 		$this->load_hooks();
 		$this->get_next_packages();
 	}
@@ -107,6 +105,11 @@ class WPBT_Beta_RC {
 	 * @return array
 	 */
 	public function get_next_packages() {
+		// Exit early if not currently on a development branch.
+		if ( ! preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) {
+			return array( esc_attr( 'next release version', 'wordpress-beta-tester' ) => false );
+		}
+
 		global $wp_version;
 
 		// beta/RC downloads, when available, are at a URL matching this pattern.

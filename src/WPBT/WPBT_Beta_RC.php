@@ -61,7 +61,8 @@ class WPBT_Beta_RC {
 	 *
 	 * @since 2.2.0
 	 *
-	 * @var bool
+	 * @var bool|string Will be boolean false if the next beta/RC package was not found,
+	 *                  or the version of the package (as a string) otherwise.
 	 */
 	protected $found = false;
 
@@ -105,12 +106,11 @@ class WPBT_Beta_RC {
 	 * @return array
 	 */
 	public function get_next_packages() {
+		$wp_version = get_bloginfo( 'version' );
 		// Exit early if not currently on a development branch.
 		if ( ! preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) {
 			return array( esc_attr( 'next release version', 'wordpress-beta-tester' ) => false );
 		}
-
-		global $wp_version;
 
 		// beta/RC downloads, when available, are at a URL matching this pattern.
 		$beta_rc_download_url_pattern = 'https://wordpress.org/wordpress-%s-%s%s.zip';
@@ -208,11 +208,11 @@ class WPBT_Beta_RC {
 							$package_url = 'full' === $package ? $next_package_url : false;
 						}
 
+						$this->found = $version;
+
 						break;
 				}
 			}
-
-			$this->found = true;
 
 			break;
 		}
@@ -259,7 +259,9 @@ class WPBT_Beta_RC {
 	 */
 	private function next_package_exists( $url ) {
 		add_filter( 'qm/collect/silent_http_error_statuses', array( $this, 'qm_silence_404s' ), 10, 2 );
+
 		$response = wp_remote_head( $url );
+
 		remove_filter( 'qm/collect/silent_http_error_statuses', array( $this, 'qm_silence_404s' ) );
 
 		return ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response );
@@ -325,16 +327,40 @@ class WPBT_Beta_RC {
 	}
 
 	/**
-	 * Silent Query Monitor red banner for 404s.
+	 * Silence Query Monitor red banner for 404s.
+	 *
+	 * @since 2.2.0
 	 *
 	 * @param array $silenced QM HTTP codes to be silenced.
 	 * @param array $http     QM "HTTP" request object.
-	 *
 	 * @return array
 	 */
 	public function qm_silence_404s( $silenced, $http ) {
 		$silenced[] = 404;
 
 		return $silenced;
+	}
+
+	/**
+	 * Get version of the next beta/RC package found.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @return bool|string Will be boolean false if the next beta/RC package was not found,
+	 *                  or the version of the package (as a string) otherwise.
+	 */
+	function get_found_version() {
+		return $this->found;
+	}
+
+	/**
+	 * Get the versions of the beta/RC packages we will look for.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @return array
+	 */
+	function next_package_versions() {
+		return array_keys( $this->next_package_urls );
 	}
 }

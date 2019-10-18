@@ -52,11 +52,11 @@ class WPBT_Bootstrap {
 	 * @return void
 	 */
 	public function run() {
-		// require_once $this->dir . '/vendor/autoload.php';
+		// TODO: require_once $this->dir . '/vendor/autoload.php';
 		$this->load_requires(); // TODO: replace with composer's autoload.
 		$this->load_hooks();
 		// TODO: I really want to do this, but have to wait for PHP 5.4.
-		// ( new WP_Beta_Tester( $this->file ) )->run( $this->options );
+		// TODO: ( new WP_Beta_Tester( $this->file ) )->run( $this->options );
 		$wpbt = new WP_Beta_Tester( $this->file );
 		$wpbt->run( self::$options );
 	}
@@ -104,7 +104,8 @@ class WPBT_Bootstrap {
 	 */
 	public function deactivate() {
 		delete_site_transient( 'update_core' );
-		$wpbt        = new WP_Beta_Tester( $this->file );
+		$wpbt = new WP_Beta_Tester( $this->file );
+		// TODO: ( new WPBT_Extras( $wpbt, self::$options ) )->deactivate();
 		$wpbt_extras = new WPBT_Extras( $wpbt, self::$options );
 		$wpbt_extras->deactivate();
 	}

@@ -46,10 +46,10 @@ class WP_Beta_Tester {
 	public function run( $options ) {
 		$this->load_hooks();
 		// TODO: I really want to do this, but have to wait for PHP 5.4
-		// ( new WPBT_Settings( $this, $options ) )->run();
-		// ( new WPBT_Beta_RC( $this ) )->get_next_packages();
+		// TODO: ( new WPBT_Settings( $this, $options ) )->run();
 		$settings = new WPBT_Settings( $this, $options );
 		$settings->run();
+		// TODO: $this->next_package_urls = ( new WPBT_Beta_RC( $this ) )->get_next_packages();
 		$beta_rc                 = new WPBT_Beta_RC();
 		$this->next_package_urls = $beta_rc->get_next_packages();
 	}

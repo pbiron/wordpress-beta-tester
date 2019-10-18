@@ -16,9 +16,16 @@ class WPBT_Core {
 	/**
 	 * Placeholder for saved options.
 	 *
-	 * @var $options
+	 * @var array
 	 */
 	protected static $options;
+
+	/**
+	 * Holds the WP_Beta_Tester instance.
+	 *
+	 * @var WP_Beta_Tester
+	 */
+	protected $wp_beta_tester;
 
 	/**
 	 * Constructor.

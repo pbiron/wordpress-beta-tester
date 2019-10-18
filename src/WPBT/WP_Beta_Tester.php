@@ -21,11 +21,13 @@ class WP_Beta_Tester {
 	public $file;
 
 	/**
-	 * Holds Beta/RC next packages.
+	 * Holds Beta/RC class instance.
 	 *
-	 * @var array
+	 * @since 2.2.0
+	 *
+	 * @var WPBT_Beta_RC
 	 */
-	public $next_package_urls = array();
+	 public $beta_rc;
 
 	/**
 	 * Constructor.
@@ -49,9 +51,7 @@ class WP_Beta_Tester {
 		// TODO: ( new WPBT_Settings( $this, $options ) )->run();
 		$settings = new WPBT_Settings( $this, $options );
 		$settings->run();
-		// TODO: $this->next_package_urls = ( new WPBT_Beta_RC( $this ) )->get_next_packages();
-		$beta_rc                 = new WPBT_Beta_RC();
-		$this->next_package_urls = $beta_rc->get_next_packages();
+		$this->beta_rc = new WPBT_Beta_RC();
 	}
 
 	/**

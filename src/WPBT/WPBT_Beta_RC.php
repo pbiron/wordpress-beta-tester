@@ -251,7 +251,9 @@ class WPBT_Beta_RC {
 	 * @return bool
 	 */
 	private function next_package_exists( $url ) {
+		add_filter( 'qm/collect/silent_http_error_statuses', array( $this, 'qm_silence_404s' ), 10, 2 );
 		$response = wp_remote_head( $url );
+		remove_filter( 'qm/collect/silent_http_error_statuses', array( $this, 'qm_silence_404s' ) );
 
 		return ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response );
 	}
@@ -313,5 +315,19 @@ class WPBT_Beta_RC {
 		);
 
 		return $from_api;
+	}
+
+	/**
+	 * Silent Query Monitor red banner for 404s.
+	 *
+	 * @param array $silenced QM HTTP codes to be silenced.
+	 * @param array $http     QM "HTTP" request object.
+	 *
+	 * @return array
+	 */
+	public function qm_silence_404s( $silenced, $http ) {
+		$silenced[] = 404;
+
+		return $silenced;
 	}
 }

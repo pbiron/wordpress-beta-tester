@@ -108,8 +108,8 @@ class WPBT_Beta_RC {
 	public function get_next_packages() {
 		$wp_version = get_bloginfo( 'version' );
 		// Exit early if not currently on a development branch.
-		if ( ! preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) {
-			return array( esc_attr( 'next release version', 'wordpress-beta-tester' ) => false );
+		if ( ! preg_match( '/alpha|beta|RC/', $wp_version ) ) {
+			return array( __( 'next release version', 'wordpress-beta-tester' ) => false );
 		}
 
 		// beta/RC downloads, when available, are at a URL matching this pattern.

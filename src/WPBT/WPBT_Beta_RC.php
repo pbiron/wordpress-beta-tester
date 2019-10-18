@@ -27,7 +27,9 @@ if ( 0 !== strpos( $options['stream'], 'beta-rc' ) ) {
  * Class to modify the response to the Core Update API to include the next beta/RC
  * package if it is available.
  *
- * @since 0.1.0
+ * This feature is experimental as the API does not offer beta/RC packages directly.
+ *
+ * @since 2.2.0
  */
 class WPBT_Beta_RC {
 	/**
@@ -45,7 +47,7 @@ class WPBT_Beta_RC {
 	 * We store this regex as a static property because we use it in 2 separate places
 	 * and doing so ensures that the regex is the same in both places.
 	 *
-	 * @since 0.1.0
+	 * @since 2.2.0
 	 *
 	 * @var string
 	 */
@@ -54,7 +56,7 @@ class WPBT_Beta_RC {
 	/**
 	 * Used to store the URL(s) for the next beta/RC download packages.
 	 *
-	 * @since 0.1.0
+	 * @since 2.2.0
 	 *
 	 * @var array
 	 */
@@ -63,7 +65,7 @@ class WPBT_Beta_RC {
 	/**
 	 * Whether we found the next beta/RC package.
 	 *
-	 * @since 0.1.0
+	 * @since 2.2.0
 	 *
 	 * @var bool
 	 */
@@ -79,7 +81,9 @@ class WPBT_Beta_RC {
 	 * we don't have to do it inside the `http_response` callback, which would slow down handling
 	 * of Core Update API requests.
 	 *
-	 * @since 0.1.0
+	 * Exit early if not on a development branch.
+	 *
+	 * @since 2.2.0
 	 */
 	public function __construct() {
 		$this->load_hooks();
@@ -151,7 +155,7 @@ class WPBT_Beta_RC {
 	 * Modify the repsonse from WP Core Update API requests to only show the
 	 * next Beta/RC (and the latest stable release) package.
 	 *
-	 * @since 0.1.0
+	 * @since 2.2.0
 	 *
 	 * @param array  $response HTTP response.
 	 * @param array  $parsed_args HTTP request arguments.
@@ -245,7 +249,7 @@ class WPBT_Beta_RC {
 	 *    this check in its own method will make it easier to add that hook when/if
 	 *    it is supported by QM.
 	 *
-	 * @since 0.1.0
+	 * @since 2.2.0
 	 *
 	 * @param string $url URL of a beta/RC release package.
 	 * @return bool
@@ -263,7 +267,7 @@ class WPBT_Beta_RC {
 	 * footer, even if we've removed the `development` update response because the next
 	 * beta/RC package is not available.
 	 *
-	 * @since 0.1.0
+	 * @since 2.2.0
 	 *
 	 * @param string $content The content that will be printed.
 	 * @return string
@@ -290,7 +294,7 @@ class WPBT_Beta_RC {
 	/**
 	 * Add a minimal development response as the preferred update.
 	 *
-	 * @since 0.1.0
+	 * @since 2.2.0
 	 *
 	 * @param mixed  $pre_site_transient The default value to return if the site
 	 *                                   transient does not exist. Any value other

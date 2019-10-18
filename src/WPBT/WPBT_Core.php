@@ -125,6 +125,8 @@ class WPBT_Core {
 			echo '<p>' . wp_kses_post( __( '<strong>Please note:</strong> There are no development builds of the beta stream you have chosen available, so you will receive normal update notifications.', 'wordpress-beta-tester' ) ) . '</p>';
 			echo '</div>';
 		}
+		$next_package       = array_key_last( $this->wp_beta_tester->next_package_urls );
+		$preferred->version = ( 0 === strpos( static::$options['stream'], 'beta-rc' ) || ! preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) ? $next_package : $preferred->version;
 
 		echo '<div><p>';
 		printf(
@@ -143,7 +145,6 @@ class WPBT_Core {
 		echo '</p><p>';
 		echo( wp_kses_post( __( 'By default, your WordPress install uses the stable update stream. To return to this, please deactivate this plugin and re-install from the <a href="update-core.php">WordPress Updates</a> page.', 'wordpress-beta-tester' ) ) );
 		echo '</p><p>';
-		$preferred->version = ( 0 === strpos( static::$options['stream'], 'beta-rc' ) ) ? key( $this->wp_beta_tester->next_package_urls ) : $preferred->version;
 		printf(
 			/* translators: %s: update version */
 			wp_kses_post( __( 'Currently your site is set to update to version %s.', 'wordpress-beta-tester' ) ),
@@ -160,6 +161,13 @@ class WPBT_Core {
 	 * @return void
 	 */
 	public function core_radio_group() {
+		$wp_version    = get_bloginfo( 'version' );
+		$beta_rc       = 1 === preg_match( '/alpha|beta|RC/', $wp_version );
+		$point         = 1 === preg_match( '/point/', static::$options['stream'] );
+		$unstable      = 1 === preg_match( '/unstable/', static::$options['stream'] );
+		$show_unstable = $unstable && $beta_rc;
+		$show_point    = $point && $beta_rc;
+
 		?>
 		<fieldset>
 		<tr>
@@ -168,25 +176,28 @@ class WPBT_Core {
 			</label></th>
 			<td><?php esc_html_e( 'This contains the work that is occurring on a branch in preparation for a x.x.x point release. This should also be fairly stable but will be available before the branch is ready for release.', 'wordpress-beta-tester' ); ?></td>
 		</tr>
+		<?php if ( $show_point ) : ?>
 		<tr>
 			<th><label><input name="wp-beta-tester" id="update-stream-beta-rc-point"    type="radio" value="beta-rc-point" class="tog" <?php checked( 'beta-rc-point', self::$options['stream'] ); ?> />
-			<?php esc_html_e( 'Point Beta/RC', 'wordpress-beta-tester' ); ?>
+			<?php esc_html_e( 'Beta/RC - Point release', 'wordpress-beta-tester' ); ?>
 			</label></th>
 			<td><?php echo( wp_kses_post( __( 'This is for the Beta/RC releases only the x.x.x point release. It will only update to beta/RC releases of point releases.', 'wordpress-beta-tester' ) ) ); ?></td>
 		</tr>
+		<?php endif ?>
 		<tr>
 			<th><label><input name="wp-beta-tester" id="update-stream-bleeding-nightlies"    type="radio" value="unstable" class="tog" <?php checked( 'unstable', self::$options['stream'] ); ?> />
 			<?php esc_html_e( 'Bleeding edge nightlies', 'wordpress-beta-tester' ); ?>
 			</label></th>
 			<td><?php echo( wp_kses_post( __( 'This is the bleeding edge development code from `trunk` which may be unstable at times. <em>Only use this if you really know what you are doing</em>.', 'wordpress-beta-tester' ) ) ); ?></td>
 		</tr>
+		<?php if ( $show_unstable ) : ?>
 		<tr>
 			<th><label><input name="wp-beta-tester" id="update-stream-beta-rc-unstable"    type="radio" value="beta-rc-unstable" class="tog" <?php checked( 'beta-rc-unstable', self::$options['stream'] ); ?> />
-			<?php esc_html_e( 'Bleeding edge Beta/RC', 'wordpress-beta-tester' ); ?>
+			<?php esc_html_e( 'Beta/RC - Bleeding edge ', 'wordpress-beta-tester' ); ?>
 			</label></th>
 			<td><?php echo( wp_kses_post( __( 'This is for the Beta/RC releases only of development code from `trunk`. It will only update to beta/RC releases of `trunk`.', 'wordpress-beta-tester' ) ) ); ?></td>
 		</tr>
-
+		<?php endif ?>
 		</fieldset>
 		<?php
 	}

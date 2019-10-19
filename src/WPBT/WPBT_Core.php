@@ -104,6 +104,10 @@ class WPBT_Core {
 				? $post_data['wp-beta-tester']
 				: array();
 			self::$options['stream'] = WPBT_Settings::sanitize( $options );
+
+			// set an option when picking 'point' release stream.
+			// used to ensure correct mangled version is returned.
+			'point' === $options ? self::$options['revert'] = true : self::$options['revert'] = false;
 			update_site_option( 'wp_beta_tester', (array) self::$options );
 			add_filter( 'wp_beta_tester_save_redirect', array( $this, 'save_redirect_page' ) );
 		}

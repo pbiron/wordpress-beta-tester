@@ -181,6 +181,11 @@ class WP_Beta_Tester {
 			$versions = array_map( 'intval', explode( '.', $preferred->current ) );
 		}
 
+		// ensure that a downgrade correctly gets mangled version.
+		if ( $options['revert'] && version_compare( $preferred->current, $wp_version, '>=' ) ) {
+			$versions[1] = $versions[1] - 1;
+		}
+
 		switch ( $options['stream'] ) {
 			case 'point':
 			case 'beta-rc-point':

@@ -183,7 +183,9 @@ class WP_Beta_Tester {
 		}
 
 		// ensure that a downgrade correctly gets mangled version.
-		if ( $options['revert'] && version_compare( $preferred->current, $wp_version, '>=' ) ) {
+		if ( 'development' === $preferred->response &&
+			$options['revert'] && version_compare( $preferred->current, $wp_version, '>=' )
+		) {
 			$versions[1] = $versions[1] - 1;
 		}
 

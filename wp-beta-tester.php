@@ -13,7 +13,7 @@
  * Plugin URI:        https://wordpress.org/plugins/wordpress-beta-tester/
  * Description:       Allows you to easily upgrade to Beta releases.
  * Author:            Peter Westwood, Andy Fragen
- * Version:           2.1.0
+ * Version:           2.1.0.1
  * Network:           true
  * Author URI:        https://blog.ftwr.co.uk/
  * Text Domain:       wordpress-beta-tester
@@ -32,6 +32,6 @@ if ( ! defined( 'WPINC' ) ) {
 
 require_once dirname( __FILE__ ) . '/src/WPBT/WPBT_Bootstrap.php';
 // TODO: I really want to do this, but have to wait for PHP 5.4
-// ( new WPBT_Bootstrap( __FILE__ ) )->run();
+// TODO: ( new WPBT_Bootstrap( __FILE__ ) )->run();
 $wp_beta_tester_bootstrap = new WPBT_Bootstrap( __FILE__ );
 $wp_beta_tester_bootstrap->run();

@@ -27,7 +27,7 @@ class WP_Beta_Tester {
 	 *
 	 * @var WPBT_Beta_RC
 	 */
-	 public $beta_rc;
+	public $beta_rc;
 
 	/**
 	 * Constructor.

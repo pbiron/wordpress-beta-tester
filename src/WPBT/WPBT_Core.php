@@ -256,8 +256,9 @@ class WPBT_Core {
 		$next_version = $this->wp_beta_tester->beta_rc->next_package_versions();
 		if ( count( $next_version ) === 1 ) {
 			$next_version = array_shift( $next_version );
-		}
-		else {
+		} elseif ( empty( $next_version ) ) {
+			$next_version = __( 'next released version', 'wordpress-beta-tester' );
+		} else {
 			// show all versions that may come next.
 			$next_version = implode( ' or ', $next_version ) . ', ' . __( 'whichever is released first', 'wordpress-beta-tester' );
 		}

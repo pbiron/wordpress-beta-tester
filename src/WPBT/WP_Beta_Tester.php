@@ -193,7 +193,6 @@ class WP_Beta_Tester {
 			case 'point':
 			case 'beta-rc-point':
 				$versions[2] = isset( $versions[2] ) ? $versions[2] + 1 : 1;
-				$wp_version  = $versions[0] . '.' . $versions[1] . '.' . $versions[2] . '-wp-beta-tester';
 				break;
 			case 'unstable':
 			case 'beta-rc-unstable':
@@ -202,9 +201,9 @@ class WP_Beta_Tester {
 					++ $versions[0];
 					$versions[1] = 0;
 				}
-				$wp_version = $versions[0] . '.' . $versions[1] . '-wp-beta-tester';
 				break;
 		}
+		$wp_version = implode( '.', $versions ) . '-wp-beta-tester';
 
 		return $wp_version;
 	}

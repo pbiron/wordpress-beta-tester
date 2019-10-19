@@ -345,7 +345,7 @@ class WPBT_Beta_RC {
 	 * @return bool|string Will be boolean false if the next beta/RC package was not found,
 	 *                  or the version of the package (as a string) otherwise.
 	 */
-	function get_found_version() {
+	public function get_found_version() {
 		return $this->found;
 	}
 
@@ -356,7 +356,7 @@ class WPBT_Beta_RC {
 	 *
 	 * @return array
 	 */
-	function next_package_versions() {
+	public function next_package_versions() {
 		return array_keys( $this->next_package_urls );
 	}
 }

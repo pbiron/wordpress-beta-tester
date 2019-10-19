@@ -242,7 +242,7 @@ class WPBT_Core {
 	 * @param string $preferred_version The preferred version.
 	 * @return string
 	 */
-	function get_next_version( $preferred_version ) {
+	public function get_next_version( $preferred_version ) {
 		if ( ! ( 0 === strpos( static::$options['stream'], 'beta-rc' ) ||
 				! preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) ) {
 			// site is not running a development version or not on a beta/RC stream.

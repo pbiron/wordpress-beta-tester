@@ -41,9 +41,8 @@ class WPBT_Bootstrap {
 	 * @return void
 	 */
 	public function __construct( $file ) {
-		$this->file    = $file;
-		$this->dir     = dirname( $file );
-		self::$options = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
+		$this->file = $file;
+		$this->dir  = dirname( $file );
 	}
 
 	/**
@@ -55,6 +54,7 @@ class WPBT_Bootstrap {
 		// TODO: require_once $this->dir . '/vendor/autoload.php';
 		$this->load_requires(); // TODO: replace with composer's autoload.
 		$this->load_hooks();
+		self::$options = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
 		// TODO: I really want to do this, but have to wait for PHP 5.4.
 		// TODO: ( new WP_Beta_Tester( $this->file ) )->run( $this->options );
 		$wpbt = new WP_Beta_Tester( $this->file );
@@ -70,6 +70,7 @@ class WPBT_Bootstrap {
 		add_action( 'init', array( $this, 'load_textdomain' ) );
 		register_activation_hook( $this->file, array( $this, 'activate' ) );
 		register_deactivation_hook( $this->file, array( $this, 'deactivate' ) );
+		add_filter( 'site_option_wp_beta_tester', array( $this, 'fix_stream' ) );
 	}
 
 	/**
@@ -108,6 +109,23 @@ class WPBT_Bootstrap {
 		// TODO: ( new WPBT_Extras( $wpbt, self::$options ) )->deactivate();
 		$wpbt_extras = new WPBT_Extras( $wpbt, self::$options );
 		$wpbt_extras->deactivate();
+	}
+
+	/**
+	 * Fix stream option for when `beta-rc` set but current version
+	 * isn't a `beta|RC` version.
+	 *
+	 * @param array $value
+	 *
+	 * @return array
+	 */
+	public function fix_stream( $value ) {
+		if ( 0 === strpos( $value['stream'], 'beta-rc' ) &&
+			1 !== preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) {
+			$value['stream'] = str_replace( 'beta-rc-', '', $value['stream'] );
+		}
+
+		return $value;
 	}
 
 	/**

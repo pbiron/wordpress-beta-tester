@@ -16,9 +16,16 @@ class WPBT_Core {
 	/**
 	 * Placeholder for saved options.
 	 *
-	 * @var $options
+	 * @var array
 	 */
 	protected static $options;
+
+	/**
+	 * Holds the WP_Beta_Tester instance.
+	 *
+	 * @var WP_Beta_Tester
+	 */
+	protected $wp_beta_tester;
 
 	/**
 	 * Constructor.
@@ -122,12 +129,11 @@ class WPBT_Core {
 		$preferred = $this->wp_beta_tester->get_preferred_from_update_core();
 		if ( 'development' !== $preferred->response ) {
 			echo '<div class="updated fade">';
-			echo '<p>' . wp_kses_post( __( '<strong>Please note:</strong> There are no development builds of the beta stream you have chosen available, so you will receive normal update notifications.', 'wordpress-beta-tester' ) ) . '</p>';
+			echo '<p>' . wp_kses_post( __( '<strong>Please note:</strong> There are no development builds available for the beta stream you have chosen, so you will receive normal update notifications.', 'wordpress-beta-tester' ) ) . '</p>';
 			echo '</div>';
 		}
-		$next_package       = array_reverse( array_keys( $this->wp_beta_tester->next_package_urls ) );
-		$next_package       = array_pop( $next_package );
-		$preferred->version = ( 0 === strpos( static::$options['stream'], 'beta-rc' ) || ! preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) ? $next_package : $preferred->version;
+
+		$preferred->version = $this->get_next_version( $preferred->version );
 
 		echo '<div><p>';
 		printf(
@@ -222,5 +228,40 @@ class WPBT_Core {
 			<?php endif; ?>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Get the next version the site will be updated to.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param string $preferred_version The preferred version.
+	 * @return string
+	 */
+	function get_next_version( $preferred_version ) {
+		if ( ! ( 0 === strpos( static::$options['stream'], 'beta-rc' ) ||
+				! preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) ) {
+			// site is not running a development version or not on a beta/RC stream.
+			// So use the preferred version.
+			return $preferred_version;
+		}
+
+		$next_version = $this->wp_beta_tester->beta_rc->get_found_version();
+		if ( $next_version ) {
+			// the next beta/RC package was found, return that version.
+			return $next_version;
+		}
+
+		// the next beta/RC package was not found.
+		$next_version = $this->wp_beta_tester->beta_rc->next_package_versions();
+		if ( count( $next_version ) === 1 ) {
+			$next_version = array_shift( $next_version );
+		}
+		else {
+			// show all versions that may come next.
+			$next_version = implode( ' or ', $next_version ) . ', ' . __( 'whichever is released first', 'wordpress-beta-tester' );
+		}
+
+		return $next_version;
 	}
 }

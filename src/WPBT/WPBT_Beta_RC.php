@@ -81,10 +81,6 @@ class WPBT_Beta_RC {
 	 * @since 2.2.0
 	 */
 	public function __construct() {
-		if ( ! preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) {
-			return;
-		}
-
 		$this->load_hooks();
 		$this->get_next_packages();
 	}

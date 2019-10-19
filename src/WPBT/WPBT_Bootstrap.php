@@ -115,7 +115,7 @@ class WPBT_Bootstrap {
 	 * Fix stream option for when `beta-rc` set but current version
 	 * isn't a `beta|RC` version.
 	 *
-	 * @param array $value
+	 * @param array $value Array of options values from `wp_beta_tester` option.
 	 *
 	 * @return array
 	 */

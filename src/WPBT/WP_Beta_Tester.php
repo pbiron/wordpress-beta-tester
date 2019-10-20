@@ -168,6 +168,7 @@ class WP_Beta_Tester {
 		$options    = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
 		$preferred  = $this->get_preferred_from_update_core();
 		$wp_version = get_bloginfo( 'version' );
+		$current    = array_map( 'intval', explode( '.', $wp_version ) );
 
 		// If we're getting no updates back from get_preferred_from_update_core(),
 		// let an HTTP request go through unmangled.
@@ -184,15 +185,22 @@ class WP_Beta_Tester {
 
 		// ensure that a downgrade correctly gets mangled version.
 		if ( 'development' === $preferred->response &&
-			$options['revert'] && version_compare( $preferred->current, $wp_version, '>=' )
+			$options['revert'] && version_compare( $preferred->current, $wp_version, '>=' ) &&
+			version_compare( implode( '.', $current ), implode( '.', $versions ), '=' )
 		) {
 			$versions[1] = $versions[1] - 1;
+		}
+		if ( $options['revert'] && $versions[1] !== $current[1] &&
+			version_compare( implode( '.', $current ), implode( '.', $versions ), '<' )
+		) {
+			$versions[1] = $current[1];
 		}
 
 		switch ( $options['stream'] ) {
 			case 'point':
 			case 'beta-rc-point':
 				$versions[2] = isset( $versions[2] ) ? $versions[2] + 1 : 1;
+				$versions[2] = isset( $current[2] ) && 1 === $versions[2] ? $current[2] : $versions[2];
 				break;
 			case 'unstable':
 			case 'beta-rc-unstable':

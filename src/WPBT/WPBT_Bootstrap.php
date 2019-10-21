@@ -54,7 +54,13 @@ class WPBT_Bootstrap {
 		// TODO: require_once $this->dir . '/vendor/autoload.php';
 		$this->load_requires(); // TODO: replace with composer's autoload.
 		$this->load_hooks();
-		self::$options = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
+		self::$options = get_site_option(
+			'wp_beta_tester',
+			array(
+				'stream' => 'point',
+				'revert' => true,
+			)
+		);
 		// TODO: I really want to do this, but have to wait for PHP 5.4.
 		// TODO: ( new WP_Beta_Tester( $this->file ) )->run( $this->options );
 		$wpbt = new WP_Beta_Tester( $this->file );

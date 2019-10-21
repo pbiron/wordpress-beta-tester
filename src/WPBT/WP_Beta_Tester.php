@@ -165,7 +165,13 @@ class WP_Beta_Tester {
 	 * @return string $wp_version
 	 */
 	protected function mangle_wp_version() {
-		$options    = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
+		$options    = get_site_option(
+			'wp_beta_tester',
+			array(
+				'stream' => 'point',
+				'revert' => true,
+			)
+		);
 		$preferred  = $this->get_preferred_from_update_core();
 		$wp_version = get_bloginfo( 'version' );
 		$current    = array_map( 'intval', explode( '.', $wp_version ) );
@@ -185,12 +191,12 @@ class WP_Beta_Tester {
 
 		// ensure that a downgrade correctly gets mangled version.
 		if ( 'development' === $preferred->response &&
-			$options['revert'] && version_compare( $preferred->current, $wp_version, '>=' ) &&
+			isset( $options['revert'] ) && $options['revert'] && version_compare( $preferred->current, $wp_version, '>=' ) &&
 			version_compare( implode( '.', $current ), implode( '.', $versions ), '=' )
 		) {
 			$versions[1] = $versions[1] - 1;
 		}
-		if ( $options['revert'] && $versions[1] !== $current[1] &&
+		if ( isset( $options['revert'] ) && $options['revert'] && $versions[1] !== $current[1] &&
 			version_compare( implode( '.', $current ), implode( '.', $versions ), '<' )
 		) {
 			$versions[1] = $current[1];

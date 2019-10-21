@@ -172,7 +172,13 @@ class WPBT_Beta_RC {
 			return $response;
 		}
 
-		$options = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
+		$options = get_site_option(
+			'wp_beta_tester',
+			array(
+				'stream' => 'point',
+				'revert' => true,
+			)
+		);
 		if ( 0 !== strpos( $options['stream'], 'beta-rc' ) ) {
 			return $response;
 		}

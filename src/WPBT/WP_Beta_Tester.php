@@ -174,7 +174,6 @@ class WP_Beta_Tester {
 		);
 		$preferred  = $this->get_preferred_from_update_core();
 		$wp_version = get_bloginfo( 'version' );
-		$current    = array_map( 'intval', explode( '.', $wp_version ) );
 
 		// If we're getting no updates back from get_preferred_from_update_core(),
 		// let an HTTP request go through unmangled.
@@ -190,16 +189,8 @@ class WP_Beta_Tester {
 		}
 
 		// ensure that a downgrade correctly gets mangled version.
-		if ( 'development' === $preferred->response &&
-			isset( $options['revert'] ) && $options['revert'] && version_compare( $preferred->current, $wp_version, '>=' ) &&
-			version_compare( implode( '.', $current ), implode( '.', $versions ), '=' )
-		) {
-			$versions[1] = $versions[1] - 1;
-		}
-		if ( isset( $options['revert'] ) && $options['revert'] && $versions[1] !== $current[1] &&
-			version_compare( implode( '.', $current ), implode( '.', $versions ), '<' )
-		) {
-			$versions[1] = $current[1];
+		if ( isset( $options['revert'] ) && $options['revert'] ) {
+			$versions = $this->correct_versions_for_downgrade( $versions, $preferred );
 		}
 
 		switch ( $options['stream'] ) {
@@ -220,6 +211,36 @@ class WP_Beta_Tester {
 		$wp_version = implode( '.', $versions ) . '-wp-beta-tester';
 
 		return $wp_version;
+	}
+
+	/**
+	 * Ensure that a downgrade to a point release returns a version array that
+	 * will properly get the correct offer.
+	 *
+	 * @param array     $versions      Array containing the semver arguments of the currently
+	 *                                 installed version.
+	 * @param string    $wp_version   Installed WordPress version.
+	 * @param \stdClass $preferred Object containing preferred update offer from core.
+	 *
+	 * @return array
+	 */
+	private function correct_versions_for_downgrade( $versions, $preferred ) {
+		$wp_version = get_bloginfo( 'version' );
+		$current    = array_map( 'intval', explode( '.', $wp_version ) );
+
+		if ( version_compare( implode( '.', $versions ), implode( '.', $current ), '=' ) ||
+			version_compare( implode( '.', $versions ), implode( '.', $current ), '>' )
+		) {
+			$versions[1] = $versions[1] - 1;
+		}
+		if ( isset( $current[2] ) && $versions[1] < $current[1] ) {
+			$versions[1] = $current[1];
+		}
+
+		// Add an obscenely high value to always get the point release offer.
+		$versions[2] = 100;
+
+		return $versions;
 	}
 
 	/**

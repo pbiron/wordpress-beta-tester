@@ -107,7 +107,7 @@ class WPBT_Core {
 
 			// set an option when picking 'point' release stream.
 			// used to ensure correct mangled version is returned.
-			'point' === $options ? isset( self::$options['revert'] ) && self::$options['revert'] = true : self::$options['revert'] = false;
+			self::$options['revert'] = 'point' === $options;
 			update_site_option( 'wp_beta_tester', (array) self::$options );
 			add_filter( 'wp_beta_tester_save_redirect', array( $this, 'save_redirect_page' ) );
 		}

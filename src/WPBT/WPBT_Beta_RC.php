@@ -37,15 +37,29 @@ class WPBT_Beta_RC {
 	 *    5.3 instead of 5.3.0.
 	 * 3. The third is whether the release is an alpha, beta or RC.
 	 * 4. The forth is the number of the beta or RC release (e.g., 1st beta, 2nd RC, etc).
-	 *
-	 * We store this regex as a static property because we use it in 2 separate places
-	 * and doing so ensures that the regex is the same in both places.
+	 *    If site is running a "bleeding edge" version, this will also contain the
+	 *    commit number, e.g., after RC3, will be something like 3-1234).
 	 *
 	 * @since 2.2.0
 	 *
 	 * @var string
 	 */
-	protected static $version_regex = '^(\d+\.\d+(\.\d+)?)-(alpha|beta|RC)(\d+|\d*-\d+)?$';
+	const VERSION_REGEX = '^(\d+\.\d+(\.\d+)?)-(alpha|beta|RC)(\d+|\d*-\d+)?$';
+
+	/**
+	 * Sprintf pattern for beta/RC download URLs.
+	 *
+	 * The variables in the pattern (e.g., %1$s) are as follows:
+	 *
+	 * 1. the version number (e.g., 5.3)
+	 * 2. the package type (e.g., beta or RC)
+	 * 3. the release number (e.g., 2 for RC2).
+	 *
+	 * @since 2.2.0
+	 *
+	 * @var string
+	 */
+	const DOWNLOAD_URL_PATTERN = 'https://wordpress.org/wordpress-%1$s-%2$s%3$d.zip';
 
 	/**
 	 * Used to store the URL(s) for the next beta/RC download packages.
@@ -76,8 +90,6 @@ class WPBT_Beta_RC {
 	 * we don't have to do it inside the `http_response` callback, which would slow down handling
 	 * of Core Update API requests.
 	 *
-	 * Exit early if not on a development branch.
-	 *
 	 * @since 2.2.0
 	 */
 	public function __construct() {
@@ -99,21 +111,18 @@ class WPBT_Beta_RC {
 	/**
 	 * Get next available package URLs.
 	 *
-	 * @return array
+	 * @return array Keys are the packages (e.g., RC3), values are the download URLs.
 	 */
-	public function get_next_packages() {
+	protected function get_next_packages() {
 		$wp_version = get_bloginfo( 'version' );
 		// Exit early if not currently on a development branch.
 		if ( ! preg_match( '/alpha|beta|RC/', $wp_version ) ) {
 			return array( __( 'next release version', 'wordpress-beta-tester' ) => false );
 		}
 
-		// beta/RC downloads, when available, are at a URL matching this pattern.
-		$beta_rc_download_url_pattern = 'https://wordpress.org/wordpress-%s-%s%s.zip';
-
 		// extract the parts of the version the site is running.
 		$matches = array();
-		preg_match( '@' . self::$version_regex . '@', $wp_version, $matches );
+		preg_match( '@' . self::VERSION_REGEX . '@', $wp_version, $matches );
 
 		// see the DocBlock of self::$version_regex for what those parts are.
 		$version = $matches[1];
@@ -125,24 +134,26 @@ class WPBT_Beta_RC {
 		switch ( $package_type ) {
 			case 'alpha':
 				// when running alpha, we check for both the first beta and the first RC.
+				// we check for RC's because some releases never have betas (e.g., 5.0.2,
+				// 5.0.3, 5.1.1, 5.2.2, 5.2.3).
 				// check the RC1 package first.
-				// TODO: do we really want to check for RC1?  The only way it would be found
-				// TODO: is if someone downgraded a site to an alpha after beta1 was
-				// TODO: was released.
-				$this->next_package_urls[ "{$version}-RC1" ]   = sprintf( $beta_rc_download_url_pattern, $version, 'RC', 1 );
-				$this->next_package_urls[ "{$version}-beta1" ] = sprintf( $beta_rc_download_url_pattern, $version, 'beta', 1 );
+				$this->next_package_urls[ "{$version}-RC1" ]   = sprintf( self::DOWNLOAD_URL_PATTERN, $version, 'RC', 1 );
+				$this->next_package_urls[ "{$version}-beta1" ] = sprintf( self::DOWNLOAD_URL_PATTERN, $version, 'beta', 1 );
 
 				break;
 			case 'beta':
 				// when running a beta, we check for both the next beta and the first RC.
 				// check the RC1 package first.
-				$this->next_package_urls[ "{$version}-RC1" ]         = sprintf( $beta_rc_download_url_pattern, $version, 'RC', 1 );
-				$this->next_package_urls[ "{$version}-beta{$next}" ] = sprintf( $beta_rc_download_url_pattern, $version, 'beta', $next );
+				$this->next_package_urls[ "{$version}-RC1" ]         = sprintf( self::DOWNLOAD_URL_PATTERN, $version, 'RC', 1 );
+				$this->next_package_urls[ "{$version}-beta{$next}" ] = sprintf( self::DOWNLOAD_URL_PATTERN, $version, 'beta', $next );
 
 				break;
 			case 'RC':
 				// when running an RC, we just check for the next RC.
-				$this->next_package_urls[ "{$version}-RC{$next}" ] = sprintf( $beta_rc_download_url_pattern, $version, 'RC', $next );
+				// @todo has it ever happened that once RC1 was release that another beta was released?
+				//       I don't think so, but if that is a possibility then we'll need to account
+				//       for that possibility?
+				$this->next_package_urls[ "{$version}-RC{$next}" ] = sprintf( self::DOWNLOAD_URL_PATTERN, $version, 'RC', $next );
 
 				break;
 		}
@@ -198,7 +209,7 @@ class WPBT_Beta_RC {
 			// Modify the development and autoupdate offers to use the URL
 			// of that next beta/RC release.
 			// @todo are there any cases where we'd need to modify other offers?
-			// I don't know the core update API well enough to know.
+			//       I don't know the core update API well enough to know.
 			foreach ( $body['offers'] as &$offer ) {
 				switch ( $offer['response'] ) {
 					case 'development':
@@ -257,9 +268,11 @@ class WPBT_Beta_RC {
 	 * @since 2.2.0
 	 *
 	 * @param string $url URL of a beta/RC release package.
-	 * @return bool
+	 * @return bool       True if the package at `$url` exists, false otherwise.
 	 */
 	private function next_package_exists( $url ) {
+		// note: adding this filter will be a no-op until a version of QM that supports
+		//       https://github.com/johnbillion/query-monitor/issues/474 is released.
 		add_filter( 'qm/collect/silent_http_error_statuses', array( $this, 'qm_silence_404s' ), 10, 2 );
 
 		$response = wp_remote_head( $url );
@@ -308,7 +321,7 @@ class WPBT_Beta_RC {
 	 *                                   than false will short-circuit the retrieval
 	 *                                   of the transient, and return the returned value.
 	 * @param string $transient          Transient name.
-	 * @return mixed
+	 * @return object
 	 *
 	 * @filter pre_site_transient_update_core
 	 */
@@ -335,7 +348,7 @@ class WPBT_Beta_RC {
 	 *
 	 * @param array $silenced QM HTTP codes to be silenced.
 	 * @param array $http     QM "HTTP" request object.
-	 * @return array
+	 * @return int[]          Array of HTTP Status Codes to be silenced.
 	 */
 	public function qm_silence_404s( $silenced, $http ) {
 		$silenced[] = 404;
@@ -360,7 +373,7 @@ class WPBT_Beta_RC {
 	 *
 	 * @since 2.2.0
 	 *
-	 * @return array
+	 * @return string[]
 	 */
 	public function next_package_versions() {
 		return array_keys( $this->next_package_urls );

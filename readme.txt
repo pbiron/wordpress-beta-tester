@@ -1,7 +1,7 @@
 # WordPress Beta Tester
 
 Tags: beta, advanced, testing
-Contributors: westi, mlteal, afragen
+Contributors: westi, mlteal, afragen, pbiron
 Tested up to: 5.3
 Requires at least: 3.1
 Stable Tag: 2.1.0

@@ -241,6 +241,10 @@ class WPBT_Extras {
 	 * @return void
 	 */
 	private function add_constants( $add ) {
+		if ( ! file_exists( self::$config_path ) ) {
+			return;
+		}
+
 		$config_transformer = new WPBT_WPConfigTransformer( self::$config_path );
 		$config_args        = array(
 			'raw'       => true,
@@ -261,6 +265,10 @@ class WPBT_Extras {
 	 * @return void
 	 */
 	private function remove_constants( $remove ) {
+		if ( ! file_exists( self::$config_path ) ) {
+			return;
+		}
+
 		$config_transformer = new WPBT_WPConfigTransformer( self::$config_path );
 		foreach ( array_keys( $remove ) as $constant ) {
 			$feature_flag = strtoupper( 'wp_beta_tester_' . $constant );

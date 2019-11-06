@@ -81,6 +81,15 @@ class WPBT_Extras {
 	}
 
 	/**
+	 * Test to see if wp-config.php is writable.
+	 *
+	 * @return bool
+	 */
+	public function is_config_writable() {
+		return is_writable( self::$config_path );
+	}
+
+	/**
 	 * Add class settings tab.
 	 *
 	 * @param array $tabs Settings tabs.
@@ -129,19 +138,22 @@ class WPBT_Extras {
 			)
 		);
 
-		// Example.
-		add_settings_field(
-			'example',
-			null,
-			array( 'WPBT_Settings', 'checkbox_setting' ),
-			'wp_beta_tester_extras',
-			'wp_beta_tester_new_feature_testing',
-			array(
-				'id'          => 'example',
-				'title'       => esc_html__( 'Just an example.', 'wordpress-beta-tester' ),
-				'description' => esc_html__( 'Look in `wp-config.php` for results.', 'wordpress-beta-tester' ),
-			)
-		);
+		if ( $this->is_config_writable() ) {
+			// Example.
+			add_settings_field(
+				'example',
+				null,
+				array( 'WPBT_Settings', 'checkbox_setting' ),
+				'wp_beta_tester_extras',
+				'wp_beta_tester_new_feature_testing',
+				array(
+					'id'          => 'example',
+					'title'       => esc_html__( 'Just an example.', 'wordpress-beta-tester' ),
+					'description' => esc_html__( 'Look in `wp-config.php` for results.', 'wordpress-beta-tester' ),
+				)
+			);
+		}
+
 	}
 
 	/**
@@ -241,7 +253,7 @@ class WPBT_Extras {
 	 * @return void
 	 */
 	private function add_constants( $add ) {
-		if ( ! file_exists( self::$config_path ) ) {
+		if ( ! $this->is_config_writable() ) {
 			return;
 		}
 
@@ -265,7 +277,7 @@ class WPBT_Extras {
 	 * @return void
 	 */
 	private function remove_constants( $remove ) {
-		if ( ! file_exists( self::$config_path ) ) {
+		if ( ! $this->is_config_writable() ) {
 			return;
 		}
 
@@ -292,7 +304,7 @@ class WPBT_Extras {
 	 * @return void
 	 */
 	public function print_new_feature_testing_top() {
-		esc_html_e( 'This area is for extra special beta testing. If nothing is present there are no additional features that need testing. Features will set constants in the `wp-config.php` file.', 'wordpress-beta-tester' );
+		esc_html_e( 'This area is for extra special beta testing. If nothing is present there are no additional features that need testing or the `wp-config.php` file is not writable. Features will set constants in the `wp-config.php` file.', 'wordpress-beta-tester' );
 	}
 
 	/**

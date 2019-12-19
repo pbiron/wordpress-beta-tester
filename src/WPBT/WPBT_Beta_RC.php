@@ -158,6 +158,8 @@ class WPBT_Beta_RC {
 				break;
 		}
 
+		$this->next_package_urls[ $version ] = "https://wordpress.org/wordpress-{$version}.zip";
+
 		return $this->next_package_urls;
 	}
 

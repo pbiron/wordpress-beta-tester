@@ -164,7 +164,7 @@ class WP_Beta_Tester {
 	 *
 	 * @return string $wp_version
 	 */
-	public function mangle_wp_version() {
+	protected function mangle_wp_version() {
 		$options    = get_site_option(
 			'wp_beta_tester',
 			array(

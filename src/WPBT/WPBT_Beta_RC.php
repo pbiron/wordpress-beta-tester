@@ -129,6 +129,7 @@ class WPBT_Beta_RC {
 
 		$package_type = $matches[3];
 		$next         = isset( $matches[4] ) ? intval( $matches[4] ) + 1 : null;
+		$this->add_next_release_version_package();
 
 		// construct the URLs for the next beta/RC release.
 		switch ( $package_type ) {
@@ -159,6 +160,20 @@ class WPBT_Beta_RC {
 		}
 
 		return $this->next_package_urls;
+	}
+
+	/**
+	 * Add next version to $next_package_urls.
+	 * The intent is to update to the next release once the beta/RC cycle finishes.
+	 *
+	 * @return void
+	 */
+	private function add_next_release_version_package() {
+		$beta_tester = new WP_Beta_Tester( null );
+		$mangled     = $beta_tester->mangle_wp_version();
+		$version     = str_replace( '-wp-beta-tester', '', $mangled );
+
+		$this->next_package_urls[ $version ] = "https://wordpress.org/wordpress-{$version}.zip";
 	}
 
 	/**

@@ -151,14 +151,13 @@ class WPBT_Beta_RC {
 			case 'RC':
 				// when running an RC, we just check for the next RC.
 				// @todo has it ever happened that once RC1 was release that another beta was released?
-				//       I don't think so, but if that is a possibility then we'll need to account
-				//       for that possibility?
+				// I don't think so, but if that is a possibility then we'll need to account
+				// for that possibility?
 				$this->next_package_urls[ "{$version}-RC{$next}" ] = sprintf( self::DOWNLOAD_URL_PATTERN, $version, 'RC', $next );
+				$this->next_package_urls[ $version ]               = "https://wordpress.org/wordpress-{$version}.zip";
 
 				break;
 		}
-
-		$this->next_package_urls[ $version ] = "https://wordpress.org/wordpress-{$version}.zip";
 
 		return $this->next_package_urls;
 	}
@@ -211,7 +210,7 @@ class WPBT_Beta_RC {
 			// Modify the development and autoupdate offers to use the URL
 			// of that next beta/RC release.
 			// @todo are there any cases where we'd need to modify other offers?
-			//       I don't know the core update API well enough to know.
+			// I don't know the core update API well enough to know.
 			foreach ( $body['offers'] as &$offer ) {
 				switch ( $offer['response'] ) {
 					case 'development':
@@ -274,7 +273,7 @@ class WPBT_Beta_RC {
 	 */
 	private function next_package_exists( $url ) {
 		// note: adding this filter will be a no-op until a version of QM that supports
-		//       https://github.com/johnbillion/query-monitor/issues/474 is released.
+		// https://github.com/johnbillion/query-monitor/issues/474 is released.
 		add_filter( 'qm/collect/silent_http_error_statuses', array( $this, 'qm_silence_404s' ), 10, 2 );
 
 		$response = wp_remote_head( $url );

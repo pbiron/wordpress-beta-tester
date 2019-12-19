@@ -1,6 +1,7 @@
 [unreleased]
 * added support for updating to the _beta/RC offer_. Based on and with tons of help from @pbrion, thanks Paul 👏🏻
 * fixed so a downgrade from 'unstable' to 'point' serves the correct download
+* test and exit from **Extra Settings** if `wp-config.php` is not writeable
 
 #### 2.1.0 / 2019-09-17
 * add extra setting to skip successful autoupdate emails

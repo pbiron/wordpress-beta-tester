@@ -128,7 +128,9 @@ class WPBT_Beta_RC {
 		$version = $matches[1];
 
 		$package_type = $matches[3];
-		$next         = isset( $matches[4] ) ? intval( $matches[4] ) + 1 : null;
+		$next         = isset( $matches[4] ) ? intval( $matches[4] ) - 1 : null;
+
+		$this->next_package_urls[ $version ] = "https://wordpress.org/wordpress-{$version}.zip";
 
 		// construct the URLs for the next beta/RC release.
 		switch ( $package_type ) {
@@ -154,7 +156,6 @@ class WPBT_Beta_RC {
 				// I don't think so, but if that is a possibility then we'll need to account
 				// for that possibility?
 				$this->next_package_urls[ "{$version}-RC{$next}" ] = sprintf( self::DOWNLOAD_URL_PATTERN, $version, 'RC', $next );
-				$this->next_package_urls[ $version ]               = "https://wordpress.org/wordpress-{$version}.zip";
 
 				break;
 		}

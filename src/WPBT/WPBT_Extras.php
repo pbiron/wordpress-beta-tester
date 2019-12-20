@@ -253,8 +253,8 @@ class WPBT_Extras {
 	 * @return void
 	 */
 	private function add_constants( $add ) {
-		if ( ! $this->is_config_writable() ) {
-			return;
+		if ( ! $this->is_config_writable() || \filesize( self::$config_path ) ) {
+			return array();
 		}
 
 		$config_transformer = new WPBT_WPConfigTransformer( self::$config_path );
@@ -277,7 +277,7 @@ class WPBT_Extras {
 	 * @return void
 	 */
 	private function remove_constants( $remove ) {
-		if ( ! $this->is_config_writable() ) {
+		if ( ! $this->is_config_writable() || \filesize( self::$config_path ) ) {
 			return;
 		}
 

@@ -128,7 +128,7 @@ class WPBT_Beta_RC {
 		$version = $matches[1];
 
 		$package_type = $matches[3];
-		$next         = isset( $matches[4] ) ? intval( $matches[4] ) - 1 : null;
+		$next         = isset( $matches[4] ) ? absint( $matches[4] ) + 1 : null;
 
 		$this->next_package_urls[ $version ] = "https://wordpress.org/wordpress-{$version}.zip";
 

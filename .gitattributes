@@ -8,4 +8,4 @@ composer.lock export-ignore
 /tests export-ignore
 phpunit.xml export-ignore
 .svnignore export-ignore
-phpcs.xml.dist export-ignore
+.phpcs.xml.dist export-ignore

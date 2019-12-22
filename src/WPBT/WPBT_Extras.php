@@ -250,7 +250,7 @@ class WPBT_Extras {
 	 * @uses https://github.com/wp-cli/wp-config-transformer
 	 *
 	 * @param array $add Constants to add to wp-config.php.
-	 * @return void
+	 * @return void|array
 	 */
 	private function add_constants( $add ) {
 		if ( ! $this->is_config_writable() || \filesize( self::$config_path ) ) {

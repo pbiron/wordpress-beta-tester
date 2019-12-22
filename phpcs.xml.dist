@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress Beta Tester Coding Standards">
+    <description>A custom ruleset to take in account both WordPress and personal standards. But keep long array syntax.</description>
+	<rule ref="/Users/afragen/Documents/phpcs/phpcs.xml"/>
+
+	<rule ref="Generic.Arrays.DisallowShortArraySyntax" />
+	<!-- Use only long arrays -->
+    <rule ref="Generic.Arrays">
+    	<exclude name="Generic.Arrays.DisallowLongArraySyntax.Found" />
+    </rule>
+</ruleset>

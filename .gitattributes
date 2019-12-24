@@ -9,3 +9,4 @@ composer.lock export-ignore
 phpunit.xml export-ignore
 .svnignore export-ignore
 .phpcs.xml export-ignore
+/.wordpress-org export-ignore

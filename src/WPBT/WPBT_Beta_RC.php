@@ -243,7 +243,7 @@ class WPBT_Beta_RC {
 		}
 
 		// re-json encode the body.
-		$response['body'] = json_encode( $body );
+		$response['body'] = wp_json_encode( $body );
 
 		return $response;
 	}

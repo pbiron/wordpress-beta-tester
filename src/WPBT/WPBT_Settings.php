@@ -187,8 +187,10 @@ class WPBT_Settings {
 	 * @return void
 	 */
 	private function saved_settings_notice() {
+		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 		if ( ( isset( $_GET['updated'] ) && true == $_GET['updated'] ) ||
-			( isset( $_GET['settings-updated'] ) && true == $_GET['settings-updated'] )
+		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+		( isset( $_GET['settings-updated'] ) && true == $_GET['settings-updated'] )
 		) {
 			echo '<div class="updated"><p>';
 			esc_html_e( 'Saved.', 'wordpress-beta-tester' );

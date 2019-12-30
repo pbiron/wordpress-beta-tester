@@ -51,7 +51,6 @@ class WPBT_Bootstrap {
 	 * @return void
 	 */
 	public function run() {
-		// TODO: require_once $this->dir . '/vendor/autoload.php';
 		$this->load_requires(); // TODO: replace with composer's autoload.
 		$this->load_hooks();
 		self::$options = get_site_option(

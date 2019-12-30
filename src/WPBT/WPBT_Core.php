@@ -192,7 +192,7 @@ class WPBT_Core {
 			<th><label><input name="wp-beta-tester" id="update-stream-beta-rc-point"    type="radio" value="beta-rc-point" class="tog" <?php checked( 'beta-rc-point', self::$options['stream'] ); ?> />
 			<?php esc_html_e( 'Beta/RC - Point release', 'wordpress-beta-tester' ); ?>
 			</label></th>
-			<td><?php echo( wp_kses_post( __( 'This is for the Beta/RC releases only the x.x.x point release. It will only update to beta/RC releases of point releases.', 'wordpress-beta-tester' ) ) ); ?></td>
+			<td><?php echo( wp_kses_post( __( 'This is for the Beta/RC releases only of the x.x.x point release. It will only update to beta/RC releases of point releases.', 'wordpress-beta-tester' ) ) ); ?></td>
 		</tr>
 		<?php endif ?>
 		<tr>

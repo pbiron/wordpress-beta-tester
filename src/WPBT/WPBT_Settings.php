@@ -84,7 +84,7 @@ class WPBT_Settings {
 		add_submenu_page(
 			$parent,
 			esc_html__( 'Beta Testing WordPress', 'wordpress-beta-tester' ),
-			esc_html__( 'Beta Testing', 'wordpress-beta-tester' ),
+			esc_html_x( 'Beta Testing', 'Menu item', 'wordpress-beta-tester' ),
 			$capability,
 			'wp_beta_tester',
 			array( $this, 'create_settings_page' )

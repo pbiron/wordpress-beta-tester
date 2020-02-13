@@ -172,12 +172,15 @@ class WPBT_Core {
 	 * @return void
 	 */
 	public function core_radio_group() {
-		$wp_version    = get_bloginfo( 'version' );
-		$beta_rc       = 1 === preg_match( '/alpha|beta|RC/', $wp_version );
-		$point         = 1 === preg_match( '/point/', static::$options['stream'] );
-		$unstable      = 1 === preg_match( '/unstable/', static::$options['stream'] );
-		$show_unstable = $unstable && $beta_rc;
-		$show_point    = $point && $beta_rc;
+		$wp_version     = get_bloginfo( 'version' );
+		$wp_base        = explode( '-', $wp_version );
+		$preferred      = $this->wp_beta_tester->get_preferred_from_update_core();
+		$preferred_base = explode( '-', $preferred->version );
+
+		$beta_rc      = 1 === preg_match( '/alpha|beta|RC/', $wp_version );
+		$point        = 1 === preg_match( '/point/', static::$options['stream'] );
+		$unstable     = 1 === preg_match( '/unstable/', static::$options['stream'] );
+		$show_beta_rc = $wp_base[0] === $preferred_base[0] || 'latest' === $preferred->response;
 
 		?>
 		<fieldset>
@@ -187,7 +190,7 @@ class WPBT_Core {
 			</label></th>
 			<td><?php esc_html_e( 'This contains the work that is occurring on a branch in preparation for a x.x.x point release. This should also be fairly stable but will be available before the branch is ready for release.', 'wordpress-beta-tester' ); ?></td>
 		</tr>
-		<?php if ( $show_point ) : ?>
+		<?php if ( $point && $beta_rc && $show_beta_rc ) : ?>
 		<tr>
 			<th><label><input name="wp-beta-tester" id="update-stream-beta-rc-point"    type="radio" value="beta-rc-point" class="tog" <?php checked( 'beta-rc-point', self::$options['stream'] ); ?> />
 			<?php esc_html_e( 'Beta/RC - Point release', 'wordpress-beta-tester' ); ?>
@@ -201,7 +204,7 @@ class WPBT_Core {
 			</label></th>
 			<td><?php echo( wp_kses_post( __( 'This is the bleeding edge development code from `trunk` which may be unstable at times. <em>Only use this if you really know what you are doing</em>.', 'wordpress-beta-tester' ) ) ); ?></td>
 		</tr>
-		<?php if ( $show_unstable ) : ?>
+		<?php if ( $unstable && $beta_rc && $show_beta_rc ) : ?>
 		<tr>
 			<th><label><input name="wp-beta-tester" id="update-stream-beta-rc-unstable"    type="radio" value="beta-rc-unstable" class="tog" <?php checked( 'beta-rc-unstable', self::$options['stream'] ); ?> />
 			<?php esc_html_e( 'Beta/RC - Bleeding edge ', 'wordpress-beta-tester' ); ?>

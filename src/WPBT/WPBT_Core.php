@@ -172,15 +172,15 @@ class WPBT_Core {
 	 * @return void
 	 */
 	public function core_radio_group() {
-		$wp_version     = get_bloginfo( 'version' );
-		$wp_base        = explode( '-', $wp_version );
-		$preferred      = $this->wp_beta_tester->get_preferred_from_update_core();
-		$preferred_base = explode( '-', $preferred->version );
+		$wp_version = get_bloginfo( 'version' );
+		$preferred  = $this->wp_beta_tester->get_preferred_from_update_core();
 
-		$beta_rc      = 1 === preg_match( '/alpha|beta|RC/', $wp_version );
-		$point        = 1 === preg_match( '/point/', static::$options['stream'] );
-		$unstable     = 1 === preg_match( '/unstable/', static::$options['stream'] );
-		$show_beta_rc = $wp_base[0] === $preferred_base[0] || 'latest' === $preferred->response;
+		$beta_rc                = 1 === preg_match( '/alpha|beta|RC/', $wp_version );
+		$point                  = 1 === preg_match( '/point/', static::$options['stream'] );
+		$unstable               = 1 === preg_match( '/unstable/', static::$options['stream'] );
+		list( $wp_base )        = explode( '-', $wp_version );
+		list( $preferred_base ) = explode( '-', $preferred->version );
+		$show_beta_rc           = $wp_base === $preferred_base || 'latest' === $preferred->response;
 
 		?>
 		<fieldset>

@@ -4,7 +4,7 @@ Tags: beta, advanced, testing
 Contributors: westi, mlteal, afragen, pbiron
 Tested up to: 5.3
 Requires at least: 3.1
-Stable Tag: 2.1.0
+Stable Tag: 2.2.0
 License: GPLv2
 License URI: https://www.opensource.org/licenses/GPL-2.0
 Requires PHP: 5.2.4
@@ -39,6 +39,11 @@ If no settings are present there is no testing to be done that requires this fea
 PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 
 ## Changelog
+
+#### 2.2.0 / 2020-02-19
+* added support for updating to the _beta/RC offer_. Based on and with tons of help from @pbrion, thanks Paul 👏🏻
+* fixed so a downgrade from 'unstable' to 'point' serves the correct download
+* test and exit from **Extra Settings** if `wp-config.php` is not writeable
 
 #### 2.1.0 / 2019-09-17
 * add extra setting to skip successful autoupdate emails

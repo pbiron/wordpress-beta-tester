@@ -21,6 +21,15 @@ class WP_Beta_Tester {
 	public $file;
 
 	/**
+	 * Holds Beta/RC class instance.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @var WPBT_Beta_RC
+	 */
+	public $beta_rc;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param string $file Main plugin file.
@@ -39,9 +48,10 @@ class WP_Beta_Tester {
 	public function run( $options ) {
 		$this->load_hooks();
 		// TODO: I really want to do this, but have to wait for PHP 5.4
-		// ( new WPBT_Settings( $this, $options ) )->run();
+		// TODO: ( new WPBT_Settings( $this, $options ) )->run();
 		$settings = new WPBT_Settings( $this, $options );
 		$settings->run();
+		$this->beta_rc = new WPBT_Beta_RC();
 	}
 
 	/**
@@ -77,9 +87,20 @@ class WP_Beta_Tester {
 		// Can output an error here if current config drives version backwards.
 		if ( $this->check_if_settings_downgrade() ) {
 			echo '<div id="message" class="error"><p>';
-			$admin_page = is_multisite() ? 'settings.php' : 'tools.php';
+			$admin_page = is_multisite() ? network_admin_url( 'settings.php' ) : admin_url( 'tools.php' );
+			$admin_page = add_query_arg(
+				array(
+					'page' => 'wp_beta_tester',
+					'tab'  => 'wp_beta_tester_core',
+				),
+				$admin_page
+			);
 			/* translators: %s: link to setting page */
-			printf( wp_kses_post( __( '<strong>Error:</strong> Your current <a href="%s">WordPress Beta Tester plugin configuration</a> will downgrade your install to a previous version - please reconfigure it.', 'wordpress-beta-tester' ) ), esc_url( admin_url( $admin_page . '?page=wp_beta_tester&tab=wp_beta_tester_core' ) ) );
+			printf(
+				/* translators: %s: WordPress Beta Tester Settings page URL */
+				wp_kses_post( __( '<strong>Error:</strong> Your current <a href="%s">WordPress Beta Tester plugin configuration</a> will downgrade your install to a previous version - please reconfigure it.', 'wordpress-beta-tester' ) ),
+				esc_url( $admin_page )
+			);
 			echo '</p></div>';
 		}
 	}
@@ -144,7 +165,13 @@ class WP_Beta_Tester {
 	 * @return string $wp_version
 	 */
 	protected function mangle_wp_version() {
-		$options    = get_site_option( 'wp_beta_tester', array( 'stream' => 'point' ) );
+		$options    = get_site_option(
+			'wp_beta_tester',
+			array(
+				'stream' => 'point',
+				'revert' => true,
+			)
+		);
 		$preferred  = $this->get_preferred_from_update_core();
 		$wp_version = get_bloginfo( 'version' );
 
@@ -154,24 +181,63 @@ class WP_Beta_Tester {
 			return $wp_version;
 		}
 
-		$versions = array_map( 'intval', explode( '.', $preferred->current ) );
+		if ( 0 === strpos( $options['stream'], 'beta-rc' ) &&
+				version_compare( $preferred->current, $wp_version, 'lt' ) ) {
+			$versions = array_map( 'intval', explode( '.', $wp_version ) );
+		} else {
+			$versions = array_map( 'intval', explode( '.', $preferred->current ) );
+		}
+
+		// ensure that a downgrade correctly gets mangled version.
+		if ( isset( $options['revert'] ) && $options['revert'] ) {
+			$versions = $this->correct_versions_for_downgrade( $versions );
+		}
 
 		switch ( $options['stream'] ) {
 			case 'point':
+			case 'beta-rc-point':
 				$versions[2] = isset( $versions[2] ) ? $versions[2] + 1 : 1;
-				$wp_version  = $versions[0] . '.' . $versions[1] . '.' . $versions[2] . '-wp-beta-tester';
 				break;
 			case 'unstable':
+			case 'beta-rc-unstable':
 				++ $versions[1];
 				if ( 10 === $versions[1] ) {
 					++ $versions[0];
 					$versions[1] = 0;
 				}
-				$wp_version = $versions[0] . '.' . $versions[1] . '-wp-beta-tester';
 				break;
 		}
+		$wp_version = implode( '.', $versions ) . '-wp-beta-tester';
 
 		return $wp_version;
+	}
+
+	/**
+	 * Ensure that a downgrade to a point release returns a version array that
+	 * will properly get the correct offer.
+	 *
+	 * @param array $versions Array containing the semver arguments of the currently
+	 *                        installed version.
+	 *
+	 * @return array
+	 */
+	private function correct_versions_for_downgrade( $versions ) {
+		$wp_version = get_bloginfo( 'version' );
+		$current    = array_map( 'intval', explode( '.', $wp_version ) );
+
+		if ( version_compare( implode( '.', $versions ), implode( '.', $current ), '=' ) ||
+			version_compare( implode( '.', $versions ), implode( '.', $current ), '>' )
+		) {
+			$versions[1] = $versions[1] - 1;
+		}
+		if ( isset( $current[2] ) && $versions[1] < $current[1] ) {
+			$versions[1] = $current[1];
+		}
+
+		// Add an obscenely high value to always get the point release offer.
+		$versions[2] = 100;
+
+		return $versions;
 	}
 
 	/**

@@ -16,9 +16,16 @@ class WPBT_Core {
 	/**
 	 * Placeholder for saved options.
 	 *
-	 * @var $options
+	 * @var array
 	 */
 	protected static $options;
+
+	/**
+	 * Holds the WP_Beta_Tester instance.
+	 *
+	 * @var WP_Beta_Tester
+	 */
+	protected $wp_beta_tester;
 
 	/**
 	 * Constructor.
@@ -97,6 +104,10 @@ class WPBT_Core {
 				? $post_data['wp-beta-tester']
 				: array();
 			self::$options['stream'] = WPBT_Settings::sanitize( $options );
+
+			// set an option when picking 'point' release stream.
+			// used to ensure correct mangled version is returned.
+			self::$options['revert'] = 'point' === $options;
 			update_site_option( 'wp_beta_tester', (array) self::$options );
 			add_filter( 'wp_beta_tester_save_redirect', array( $this, 'save_redirect_page' ) );
 		}
@@ -118,13 +129,15 @@ class WPBT_Core {
 	 * @return void
 	 */
 	public function print_core_settings_top() {
+		$this->wp_beta_tester->action_admin_head_plugins_php(); // Check configuration.
 		$preferred = $this->wp_beta_tester->get_preferred_from_update_core();
 		if ( 'development' !== $preferred->response ) {
 			echo '<div class="updated fade">';
-			echo '<p>' . wp_kses_post( __( '<strong>Please note:</strong> There are no development builds of the beta stream you have chosen available, so you will receive normal update notifications.', 'wordpress-beta-tester' ) ) . '</p>';
+			echo '<p>' . wp_kses_post( __( '<strong>Please note:</strong> There are no development builds available for the beta stream you have chosen, so you will receive normal update notifications.', 'wordpress-beta-tester' ) ) . '</p>';
 			echo '</div>';
 		}
-		$this->wp_beta_tester->action_admin_head_plugins_php(); // Check configuration.
+
+		$preferred->version = $this->get_next_version( $preferred->version );
 
 		echo '<div><p>';
 		printf(
@@ -146,7 +159,7 @@ class WPBT_Core {
 		printf(
 			/* translators: %s: update version */
 			wp_kses_post( __( 'Currently your site is set to update to version %s.', 'wordpress-beta-tester' ) ),
-			esc_attr( $preferred->version )
+			'<strong>' . esc_attr( $preferred->version ) . '</strong>'
 		);
 		echo '</p><p>';
 		esc_html_e( 'Please select the update stream you would like this website to use:', 'wordpress-beta-tester' );
@@ -159,6 +172,16 @@ class WPBT_Core {
 	 * @return void
 	 */
 	public function core_radio_group() {
+		$wp_version = get_bloginfo( 'version' );
+		$preferred  = $this->wp_beta_tester->get_preferred_from_update_core();
+
+		$beta_rc                = 1 === preg_match( '/alpha|beta|RC/', $wp_version );
+		$point                  = 1 === preg_match( '/point/', static::$options['stream'] );
+		$unstable               = 1 === preg_match( '/unstable/', static::$options['stream'] );
+		list( $wp_base )        = explode( '-', $wp_version );
+		list( $preferred_base ) = explode( '-', $preferred->version );
+		$show_beta_rc           = $wp_base === $preferred_base || 'latest' === $preferred->response;
+
 		?>
 		<fieldset>
 		<tr>
@@ -167,12 +190,28 @@ class WPBT_Core {
 			</label></th>
 			<td><?php esc_html_e( 'This contains the work that is occurring on a branch in preparation for a x.x.x point release. This should also be fairly stable but will be available before the branch is ready for release.', 'wordpress-beta-tester' ); ?></td>
 		</tr>
+		<?php if ( $point && $beta_rc && $show_beta_rc ) : ?>
+		<tr>
+			<th><label><input name="wp-beta-tester" id="update-stream-beta-rc-point"    type="radio" value="beta-rc-point" class="tog" <?php checked( 'beta-rc-point', self::$options['stream'] ); ?> />
+			<?php esc_html_e( 'Beta/RC - Point release', 'wordpress-beta-tester' ); ?>
+			</label></th>
+			<td><?php echo( wp_kses_post( __( 'This is for the Beta/RC releases only of the x.x.x point release. It will only update to beta/RC releases of point releases.', 'wordpress-beta-tester' ) ) ); ?></td>
+		</tr>
+		<?php endif ?>
 		<tr>
 			<th><label><input name="wp-beta-tester" id="update-stream-bleeding-nightlies"    type="radio" value="unstable" class="tog" <?php checked( 'unstable', self::$options['stream'] ); ?> />
 			<?php esc_html_e( 'Bleeding edge nightlies', 'wordpress-beta-tester' ); ?>
 			</label></th>
 			<td><?php echo( wp_kses_post( __( 'This is the bleeding edge development code from `trunk` which may be unstable at times. <em>Only use this if you really know what you are doing</em>.', 'wordpress-beta-tester' ) ) ); ?></td>
 		</tr>
+		<?php if ( $unstable && $beta_rc && $show_beta_rc ) : ?>
+		<tr>
+			<th><label><input name="wp-beta-tester" id="update-stream-beta-rc-unstable"    type="radio" value="beta-rc-unstable" class="tog" <?php checked( 'beta-rc-unstable', self::$options['stream'] ); ?> />
+			<?php esc_html_e( 'Beta/RC - Bleeding edge ', 'wordpress-beta-tester' ); ?>
+			</label></th>
+			<td><?php echo( wp_kses_post( __( 'This is for the Beta/RC releases only of development code from `trunk`. It will only update to beta/RC releases of `trunk`.', 'wordpress-beta-tester' ) ) ); ?></td>
+		</tr>
+		<?php endif ?>
 		</fieldset>
 		<?php
 	}
@@ -196,5 +235,41 @@ class WPBT_Core {
 			<?php endif; ?>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Get the next version the site will be updated to.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param string $preferred_version The preferred version.
+	 * @return string
+	 */
+	public function get_next_version( $preferred_version ) {
+		if ( ! ( 0 === strpos( static::$options['stream'], 'beta-rc' ) ||
+				! preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) ) {
+			// site is not running a development version or not on a beta/RC stream.
+			// So use the preferred version.
+			return $preferred_version;
+		}
+
+		$next_version = $this->wp_beta_tester->beta_rc->get_found_version();
+		if ( $next_version ) {
+			// the next beta/RC package was found, return that version.
+			return $next_version;
+		}
+
+		// the next beta/RC package was not found.
+		$next_version = $this->wp_beta_tester->beta_rc->next_package_versions();
+		if ( count( $next_version ) === 1 ) {
+			$next_version = array_shift( $next_version );
+		} elseif ( empty( $next_version ) ) {
+			$next_version = __( 'next development version', 'wordpress-beta-tester' );
+		} else {
+			// show all versions that may come next.
+			$next_version = implode( ' or ', $next_version ) . ', ' . __( 'whichever is released first', 'wordpress-beta-tester' );
+		}
+
+		return $next_version;
 	}
 }

@@ -47,12 +47,13 @@ class WPBT_Settings {
 	public function run() {
 		$this->load_hooks();
 		// TODO: I really want to do this, but have to wait for PHP 5.4
-		// ( new WPBT_Core( $this->wp_beta_tester, self::$options ) )->load_hooks();
-		// ( new WPBT_Extras( $this->wp_beta_tester, self::$options ) )->load_hooks();
+		// TODO: ( new WPBT_Core( $this->wp_beta_tester, self::$options ) )->load_hooks();
 		$wpbt_core = new WPBT_Core( $this->wp_beta_tester, self::$options );
 		$wpbt_core->load_hooks();
+		// TODO: ( new WPBT_Extras( $this->wp_beta_tester, self::$options ) )->load_hooks();
 		$wpbt_extras = new WPBT_Extras( $this->wp_beta_tester, self::$options );
 		$wpbt_extras->load_hooks();
+		// TODO: ( new WPBT_Extras( $this->wp_beta_tester, self::$options ) )->skip_autoupdate_email();
 		$wpbt_extras->skip_autoupdate_email();
 	}
 
@@ -83,7 +84,7 @@ class WPBT_Settings {
 		add_submenu_page(
 			$parent,
 			esc_html__( 'Beta Testing WordPress', 'wordpress-beta-tester' ),
-			esc_html__( 'Beta Testing', 'wordpress-beta-tester' ),
+			esc_html_x( 'Beta Testing', 'Menu item', 'wordpress-beta-tester' ),
 			$capability,
 			'wp_beta_tester',
 			array( $this, 'create_settings_page' )
@@ -186,8 +187,10 @@ class WPBT_Settings {
 	 * @return void
 	 */
 	private function saved_settings_notice() {
+		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 		if ( ( isset( $_GET['updated'] ) && true == $_GET['updated'] ) ||
-			( isset( $_GET['settings-updated'] ) && true == $_GET['settings-updated'] )
+		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+		( isset( $_GET['settings-updated'] ) && true == $_GET['settings-updated'] )
 		) {
 			echo '<div class="updated"><p>';
 			esc_html_e( 'Saved.', 'wordpress-beta-tester' );

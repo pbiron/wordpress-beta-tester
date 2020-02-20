@@ -12,7 +12,6 @@
  * WPBT_Core
  */
 class WPBT_Core {
-
 	/**
 	 * Placeholder for saved options.
 	 *
@@ -30,8 +29,8 @@ class WPBT_Core {
 	/**
 	 * Constructor.
 	 *
-	 * @param WP_Beta_Tester $wp_beta_tester Instance of class WP_Beta_Tester.
-	 * @param array          $options Site options.
+	 * @param  WP_Beta_Tester $wp_beta_tester Instance of class WP_Beta_Tester.
+	 * @param  array          $options        Site options.
 	 * @return void
 	 */
 	public function __construct( WP_Beta_Tester $wp_beta_tester, $options ) {
@@ -54,7 +53,7 @@ class WPBT_Core {
 	/**
 	 * Add settings tab for class.
 	 *
-	 * @param array $tabs Settings tabs.
+	 * @param  array $tabs Settings tabs.
 	 * @return array
 	 */
 	public function add_settings_tab( $tabs ) {
@@ -93,7 +92,7 @@ class WPBT_Core {
 	/**
 	 * Save settings.
 	 *
-	 * @param mixed $post_data $_POST data.
+	 * @param  mixed $post_data $_POST data.
 	 * @return void
 	 */
 	public function save_settings( $post_data ) {
@@ -116,7 +115,7 @@ class WPBT_Core {
 	/**
 	 * Redirect page/tab after saving options.
 	 *
-	 * @param array $option_page Settings tabs.
+	 * @param  array $option_page Settings tabs.
 	 * @return array
 	 */
 	public function save_redirect_page( $option_page ) {
@@ -154,11 +153,11 @@ class WPBT_Core {
 			'https://core.trac.wordpress.org/newticket'
 		);
 		echo '</p><p>';
-		echo( wp_kses_post( __( 'By default, your WordPress install uses the stable update stream. To return to this, please deactivate this plugin and re-install from the <a href="update-core.php">WordPress Updates</a> page.', 'wordpress-beta-tester' ) ) );
+		echo wp_kses_post( __( 'By default, your WordPress install uses the stable update stream. To return to this, please deactivate this plugin and re-install from the <a href="update-core.php">WordPress Updates</a> page.', 'wordpress-beta-tester' ) );
 		echo '</p><p>';
 		printf(
 			/* translators: %s: update version */
-			wp_kses_post( __( 'Currently your site is set to update to version %s.', 'wordpress-beta-tester' ) ),
+			wp_kses_post( __( 'Currently your site is set to update to %s.', 'wordpress-beta-tester' ) ),
 			'<strong>' . esc_attr( $preferred->version ) . '</strong>'
 		);
 		echo '</p><p>';
@@ -207,7 +206,7 @@ class WPBT_Core {
 		<?php if ( $unstable && $beta_rc && $show_beta_rc ) : ?>
 		<tr>
 			<th><label><input name="wp-beta-tester" id="update-stream-beta-rc-unstable"    type="radio" value="beta-rc-unstable" class="tog" <?php checked( 'beta-rc-unstable', self::$options['stream'] ); ?> />
-			<?php esc_html_e( 'Beta/RC - Bleeding edge ', 'wordpress-beta-tester' ); ?>
+			<?php esc_html_e( 'Beta/RC - Bleeding edge', 'wordpress-beta-tester' ); ?>
 			</label></th>
 			<td><?php echo( wp_kses_post( __( 'This is for the Beta/RC releases only of development code from `trunk`. It will only update to beta/RC releases of `trunk`.', 'wordpress-beta-tester' ) ) ); ?></td>
 		</tr>
@@ -219,8 +218,8 @@ class WPBT_Core {
 	/**
 	 * Create core settings page.
 	 *
-	 * @param array  $tab Settings tab.
-	 * @param string $action Settings form action.
+	 * @param  array  $tab    Settings tab.
+	 * @param  string $action Settings form action.
 	 * @return void
 	 */
 	public function add_admin_page( $tab, $action ) {
@@ -242,7 +241,7 @@ class WPBT_Core {
 	 *
 	 * @since 2.2.0
 	 *
-	 * @param string $preferred_version The preferred version.
+	 * @param  string $preferred_version The preferred version.
 	 * @return string
 	 */
 	public function get_next_version( $preferred_version ) {
@@ -250,26 +249,55 @@ class WPBT_Core {
 				! preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) ) {
 			// site is not running a development version or not on a beta/RC stream.
 			// So use the preferred version.
-			return $preferred_version;
+			/* translators: %s: version number */
+			return sprintf( __( 'version %s', 'wordpress-beta-tester' ), $preferred_version );
 		}
 
 		$next_version = $this->wp_beta_tester->beta_rc->get_found_version();
 		if ( $next_version ) {
 			// the next beta/RC package was found, return that version.
-			return $next_version;
+			/* translators: %s: version number */
+			return sprintf( __( 'version %s', 'wordpress-beta-tester' ), $next_version );
 		}
 
 		// the next beta/RC package was not found.
 		$next_version = $this->wp_beta_tester->beta_rc->next_package_versions();
-		if ( count( $next_version ) === 1 ) {
+		if ( 1 === count( $next_version ) ) {
 			$next_version = array_shift( $next_version );
 		} elseif ( empty( $next_version ) ) {
 			$next_version = __( 'next development version', 'wordpress-beta-tester' );
 		} else {
 			// show all versions that may come next.
-			$next_version = implode( ' or ', $next_version ) . ', ' . __( 'whichever is released first', 'wordpress-beta-tester' );
+			add_filter( 'wp_sprintf_l', array( $this, 'wpbt_sprintf_or' ) );
+			$next_version = wp_sprintf( __( 'version %l', 'wordpress-beta-tester' ), $next_version ) . ', ' . __( 'whichever is released first', 'wordpress-beta-tester' );
+			remove_filter( 'wp_sprintf_l', array( $this, 'wpbt_sprintf_or' ) );
 		}
 
 		return $next_version;
+	}
+
+	/**
+	 * Change the delimiters used by wp_sprintf_l().
+	 *
+	 * Placeholders (%s) are included to assist translators and then
+	 * removed before the array of strings reaches the filter.
+	 *
+	 * Please note: Ampersands and entities should be avoided here.
+	 *
+	 * @since 2.2.1
+	 *
+	 * @param array $delimiters An array of translated delimiters.
+	 */
+	public function wpbt_sprintf_or( $delimiters ) {
+		$delimiters = array(
+			/* translators: Used to join items in a list with more than 2 items. */
+			'between'          => sprintf( __( '%1$s, %2$s', 'wordpress-beta-tester' ), '', '' ),
+			/* translators: Used to join last two items in a list with more than 2 times. */
+			'between_last_two' => sprintf( __( '%1$s, or %2$s', 'wordpress-beta-tester' ), '', '' ),
+			/* translators: Used to join items in a list with only 2 items. */
+			'between_only_two' => sprintf( __( '%1$s or %2$s', 'wordpress-beta-tester' ), '', '' ),
+		);
+
+		return $delimiters;
 	}
 }

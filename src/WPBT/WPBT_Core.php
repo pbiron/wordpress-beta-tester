@@ -49,6 +49,7 @@ class WPBT_Core {
 		add_action( 'wp_beta_tester_add_settings', array( $this, 'add_settings' ) );
 		add_action( 'wp_beta_tester_add_admin_page', array( $this, 'add_admin_page' ), 10, 2 );
 		add_action( 'wp_beta_tester_update_settings', array( $this, 'save_settings' ) );
+		add_filter( 'wp_sprintf_l', array( $this, 'wpbt_sprintf_or' ) );
 	}
 
 	/**
@@ -268,8 +269,33 @@ class WPBT_Core {
 		} else {
 			// show all versions that may come next.
 			$next_version = wp_sprintf( __( 'version %l', 'wordpress-beta-tester' ), $next_version ) . ', ' . __( 'whichever is released first', 'wordpress-beta-tester' );
+			remove_filter( 'wp_sprintf_l', array( $this, 'wpbt_sprintf_or' ) );
 		}
 
 		return $next_version;
+	}
+
+	/**
+	 * Change the delimiters used by wp_sprintf_l().
+	 *
+	 * Placeholders (%s) are included to assist translators and then
+	 * removed before the array of strings reaches the filter.
+	 *
+	 * Please note: Ampersands and entities should be avoided here.
+	 *
+	 * @since 2.2.1
+	 *
+	 * @param array $delimiters An array of translated delimiters.
+	 */
+	public function wpbt_sprintf_or( $delimiters ) {
+		$delimiters = array(
+			/* translators: Used to join items in a list with more than 2 items. */
+			'between'          => sprintf( __( '%1$s, %2$s', 'wordpress-beta-tester' ), '', '' ),
+			/* translators: Used to join last two items in a list with more than 2 times. */
+			'between_last_two' => sprintf( __( '%1$s, or %2$s', 'wordpress-beta-tester' ), '', '' ),
+			/* translators: Used to join items in a list with only 2 items. */
+			'between_only_two' => sprintf( __( '%1$s or %2$s', 'wordpress-beta-tester' ), '', '' ),
+		);
+	  return $delimiters;
 	}
 }

@@ -49,7 +49,6 @@ class WPBT_Core {
 		add_action( 'wp_beta_tester_add_settings', array( $this, 'add_settings' ) );
 		add_action( 'wp_beta_tester_add_admin_page', array( $this, 'add_admin_page' ), 10, 2 );
 		add_action( 'wp_beta_tester_update_settings', array( $this, 'save_settings' ) );
-		add_filter( 'wp_sprintf_l', array( $this, 'wpbt_sprintf_or' ) );
 	}
 
 	/**
@@ -268,6 +267,7 @@ class WPBT_Core {
 			$next_version = __( 'next development version', 'wordpress-beta-tester' );
 		} else {
 			// show all versions that may come next.
+			add_filter( 'wp_sprintf_l', array( $this, 'wpbt_sprintf_or' ) );
 			$next_version = wp_sprintf( __( 'version %l', 'wordpress-beta-tester' ), $next_version ) . ', ' . __( 'whichever is released first', 'wordpress-beta-tester' );
 			remove_filter( 'wp_sprintf_l', array( $this, 'wpbt_sprintf_or' ) );
 		}

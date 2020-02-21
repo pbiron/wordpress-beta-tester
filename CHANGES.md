@@ -1,4 +1,5 @@
 [unreleased]
+* fix for strange Core API response where preferred version response contained the word 'version'. We now grab the last word of that response
 
 #### 2.2.1 / 2020-02-20
 * fix some i18n strings, thanks @pedro-mendonca

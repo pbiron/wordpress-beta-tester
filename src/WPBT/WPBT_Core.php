@@ -179,7 +179,13 @@ class WPBT_Core {
 		$unstable               = 1 === preg_match( '/unstable/', static::$options['stream'] );
 		list( $wp_base )        = explode( '-', $wp_version );
 		list( $preferred_base ) = explode( '-', $preferred->version );
-		$show_beta_rc           = $wp_base === $preferred_base || 'latest' === $preferred->response;
+
+		// Odd bug where Core API returns 'version <version_number>' instead of just the <version_number>.
+		// I can't explain it, but it showed up on my server at least once.
+		$preferred_base = explode( ' ', $preferred_base );
+		$preferred_base = array_pop( $preferred_base );
+
+		$show_beta_rc = $wp_base === $preferred_base || 'latest' === $preferred->response;
 
 		?>
 		<fieldset>

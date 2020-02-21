@@ -4,7 +4,7 @@ Tags: beta, advanced, testing
 Contributors: westi, mlteal, afragen, pbiron
 Tested up to: 5.3
 Requires at least: 3.1
-Stable Tag: 2.2.1
+Stable Tag: 2.2.2
 License: GPLv2
 License URI: https://www.opensource.org/licenses/GPL-2.0
 Requires PHP: 5.2.4
@@ -39,6 +39,9 @@ If no settings are present there is no testing to be done that requires this fea
 PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 
 ## Changelog
+
+#### 2.2.2 / 2020-02-22
+* fix for strange Core API response where preferred version response contained the word 'version'. We now grab the last word of that response
 
 #### 2.2.1 / 2020-02-20
 * fix some i18n strings, thanks @pedro-mendonca

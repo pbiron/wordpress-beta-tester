@@ -1,5 +1,8 @@
 [unreleased]
 
+#### 2.2.1 / 2020-02-20
+* fix some i18n strings, thanks @pedro-mendonca
+
 #### 2.2.0 / 2020-02-19
 * added support for updating to the _beta/RC offer_. Based on and with tons of help from @pbrion, thanks Paul 👏🏻
 * fixed so a downgrade from 'unstable' to 'point' serves the correct download

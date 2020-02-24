@@ -421,11 +421,16 @@ class WPBT_Beta_RC {
 		$next_version = wp_sprintf( __( 'version %l', 'wordpress-beta-tester' ), $next_version ) . ', ' . __( 'whichever is released first', 'wordpress-beta-tester' );
 		remove_filter( 'wp_sprintf_l', array( $wpbt_core, 'wpbt_sprintf_or' ) );
 
-		$message  = '<p>WordPress Beta Tester dashboard widget.</p>';
-		$message .= '<p>Help test ' . $next_version . '.</p>';
+		$message = '<p>Help test ' . $next_version . '.</p>';
 
 		// Get link to make/core post on beta/RC release.
-		$link = '';
-		echo $message . $link;
+		$link = '<p>Figure out how to add what to test details.</p>';
+
+		echo $message;
+		echo $link;
+
+		$wpbt_settings_page = add_query_arg( 'page', 'wp_beta_tester', admin_url( 'tools.php' ) );
+		/* translators: %s: WP Beta Tester settings URL */
+		printf( __( 'Head over to your <a href="%s">WordPress Beta Tester Settings</a> and make sure the <strong>beta/RC</strong> stream is selected.' ), $wpbt_settings_page );
 	}
 }

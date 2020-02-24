@@ -394,8 +394,8 @@ class WPBT_Beta_RC {
 	public function add_dashboard_widget() {
 		$wp_beta_tester = new WP_Beta_Tester( null );
 		$wpbt_core      = new WPBT_Core( $wp_beta_tester, null );
-		$preferred      = $wp_beta_tester->get_preferred_from_update_core();
-		$beta_rc        = 1 === preg_match( '/alpha|beta|RC/', $preferred->current );
+		$wp_version     = get_bloginfo( 'version' );
+		$beta_rc        = 1 === preg_match( '/alpha|beta|RC/', $wp_version );
 
 		if ( $beta_rc ) {
 			wp_add_dashboard_widget( 'beta_tester_dashboard_widget', __( 'WordPress Beta Testing', 'wordpress-beta-tester' ), array( $this, 'setup_dashboard_widget' ), null, array( $wpbt_core ) );

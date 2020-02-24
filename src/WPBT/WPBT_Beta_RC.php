@@ -106,6 +106,9 @@ class WPBT_Beta_RC {
 		add_filter( 'http_response', array( $this, 'update_to_beta_or_rc_releases' ), 10, 3 );
 		// set priority to 11 so that we fire after the function core hooks into this filter.
 		add_filter( 'update_footer', array( $this, 'update_footer' ), 11 );
+
+		// Add dashboard widget.
+		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget' ) );
 	}
 
 	/**
@@ -379,5 +382,50 @@ class WPBT_Beta_RC {
 	 */
 	public function next_package_versions() {
 		return array_keys( $this->next_package_urls );
+	}
+
+	/**
+	 * Add dashboard widget for beta testing information.
+	 *
+	 * @since 2.2.x
+	 *
+	 * @return void
+	 */
+	public function add_dashboard_widget() {
+		$wp_beta_tester = new WP_Beta_Tester( null );
+		$wpbt_core      = new WPBT_Core( $wp_beta_tester, null );
+		$preferred      = $wp_beta_tester->get_preferred_from_update_core();
+		$beta_rc        = 1 === preg_match( '/alpha|beta|RC/', $preferred->current );
+
+		if ( $beta_rc ) {
+			wp_add_dashboard_widget( 'beta_tester_dashboard_widget', __( 'WordPress Beta Testing', 'wordpress-beta-tester' ), array( $this, 'setup_dashboard_widget' ), null, array( $wpbt_core ) );
+		}
+	}
+
+	/**
+	 * Setup dashboard widget.
+	 *
+	 * @since 2.2.x
+	 *
+	 * @param array $contol Control callback from wp_add_dashboard_widget().
+	 * @param array $args   Callback args from wp_add_dashboard_widget().
+	 *
+	 * @return void
+	 */
+	public function setup_dashboard_widget( $control, $args ) {
+		$wpbt_core    = array_pop( $args['args'] );
+		$next_version = $this->next_package_versions();
+		array_shift( $next_version );
+
+		add_filter( 'wp_sprintf_l', array( $wpbt_core, 'wpbt_sprintf_or' ) );
+		$next_version = wp_sprintf( __( 'version %l', 'wordpress-beta-tester' ), $next_version ) . ', ' . __( 'whichever is released first', 'wordpress-beta-tester' );
+		remove_filter( 'wp_sprintf_l', array( $wpbt_core, 'wpbt_sprintf_or' ) );
+
+		$message  = '<p>WordPress Beta Tester dashboard widget.</p>';
+		$message .= '<p>Help test ' . $next_version . '.</p>';
+
+		// Get link to make/core post on beta/RC release.
+		$link = '';
+		echo $message . $link;
 	}
 }

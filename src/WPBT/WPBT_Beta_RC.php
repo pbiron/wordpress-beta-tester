@@ -443,9 +443,9 @@ class WPBT_Beta_RC {
 
 		$milestone_esc = str_replace( '.', '\.', $milestone );
 		$li_regex      = "#<li>.*$milestone_esc.*<\/li><li>#";
-		preg_match_all( $li_regex, $feed, $matches );
-
-		$list = '<ul>' . $matches[0][0] . '</li></ul>';
+		preg_match( $li_regex, $feed, $matches );
+		$match = array_pop( $matches );
+		$list  = empty( $match ) ? '' : "<ul>$match</li></ul>";
 
 		return $list;
 	}

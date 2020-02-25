@@ -172,9 +172,9 @@ class WPBT_Beta_RC {
 	 *
 	 * @since 2.2.0
 	 *
-	 * @param array  $response HTTP response.
-	 * @param array  $parsed_args HTTP request arguments.
-	 * @param string $url The request URL.
+	 * @param  array  $response    HTTP response.
+	 * @param  array  $parsed_args HTTP request arguments.
+	 * @param  string $url         The request URL.
 	 * @return array
 	 *
 	 * @filter http_response
@@ -272,8 +272,8 @@ class WPBT_Beta_RC {
 	 *
 	 * @since 2.2.0
 	 *
-	 * @param string $url URL of a beta/RC release package.
-	 * @return bool       True if the package at `$url` exists, false otherwise.
+	 * @param  string $url URL of a beta/RC release package.
+	 * @return bool   True if the package at `$url` exists, false otherwise.
 	 */
 	private function next_package_exists( $url ) {
 		// note: adding this filter will be a no-op until a version of QM that supports
@@ -294,7 +294,7 @@ class WPBT_Beta_RC {
 	 *
 	 * @since 2.2.0
 	 *
-	 * @param string $content The content that will be printed.
+	 * @param  string $content The content that will be printed.
 	 * @return string
 	 *
 	 * @filter update_footer
@@ -321,11 +321,11 @@ class WPBT_Beta_RC {
 	 *
 	 * @since 2.2.0
 	 *
-	 * @param mixed  $pre_site_transient The default value to return if the site
-	 *                                   transient does not exist. Any value other
-	 *                                   than false will short-circuit the retrieval
-	 *                                   of the transient, and return the returned value.
-	 * @param string $transient          Transient name.
+	 * @param  mixed  $pre_site_transient The default value to return if the site
+	 *                                    transient does not exist. Any value other
+	 *                                    than false will short-circuit the retrieval
+	 *                                    of the transient, and return the returned value.
+	 * @param  string $transient          Transient name.
 	 * @return object
 	 *
 	 * @filter pre_site_transient_update_core
@@ -351,9 +351,9 @@ class WPBT_Beta_RC {
 	 *
 	 * @since 2.2.0
 	 *
-	 * @param array $silenced QM HTTP codes to be silenced.
-	 * @param array $http     QM "HTTP" request object.
-	 * @return int[]          Array of HTTP Status Codes to be silenced.
+	 * @param  array $silenced QM HTTP codes to be silenced.
+	 * @param  array $http     QM "HTTP" request object.
+	 * @return int[] Array of HTTP Status Codes to be silenced.
 	 */
 	public function qm_silence_404s( $silenced, $http ) {
 		$silenced[] = 404;
@@ -367,7 +367,7 @@ class WPBT_Beta_RC {
 	 * @since 2.2.0
 	 *
 	 * @return bool|string Will be boolean false if the next beta/RC package was not found,
-	 *                  or the version of the package (as a string) otherwise.
+	 *                     or the version of the package (as a string) otherwise.
 	 */
 	public function get_found_version() {
 		return $this->found;
@@ -427,6 +427,7 @@ class WPBT_Beta_RC {
 	/**
 	 * Parse development RSS feed for list of milestoned items.
 	 *
+	 * @since 2.2.x
 	 * @param string $milestone Milestone version.
 	 *
 	 * @return string HTML unordered list.

@@ -1,4 +1,6 @@
 [unreleased]
+
+#### 2.2.3 / 2020-02-25
 * add dashboard widget callout for testing
 
 #### 2.2.2 / 2020-02-22

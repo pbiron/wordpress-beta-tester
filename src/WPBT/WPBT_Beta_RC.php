@@ -109,6 +109,7 @@ class WPBT_Beta_RC {
 
 		// Add dashboard widget.
 		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget' ) );
+		add_action( 'wp_network_dashboard_setup', array( $this, 'add_dashboard_widget' ) );
 	}
 
 	/**

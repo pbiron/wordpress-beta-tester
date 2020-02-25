@@ -393,7 +393,7 @@ class WPBT_Beta_RC {
 	 */
 	public function add_dashboard_widget() {
 		$wp_version = get_bloginfo( 'version' );
-		$beta_rc    = 1 === preg_match( '/beta|RC/', $wp_version );
+		$beta_rc    = 1 === preg_match( '/alpha|beta|RC/', $wp_version );
 
 		if ( $beta_rc ) {
 			wp_add_dashboard_widget( 'beta_tester_dashboard_widget', __( 'WordPress Beta Testing', 'wordpress-beta-tester' ), array( $this, 'setup_dashboard_widget' ) );
@@ -413,12 +413,12 @@ class WPBT_Beta_RC {
 		$wpbt_settings_page = add_query_arg( 'page', 'wp_beta_tester', admin_url( 'tools.php' ) );
 
 		/* translators: %s: WordPress version */
-		printf( __( 'Please help test <strong>WordPress %s</strong>.' ), $milestone );
+		printf( wp_kses_post( __( 'Please help test <strong>WordPress %s</strong>.' ) ), esc_attr( $milestone ) );
 
 		/* translators: %1: link to closed trac tickets on current milestone */
-		printf( '<p>' . __( 'Here are the <a href="%s">commits for the milestone</a>.' ) . '</p>', "https://core.trac.wordpress.org/query?status=closed&milestone=$milestone" );
+		printf( wp_kses_post( '<p>' . __( 'Here are the <a href="%s">commits for the milestone</a>.' ) . '</p>' ), esc_url_raw( "https://core.trac.wordpress.org/query?status=closed&milestone=$milestone" ) );
 
 		/* translators: %s: WP Beta Tester settings URL */
-		printf( '<p>' . __( 'Head over to your <a href="%s">WordPress Beta Tester Settings</a> and make sure the <strong>beta/RC</strong> stream is selected.' ) . '</p>', $wpbt_settings_page );
+		printf( wp_kses_post( '<p>' . __( 'Head over to your <a href="%s">WordPress Beta Tester Settings</a> and make sure the <strong>beta/RC</strong> stream is selected.' ) . '</p>' ), esc_url_raw( $wpbt_settings_page ) );
 	}
 }

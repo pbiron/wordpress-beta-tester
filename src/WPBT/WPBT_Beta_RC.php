@@ -415,10 +415,38 @@ class WPBT_Beta_RC {
 		/* translators: %s: WordPress version */
 		printf( wp_kses_post( __( 'Please help test <strong>WordPress %s</strong>.' ) ), esc_attr( $milestone ) );
 
+		echo wp_kses_post( $this->parse_development_feed( $milestone ) );
+
 		/* translators: %1: link to closed trac tickets on current milestone */
 		printf( wp_kses_post( '<p>' . __( 'Here are the <a href="%s">commits for the milestone</a>.' ) . '</p>' ), esc_url_raw( "https://core.trac.wordpress.org/query?status=closed&milestone=$milestone" ) );
 
 		/* translators: %s: WP Beta Tester settings URL */
 		printf( wp_kses_post( '<p>' . __( 'Head over to your <a href="%s">WordPress Beta Tester Settings</a> and make sure the <strong>beta/RC</strong> stream is selected.' ) . '</p>' ), esc_url_raw( $wpbt_settings_page ) );
+	}
+
+	/**
+	 * Parse development RSS feed for list of milestoned items.
+	 *
+	 * @param string $milestone Milestone version.
+	 *
+	 * @return string HTML unordered list.
+	 */
+	private function parse_development_feed( $milestone ) {
+		$rss_args = array(
+			'show_summary' => 1,
+			'items'        => 3,
+		);
+		ob_start();
+		wp_widget_rss_output( 'https://wordpress.org/news/category/development/feed/', $rss_args );
+		$feed = ob_get_contents();
+		ob_end_clean();
+
+		$milestone_esc = str_replace( '.', '\.', $milestone );
+		$li_regex      = "#<li>.*$milestone_esc.*<\/li><li>#";
+		preg_match_all( $li_regex, $feed, $matches );
+
+		$list = '<ul>' . $matches[0][0] . '</li></ul>';
+
+		return $list;
 	}
 }

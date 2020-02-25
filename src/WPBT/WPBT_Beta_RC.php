@@ -387,7 +387,7 @@ class WPBT_Beta_RC {
 	/**
 	 * Add dashboard widget for beta testing information.
 	 *
-	 * @since 2.2.x
+	 * @since 2.2.3
 	 *
 	 * @return void
 	 */
@@ -396,38 +396,38 @@ class WPBT_Beta_RC {
 		$beta_rc    = 1 === preg_match( '/alpha|beta|RC/', $wp_version );
 
 		if ( $beta_rc ) {
-			wp_add_dashboard_widget( 'beta_tester_dashboard_widget', __( 'WordPress Beta Testing', 'wordpress-beta-tester' ), array( $this, 'setup_dashboard_widget' ) );
+			wp_add_dashboard_widget( 'beta_tester_dashboard_widget', __( 'WordPress Beta Testing', 'wordpress-beta-tester' ), array( $this, 'beta_tester_dashboard' ) );
 		}
 	}
 
 	/**
 	 * Setup dashboard widget.
 	 *
-	 * @since 2.2.x
+	 * @since 2.2.3
 	 *
 	 * @return void
 	 */
-	public function setup_dashboard_widget() {
+	public function beta_tester_dashboard() {
 		$next_version       = $this->next_package_versions();
 		$milestone          = array_shift( $next_version );
 		$wpbt_settings_page = add_query_arg( 'page', 'wp_beta_tester', admin_url( 'tools.php' ) );
 
 		/* translators: %s: WordPress version */
-		printf( wp_kses_post( __( 'Please help test <strong>WordPress %s</strong>.' ) ), esc_attr( $milestone ) );
+		printf( wp_kses_post( __( 'Please help test <strong>WordPress %s</strong>.', 'wordpress-beta-tester' ) ), esc_attr( $milestone ) );
 
 		echo wp_kses_post( $this->parse_development_feed( $milestone ) );
 
 		/* translators: %1: link to closed trac tickets on current milestone */
-		printf( wp_kses_post( '<p>' . __( 'Here are the <a href="%s">commits for the milestone</a>.' ) . '</p>' ), esc_url_raw( "https://core.trac.wordpress.org/query?status=closed&milestone=$milestone" ) );
+		printf( wp_kses_post( '<p>' . __( 'Here are the <a href="%s">commits for the milestone</a>.', 'wordpress-beta-tester' ) . '</p>' ), esc_url_raw( "https://core.trac.wordpress.org/query?status=closed&milestone=$milestone" ) );
 
 		/* translators: %s: WP Beta Tester settings URL */
-		printf( wp_kses_post( '<p>' . __( 'Head over to your <a href="%s">WordPress Beta Tester Settings</a> and make sure the <strong>beta/RC</strong> stream is selected.' ) . '</p>' ), esc_url_raw( $wpbt_settings_page ) );
+		printf( wp_kses_post( '<p>' . __( 'Head over to your <a href="%s">WordPress Beta Tester Settings</a> and make sure the <strong>beta/RC</strong> stream is selected.', 'wordpress-beta-tester' ) . '</p>' ), esc_url_raw( $wpbt_settings_page ) );
 	}
 
 	/**
 	 * Parse development RSS feed for list of milestoned items.
 	 *
-	 * @since 2.2.x
+	 * @since 2.2.3
 	 * @param string $milestone Milestone version.
 	 *
 	 * @return string HTML unordered list.

@@ -413,24 +413,28 @@ class WPBT_Beta_RC {
 	 * @return void
 	 */
 	public function setup_dashboard_widget( $control, $args ) {
-		$wpbt_core    = array_pop( $args['args'] );
-		$next_version = $this->next_package_versions();
-		array_shift( $next_version );
-
-		add_filter( 'wp_sprintf_l', array( $wpbt_core, 'wpbt_sprintf_or' ) );
-		$next_version = wp_sprintf( __( 'version %l', 'wordpress-beta-tester' ), $next_version ) . ', ' . __( 'whichever is released first', 'wordpress-beta-tester' );
-		remove_filter( 'wp_sprintf_l', array( $wpbt_core, 'wpbt_sprintf_or' ) );
-
-		$message = '<p>Help test ' . $next_version . '.</p>';
-
-		// Get link to make/core post on beta/RC release.
-		$link = '<p>Figure out how to add what to test details.</p>';
-
-		echo $message;
-		echo $link;
-
+		// $wpbt_core    = array_pop( $args['args'] );
+		$next_version       = $this->next_package_versions();
+		$milestone          = array_shift( $next_version );
 		$wpbt_settings_page = add_query_arg( 'page', 'wp_beta_tester', admin_url( 'tools.php' ) );
+
+		// add_filter( 'wp_sprintf_l', array( $wpbt_core, 'wpbt_sprintf_or' ) );
+		// $next_version = wp_sprintf( __( 'version %l', 'wordpress-beta-tester' ), $next_version ) . ', ' . __( //'whichever is released first', 'wordpress-beta-tester' );
+		// remove_filter( 'wp_sprintf_l', array( $wpbt_core, 'wpbt_sprintf_or' ) );
+
+		// $message = '<p>Help test ' . $next_version . '.</p>';
+		// echo $message;
+
+		echo '<p>';
+
+		/* translators: %1: link to closed trac tickets on current milestone, %2: current milestone */
+		printf( __( 'Help test the <a href="%1$s">commits for milestone %2$s</a>' ), "https://core.trac.wordpress.org/query?status=closed&milestone=$milestone", $milestone );
+
+		echo '</p><p>';
+
 		/* translators: %s: WP Beta Tester settings URL */
 		printf( __( 'Head over to your <a href="%s">WordPress Beta Tester Settings</a> and make sure the <strong>beta/RC</strong> stream is selected.' ), $wpbt_settings_page );
+
+		echo '</p>';
 	}
 }

@@ -1,4 +1,6 @@
 [unreleased]
+
+#### 2.2.4 / 2020-02-25 🤦‍♂️
 * added dashboard wiget for network dashboard
 
 #### 2.2.3 / 2020-02-25

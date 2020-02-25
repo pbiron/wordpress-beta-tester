@@ -392,13 +392,11 @@ class WPBT_Beta_RC {
 	 * @return void
 	 */
 	public function add_dashboard_widget() {
-		$wp_beta_tester = new WP_Beta_Tester( null );
-		$wpbt_core      = new WPBT_Core( $wp_beta_tester, null );
-		$wp_version     = get_bloginfo( 'version' );
-		$beta_rc        = 1 === preg_match( '/alpha|beta|RC/', $wp_version );
+		$wp_version = get_bloginfo( 'version' );
+		$beta_rc    = 1 === preg_match( '/beta|RC/', $wp_version );
 
 		if ( $beta_rc ) {
-			wp_add_dashboard_widget( 'beta_tester_dashboard_widget', __( 'WordPress Beta Testing', 'wordpress-beta-tester' ), array( $this, 'setup_dashboard_widget' ), null, array( $wpbt_core ) );
+			wp_add_dashboard_widget( 'beta_tester_dashboard_widget', __( 'WordPress Beta Testing', 'wordpress-beta-tester' ), array( $this, 'setup_dashboard_widget' ) );
 		}
 	}
 
@@ -407,34 +405,20 @@ class WPBT_Beta_RC {
 	 *
 	 * @since 2.2.x
 	 *
-	 * @param array $contol Control callback from wp_add_dashboard_widget().
-	 * @param array $args   Callback args from wp_add_dashboard_widget().
-	 *
 	 * @return void
 	 */
-	public function setup_dashboard_widget( $control, $args ) {
-		// $wpbt_core    = array_pop( $args['args'] );
+	public function setup_dashboard_widget() {
 		$next_version       = $this->next_package_versions();
 		$milestone          = array_shift( $next_version );
 		$wpbt_settings_page = add_query_arg( 'page', 'wp_beta_tester', admin_url( 'tools.php' ) );
 
-		// add_filter( 'wp_sprintf_l', array( $wpbt_core, 'wpbt_sprintf_or' ) );
-		// $next_version = wp_sprintf( __( 'version %l', 'wordpress-beta-tester' ), $next_version ) . ', ' . __( //'whichever is released first', 'wordpress-beta-tester' );
-		// remove_filter( 'wp_sprintf_l', array( $wpbt_core, 'wpbt_sprintf_or' ) );
+		/* translators: %s: WordPress version */
+		printf( __( 'Please help test <strong>WordPress %s</strong>.' ), $milestone );
 
-		// $message = '<p>Help test ' . $next_version . '.</p>';
-		// echo $message;
-
-		echo '<p>';
-
-		/* translators: %1: link to closed trac tickets on current milestone, %2: current milestone */
-		printf( __( 'Help test the <a href="%1$s">commits for milestone %2$s</a>' ), "https://core.trac.wordpress.org/query?status=closed&milestone=$milestone", $milestone );
-
-		echo '</p><p>';
+		/* translators: %1: link to closed trac tickets on current milestone */
+		printf( '<p>' . __( 'Here are the <a href="%s">commits for the milestone</a>.' ) . '</p>', "https://core.trac.wordpress.org/query?status=closed&milestone=$milestone" );
 
 		/* translators: %s: WP Beta Tester settings URL */
-		printf( __( 'Head over to your <a href="%s">WordPress Beta Tester Settings</a> and make sure the <strong>beta/RC</strong> stream is selected.' ), $wpbt_settings_page );
-
-		echo '</p>';
+		printf( '<p>' . __( 'Head over to your <a href="%s">WordPress Beta Tester Settings</a> and make sure the <strong>beta/RC</strong> stream is selected.' ) . '</p>', $wpbt_settings_page );
 	}
 }

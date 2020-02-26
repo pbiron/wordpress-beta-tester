@@ -1,5 +1,8 @@
 [unreleased]
 
+#### 2.2.6 / 2020-02-25
+* removed extra `</li>` in dashboard callout, 4th time's the charm 😭
+
 #### 2.2.5 / 2020-02-25
 * less greedy regex for matching release posts in RSS for dashboard callout
 

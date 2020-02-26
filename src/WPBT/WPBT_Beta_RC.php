@@ -447,7 +447,7 @@ class WPBT_Beta_RC {
 		$li_regex  = "#<li>.*$milestone.*?<\/li>#";
 		preg_match( $li_regex, $feed, $matches );
 		$match = array_pop( $matches );
-		$list  = empty( $match ) ? '' : "<ul>$match</li></ul>";
+		$list  = empty( $match ) ? '' : "<ul>$match</ul>";
 
 		return $list;
 	}

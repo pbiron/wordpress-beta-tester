@@ -418,8 +418,8 @@ class WPBT_Beta_RC {
 
 		echo wp_kses_post( $this->parse_development_feed( $milestone ) );
 
-		/* translators: %1: link to closed trac tickets on current milestone */
-		printf( wp_kses_post( '<p>' . __( 'Here are the <a href="%s">commits for the milestone</a>.', 'wordpress-beta-tester' ) . '</p>' ), esc_url_raw( "https://core.trac.wordpress.org/query?status=closed&milestone=$milestone" ) );
+		/* translators: %1: link to closed and reopened trac tickets on current milestone */
+		printf( wp_kses_post( '<p>' . __( 'Here are the <a href="%s">commits for the milestone</a>.', 'wordpress-beta-tester' ) . '</p>' ), esc_url_raw( "https://core.trac.wordpress.org/query?status=closed&status=reopened&milestone=$milestone" ) );
 
 		/* translators: %s: WP Beta Tester settings URL */
 		printf( wp_kses_post( '<p>' . __( 'Head over to your <a href="%s">WordPress Beta Tester Settings</a> and make sure the <strong>beta/RC</strong> stream is selected.', 'wordpress-beta-tester' ) . '</p>' ), esc_url_raw( $wpbt_settings_page ) );

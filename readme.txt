@@ -4,7 +4,7 @@ Tags: beta, advanced, testing
 Contributors: westi, mlteal, afragen, pbiron
 Tested up to: 5.3
 Requires at least: 3.1
-Stable Tag: 2.2.5
+Stable Tag: 2.2.6
 License: GPLv2
 License URI: https://www.opensource.org/licenses/GPL-2.0
 Requires PHP: 5.2.4
@@ -39,6 +39,9 @@ If no settings are present there is no testing to be done that requires this fea
 PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 
 ## Changelog
+
+#### 2.2.6 / 2020-02-25
+* removed extra `</li>` in dashboard callout, 4th time's the charm 😭
 
 #### 2.2.5 / 2020-02-25
 * less greedy regex for matching release posts in RSS for dashboard callout

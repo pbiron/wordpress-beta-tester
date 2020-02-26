@@ -1,5 +1,8 @@
 [unreleased]
 
+#### 2.2.5 / 2020-02-25
+* less greedy regex for matching release posts in RSS for dashboard callout
+
 #### 2.2.4 / 2020-02-25 🤦‍♂️
 * added dashboard widget for network dashboard
 

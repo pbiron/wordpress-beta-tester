@@ -436,15 +436,15 @@ class WPBT_Beta_RC {
 	private function parse_development_feed( $milestone ) {
 		$rss_args = array(
 			'show_summary' => 1,
-			'items'        => 3,
+			'items'        => 10,
 		);
 		ob_start();
 		wp_widget_rss_output( 'https://wordpress.org/news/category/development/feed/', $rss_args );
 		$feed = ob_get_contents();
 		ob_end_clean();
 
-		$milestone_esc = str_replace( '.', '\.', $milestone );
-		$li_regex      = "#<li>.*$milestone_esc.*<\/li><li>#";
+		$milestone = preg_quote( $milestone, '.' );
+		$li_regex  = "#<li>.*$milestone.*?<\/li>#";
 		preg_match( $li_regex, $feed, $matches );
 		$match = array_pop( $matches );
 		$list  = empty( $match ) ? '' : "<ul>$match</li></ul>";

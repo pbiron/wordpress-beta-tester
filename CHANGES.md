@@ -1,5 +1,6 @@
 [unreleased]
 * update trac link in callout for _closed_ or _reopened_ tickets on the milestone
+* only show Beta Tester Settings page link in callout with appropriate privileges, using `manage_network_options` and `manage_options`
 
 #### 2.2.6 / 2020-02-25
 * removed extra `</li>` in dashboard callout, 4th time's the charm 😭

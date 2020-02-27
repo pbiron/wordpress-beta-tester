@@ -78,7 +78,7 @@ class WPBT_Settings {
 	 * @return void
 	 */
 	public function add_plugin_menu() {
-		$parent     = is_multisite() ? 'settings.php' : 'tools.php';
+		$parent = is_multisite() ? 'settings.php' : 'tools.php';
 		// @todo consider changing the multiste cap to 'manage_netork_options' in a future version.
 		$capability = is_multisite() ? 'manage_network' : 'manage_options';
 

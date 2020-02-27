@@ -409,8 +409,8 @@ class WPBT_Beta_RC {
 	 * @return void
 	 */
 	public function beta_tester_dashboard() {
-		$next_version       = $this->next_package_versions();
-		$milestone          = array_shift( $next_version );
+		$next_version = $this->next_package_versions();
+		$milestone    = array_shift( $next_version );
 
 		/* translators: %s: WordPress version */
 		printf( wp_kses_post( __( 'Please help test <strong>WordPress %s</strong>.', 'wordpress-beta-tester' ) ), esc_attr( $milestone ) );
@@ -421,7 +421,7 @@ class WPBT_Beta_RC {
 		printf( wp_kses_post( '<p>' . __( 'Here are the <a href="%s">commits for the milestone</a>.', 'wordpress-beta-tester' ) . '</p>' ), esc_url_raw( "https://core.trac.wordpress.org/query?status=closed&status=reopened&milestone=$milestone" ) );
 
 		// @todo make sure these capabilities stay in sync with what is used for the
-		//       settings page in WPBP_Settings::add_plugin_menu()
+		// settings page in WPBP_Settings::add_plugin_menu()
 		$capability = is_multisite() ? 'manage_network' : 'manage_options';
 		if ( current_user_can( $capability ) ) {
 			$parent             = is_multisite() ? 'settings.php' : 'tools.php';

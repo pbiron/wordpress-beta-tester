@@ -409,20 +409,25 @@ class WPBT_Beta_RC {
 	 * @return void
 	 */
 	public function beta_tester_dashboard() {
-		$next_version       = $this->next_package_versions();
-		$milestone          = array_shift( $next_version );
-		$wpbt_settings_page = add_query_arg( 'page', 'wp_beta_tester', admin_url( 'tools.php' ) );
+		$next_version = $this->next_package_versions();
+		$milestone    = array_shift( $next_version );
 
 		/* translators: %s: WordPress version */
 		printf( wp_kses_post( __( 'Please help test <strong>WordPress %s</strong>.', 'wordpress-beta-tester' ) ), esc_attr( $milestone ) );
 
 		echo wp_kses_post( $this->parse_development_feed( $milestone ) );
 
-		/* translators: %1: link to closed trac tickets on current milestone */
-		printf( wp_kses_post( '<p>' . __( 'Here are the <a href="%s">commits for the milestone</a>.', 'wordpress-beta-tester' ) . '</p>' ), esc_url_raw( "https://core.trac.wordpress.org/query?status=closed&milestone=$milestone" ) );
+		/* translators: %1: link to closed and reopened trac tickets on current milestone */
+		printf( wp_kses_post( '<p>' . __( 'Here are the <a href="%s">commits for the milestone</a>.', 'wordpress-beta-tester' ) . '</p>' ), esc_url_raw( "https://core.trac.wordpress.org/query?status=closed&status=reopened&milestone=$milestone" ) );
 
-		/* translators: %s: WP Beta Tester settings URL */
-		printf( wp_kses_post( '<p>' . __( 'Head over to your <a href="%s">WordPress Beta Tester Settings</a> and make sure the <strong>beta/RC</strong> stream is selected.', 'wordpress-beta-tester' ) . '</p>' ), esc_url_raw( $wpbt_settings_page ) );
+		$capability = is_multisite() ? 'manage_network_options' : 'manage_options';
+		if ( current_user_can( $capability ) ) {
+			$parent             = is_multisite() ? 'settings.php' : 'tools.php';
+			$wpbt_settings_page = add_query_arg( 'page', 'wp_beta_tester', network_admin_url( $parent ) );
+
+			/* translators: %s: WP Beta Tester settings URL */
+			printf( wp_kses_post( '<p>' . __( 'Head over to your <a href="%s">WordPress Beta Tester Settings</a> and make sure the <strong>beta/RC</strong> stream is selected.', 'wordpress-beta-tester' ) . '</p>' ), esc_url_raw( $wpbt_settings_page ) );
+		}
 	}
 
 	/**

@@ -157,3 +157,4 @@ PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 
 1. This shows the main administration page for the plugin
 2. This shows the Extra Settings page for the plugin
+3. This shows the Dashboard callout

@@ -457,4 +457,45 @@ class WPBT_Beta_RC {
 
 		return $list;
 	}
+
+	/**
+	 * Add milestone dev notes and field guide when on RC version.
+	 *
+	 * @since x.x.x
+	 * @param string $milestone Milestone version.
+	 *
+	 * @return string HTML unordered list.
+	 */
+	private function add_dev_notes_field_guide_links( $milestone ) {
+		$wp_version       = get_bloginfo( 'version' );
+		$beta_rc          = 1 === preg_match( '/beta|RC/', $wp_version );
+		$rc               = 1 === preg_match( '/RC/', $wp_version );
+		$milestone_dash   = str_replace( '.', '-', $milestone );
+		$dev_note_link    = '';
+		$field_guide_link = '';
+
+		if ( $beta_rc ) {
+			$dev_note_link = sprintf(
+			/* translators: %1$s Link to dev notes, %2$s: Link title */
+				'<a href="%1$s">%2$s</a>',
+				"https://make.wordpress.org/core/tag/$milestone_dash+dev-notes/",
+				/* translators: %s: Milestone version */
+				sprintf( __( 'WordPress %s Dev Notes', 'wordpress-beta-tester' ), $milestone )
+			);
+			$dev_note_link = "<li>$dev_note_link</li>";
+		}
+		if ( $rc ) {
+			$field_guide_link = sprintf(
+			/* translators: %1$s Link to field guide, %2$s: Link title */
+				'<a href="%1$s">%2$s</a>',
+				"https://make.wordpress.org/core/tag/$milestone_dash+field-guide/",
+				/* translators: %s: Milestone version */
+				sprintf( __( 'WordPress %s Field Guide', 'wordpress-beta-tester' ), $milestone )
+			);
+			$field_guide_link = "<li>$field_guide_link</li>";
+		}
+		$links = $beta_rc || $rc ? "<ul> $dev_note_link $field_guide_link </ul>" : null;
+
+		return $links;
+	}
 }

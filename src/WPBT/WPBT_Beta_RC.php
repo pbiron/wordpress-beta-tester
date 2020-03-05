@@ -413,8 +413,9 @@ class WPBT_Beta_RC {
 		$milestone    = array_shift( $next_version );
 
 		/* translators: %s: WordPress version */
-		printf( wp_kses_post( __( 'Please help test <strong>WordPress %s</strong>.', 'wordpress-beta-tester' ) ), esc_attr( $milestone ) );
+		printf( wp_kses_post( '<p>' . __( 'Please help test <strong>WordPress %s</strong>.', 'wordpress-beta-tester' ) . '</p>' ), esc_attr( $milestone ) );
 
+		echo wp_kses_post( $this->add_dev_notes_field_guide_links( $milestone ) );
 		echo wp_kses_post( $this->parse_development_feed( $milestone ) );
 
 		/* translators: %1: link to closed and reopened trac tickets on current milestone */

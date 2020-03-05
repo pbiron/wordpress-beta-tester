@@ -441,7 +441,7 @@ class WPBT_Beta_RC {
 	 */
 	private function parse_development_feed( $milestone ) {
 		$rss_args = array(
-			'show_summary' => 1,
+			'show_summary' => 0,
 			'items'        => 10,
 		);
 		ob_start();

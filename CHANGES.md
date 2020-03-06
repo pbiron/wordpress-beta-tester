@@ -1,5 +1,6 @@
 [unreleased]
 * add Dev Notes and Field Guide links to dashboard
+* add text/link for bug reporting to trac
 
 #### 2.2.7 / 2020-03-02
 * update trac link in callout for _closed_ or _reopened_ tickets on the milestone

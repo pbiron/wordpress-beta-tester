@@ -34,5 +34,10 @@ class WPBT_Help {
 				'content' => '<p>' . __( 'This screen provides help information for the Beta Tester plugin.', 'wordpress-beta-tester' ) . '</p>',
 			)
 		);
+
+		get_current_screen()->set_help_sidebar(
+			'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
+			'<p>' . __( '<a href="https://make.wordpress.org/core/handbook/testing/beta-testing/">Beta Testing</a>', 'wordpress-beta-tester' ) . '</p>'
+		);
 	}
 }

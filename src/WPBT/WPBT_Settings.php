@@ -55,6 +55,9 @@ class WPBT_Settings {
 		$wpbt_extras->load_hooks();
 		// TODO: ( new WPBT_Extras( $this->wp_beta_tester, self::$options ) )->skip_autoupdate_email();
 		$wpbt_extras->skip_autoupdate_email();
+		// TODO: ( new WPBT_Help() )->load_hooks();
+		$wpbt_help = new WPBT_Help();
+		$wpbt_help->load_hooks();
 	}
 
 	/**

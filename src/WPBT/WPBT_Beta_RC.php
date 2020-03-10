@@ -427,7 +427,7 @@ class WPBT_Beta_RC {
 		$capability = is_multisite() ? 'manage_network_options' : 'manage_options';
 		if ( current_user_can( $capability ) ) {
 			$parent             = is_multisite() ? 'settings.php' : 'tools.php';
-			$wpbt_settings_page = add_query_arg( 'page', 'wp_beta_tester', network_admin_url( $parent ) );
+			$wpbt_settings_page = add_query_arg( 'page', 'wp-beta-tester', network_admin_url( $parent ) );
 
 			/* translators: %s: WP Beta Tester settings URL */
 			printf( wp_kses_post( '<p>' . __( 'Head over to your <a href="%s">WordPress Beta Tester Settings</a> and make sure the <strong>beta/RC</strong> stream is selected.', 'wordpress-beta-tester' ) . '</p>' ), esc_url_raw( $wpbt_settings_page ) );

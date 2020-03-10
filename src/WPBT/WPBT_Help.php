@@ -28,8 +28,7 @@ class WPBT_Help {
 	 */
 	public function add_help_tabs() {
 		$current_screen = get_current_screen();
-		$screens        = array( 'tools_page_wp_beta_tester', 'settings_page_wp_beta_tester-network' );
-		if ( ! in_array( $current_screen->id, $screens, true ) ) {
+		if ( false === strpos( $current_screen->id, 'wp-beta-tester' ) ) {
 			return false;
 		}
 

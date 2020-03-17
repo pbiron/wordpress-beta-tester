@@ -413,17 +413,21 @@ class WPBT_Beta_RC {
 		$milestone    = array_shift( $next_version );
 
 		/* translators: %s: WordPress version */
-		printf( wp_kses_post( __( 'Please help test <strong>WordPress %s</strong>.', 'wordpress-beta-tester' ) ), esc_attr( $milestone ) );
+		printf( wp_kses_post( '<p>' . __( 'Please help test <strong>WordPress %s</strong>.', 'wordpress-beta-tester' ) . '</p>' ), esc_attr( $milestone ) );
 
+		echo wp_kses_post( $this->add_dev_notes_field_guide_links( $milestone ) );
 		echo wp_kses_post( $this->parse_development_feed( $milestone ) );
 
 		/* translators: %1: link to closed and reopened trac tickets on current milestone */
 		printf( wp_kses_post( '<p>' . __( 'Here are the <a href="%s">commits for the milestone</a>.', 'wordpress-beta-tester' ) . '</p>' ), esc_url_raw( "https://core.trac.wordpress.org/query?status=closed&status=reopened&milestone=$milestone" ) );
 
+		/* translators: %s: link to trac search */
+		printf( wp_kses_post( '<p>' . __( '&#128027; Did you find a bug? Search for a <a href="%s">trac ticket</a> to see if it has already been reported.', 'wordpress-beta-tester' ) . '</p>' ), 'https://core.trac.wordpress.org/search' );
+
 		$capability = is_multisite() ? 'manage_network_options' : 'manage_options';
 		if ( current_user_can( $capability ) ) {
 			$parent             = is_multisite() ? 'settings.php' : 'tools.php';
-			$wpbt_settings_page = add_query_arg( 'page', 'wp_beta_tester', network_admin_url( $parent ) );
+			$wpbt_settings_page = add_query_arg( 'page', 'wp-beta-tester', network_admin_url( $parent ) );
 
 			/* translators: %s: WP Beta Tester settings URL */
 			printf( wp_kses_post( '<p>' . __( 'Head over to your <a href="%s">WordPress Beta Tester Settings</a> and make sure the <strong>beta/RC</strong> stream is selected.', 'wordpress-beta-tester' ) . '</p>' ), esc_url_raw( $wpbt_settings_page ) );
@@ -440,7 +444,7 @@ class WPBT_Beta_RC {
 	 */
 	private function parse_development_feed( $milestone ) {
 		$rss_args = array(
-			'show_summary' => 1,
+			'show_summary' => 0,
 			'items'        => 10,
 		);
 		ob_start();
@@ -455,5 +459,46 @@ class WPBT_Beta_RC {
 		$list  = empty( $match ) ? '' : "<ul>$match</ul>";
 
 		return $list;
+	}
+
+	/**
+	 * Add milestone dev notes and field guide when on RC version.
+	 *
+	 * @since x.x.x
+	 * @param string $milestone Milestone version.
+	 *
+	 * @return string HTML unordered list.
+	 */
+	private function add_dev_notes_field_guide_links( $milestone ) {
+		$wp_version       = get_bloginfo( 'version' );
+		$beta_rc          = 1 === preg_match( '/beta|RC/', $wp_version );
+		$rc               = 1 === preg_match( '/RC/', $wp_version );
+		$milestone_dash   = str_replace( '.', '-', $milestone );
+		$dev_note_link    = '';
+		$field_guide_link = '';
+
+		if ( $beta_rc ) {
+			$dev_note_link = sprintf(
+			/* translators: %1$s Link to dev notes, %2$s: Link title */
+				'<a href="%1$s">%2$s</a>',
+				"https://make.wordpress.org/core/tag/$milestone_dash+dev-notes/",
+				/* translators: %s: Milestone version */
+				sprintf( __( 'WordPress %s Dev Notes', 'wordpress-beta-tester' ), $milestone )
+			);
+			$dev_note_link = "<li>$dev_note_link</li>";
+		}
+		if ( $rc ) {
+			$field_guide_link = sprintf(
+			/* translators: %1$s Link to field guide, %2$s: Link title */
+				'<a href="%1$s">%2$s</a>',
+				"https://make.wordpress.org/core/tag/$milestone_dash+field-guide/",
+				/* translators: %s: Milestone version */
+				sprintf( __( 'WordPress %s Field Guide', 'wordpress-beta-tester' ), $milestone )
+			);
+			$field_guide_link = "<li>$field_guide_link</li>";
+		}
+		$links = $beta_rc || $rc ? "<ul> $dev_note_link $field_guide_link </ul>" : null;
+
+		return $links;
 	}
 }

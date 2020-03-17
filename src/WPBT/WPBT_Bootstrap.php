@@ -145,6 +145,7 @@ class WPBT_Bootstrap {
 		require_once $this->dir . '/src/WPBT/WPBT_Core.php';
 		require_once $this->dir . '/src/WPBT/WPBT_Extras.php';
 		require_once $this->dir . '/src/WPBT/WPBT_Beta_RC.php';
+		require_once $this->dir . '/src/WPBT/WPBT_Help.php';
 		require_once $this->dir . '/vendor/WPConfigTransformer.php';
 	}
 }

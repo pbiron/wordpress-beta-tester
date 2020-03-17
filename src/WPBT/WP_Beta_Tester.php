@@ -86,11 +86,11 @@ class WP_Beta_Tester {
 
 		// Can output an error here if current config drives version backwards.
 		if ( $this->check_if_settings_downgrade() ) {
-			echo '<div id="message" class="error"><p>';
+			echo '<div id="message" class="notice notice-warning"><p>';
 			$admin_page = is_multisite() ? network_admin_url( 'settings.php' ) : admin_url( 'tools.php' );
 			$admin_page = add_query_arg(
 				array(
-					'page' => 'wp_beta_tester',
+					'page' => 'wp-beta-tester',
 					'tab'  => 'wp_beta_tester_core',
 				),
 				$admin_page
@@ -98,7 +98,7 @@ class WP_Beta_Tester {
 			/* translators: %s: link to setting page */
 			printf(
 				/* translators: %s: WordPress Beta Tester Settings page URL */
-				wp_kses_post( __( '<strong>Error:</strong> Your current <a href="%s">WordPress Beta Tester plugin configuration</a> will downgrade your install to a previous version - please reconfigure it.', 'wordpress-beta-tester' ) ),
+				wp_kses_post( __( '<strong>Warning:</strong> Your current <a href="%s">WordPress Beta Tester plugin configuration</a> will downgrade your install to a previous version - please reconfigure it.', 'wordpress-beta-tester' ) ),
 				esc_url( $admin_page )
 			);
 			echo '</p></div>';

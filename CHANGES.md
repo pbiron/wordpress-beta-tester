@@ -1,5 +1,11 @@
 [unreleased]
 
+#### 2.2.8 / 2020-03-17 🍀
+* add Dev Notes and Field Guide links to dashboard
+* add text/link for bug reporting to trac
+* add help tabs to screen
+* arbitrarily changed settings page id from `wp_beta_tester` to `wp-beta-tester` 😏
+
 #### 2.2.7 / 2020-03-02
 * update trac link in callout for _closed_ or _reopened_ tickets on the milestone
 * only show Beta Tester Settings page link in callout with appropriate privileges, using `manage_network_options` and `manage_options`

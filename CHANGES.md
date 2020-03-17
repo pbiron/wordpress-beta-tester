@@ -1,4 +1,6 @@
 [unreleased]
+
+#### 2.2.8 / 2020-03-17 🍀
 * add Dev Notes and Field Guide links to dashboard
 * add text/link for bug reporting to trac
 * add help tabs to screen

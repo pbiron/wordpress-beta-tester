@@ -60,5 +60,13 @@ class WPBT_Help {
 
 			)
 		);
+
+		get_current_screen()->add_help_tab(
+			array(
+				'id'      => 'dashboard',
+				'title'   => __( 'Dashboard Widget', 'wordpress-beta-tester' ),
+				'content' => '<p>' . __( 'A dashboard widget is displayed when the plugin is active. It contains links to Dev Notes, the Field Guide, beta/RC release posts, milestone commits, and filing a bug report.', 'wordpress-beta-tester' ) . '</p>',
+			)
+		);
 	}
 }

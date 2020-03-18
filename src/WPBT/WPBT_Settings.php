@@ -89,7 +89,7 @@ class WPBT_Settings {
 			esc_html__( 'Beta Testing WordPress', 'wordpress-beta-tester' ),
 			esc_html_x( 'Beta Testing', 'Menu item', 'wordpress-beta-tester' ),
 			$capability,
-			'wp_beta_tester',
+			'wp-beta-tester',
 			array( $this, 'create_settings_page' )
 		);
 	}
@@ -120,7 +120,7 @@ class WPBT_Settings {
 		 * @since 2.0.0
 		 * @param array Default array.
 		 */
-		$option_page = apply_filters( 'wp_beta_tester_save_redirect', array( 'wp_beta_tester' ) );
+		$option_page = apply_filters( 'wp_beta_tester_save_redirect', array( 'wp-beta-tester' ) );
 		$update      = false;
 
 		if ( ( isset( $_POST['action'] ) && 'update' === $_POST['action'] ) &&
@@ -138,7 +138,7 @@ class WPBT_Settings {
 
 			$location = add_query_arg(
 				array(
-					'page'    => 'wp_beta_tester',
+					'page'    => 'wp-beta-tester',
 					'tab'     => $arr['tab'],
 					'updated' => $update,
 				),
@@ -179,7 +179,7 @@ class WPBT_Settings {
 		echo '<nav class="nav-tab-wrapper" aria-label="Secondary menu">';
 		foreach ( $this->settings_tabs() as $key => $name ) {
 			$active = ( $current_tab === $key ) ? 'nav-tab-active' : '';
-			echo( wp_kses_post( '<a class="nav-tab ' . $active . '" href="?page=wp_beta_tester&tab=' . $key . '">' . $name . '</a>' ) );
+			echo( wp_kses_post( '<a class="nav-tab ' . $active . '" href="?page=wp-beta-tester&tab=' . $key . '">' . $name . '</a>' ) );
 		}
 		echo '</nav>';
 	}
@@ -223,7 +223,7 @@ class WPBT_Settings {
 	 */
 	public function create_settings_page() {
 		$this->saved_settings_notice();
-		$action = is_multisite() ? 'edit.php?action=wp_beta_tester' : 'options.php';
+		$action = is_multisite() ? 'edit.php?action=wp-beta-tester' : 'options.php';
 		$tab    = isset( $_GET['tab'] ) ? esc_attr( $_GET['tab'] ) : 'wp_beta_tester_core';
 		?>
 		<div class="wrap">

@@ -90,7 +90,7 @@ class WP_Beta_Tester {
 			$admin_page = is_multisite() ? network_admin_url( 'settings.php' ) : admin_url( 'tools.php' );
 			$admin_page = add_query_arg(
 				array(
-					'page' => 'wp_beta_tester',
+					'page' => 'wp-beta-tester',
 					'tab'  => 'wp_beta_tester_core',
 				),
 				$admin_page

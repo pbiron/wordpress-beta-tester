@@ -110,6 +110,9 @@ class WPBT_Beta_RC {
 		// Add dashboard widget.
 		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget' ) );
 		add_action( 'wp_network_dashboard_setup', array( $this, 'add_dashboard_widget' ) );
+
+		// Refresh development RSS feed for dashboard widget on core upgrade.
+		add_action( 'upgrader_process_complete', array( $this, 'update_rss_feed_on_upgrade' ), 10, 2 );
 	}
 
 	/**
@@ -500,5 +503,33 @@ class WPBT_Beta_RC {
 		$links = $beta_rc || $rc ? "<ul> $dev_note_link $field_guide_link </ul>" : null;
 
 		return $links;
+	}
+
+	/**
+	 * Update development RSS feed on core upgrade.
+	 *
+	 * @uses filter 'upgrader_process_complete'.
+	 *
+	 * @param \Core_Upgrader $obj        \Core_Upgrader object.
+	 * @param array          $hook_extra $hook_extra array from filter.
+	 *
+	 * @return void
+	 */
+	public function update_rss_feed_on_upgrade( $obj, $hook_extra ) {
+		if ( $obj instanceof \Core_Upgrader && 'core' === $hook_extra['type'] ) {
+			add_filter( 'wp_feed_cache_transient_lifetime', array( $this, 'set_rss_lifetime' ) );
+			$next_version = $this->next_package_versions();
+			$milestone    = array_shift( $next_version );
+			$this->parse_development_feed( $milestone );
+		}
+	}
+
+	/**
+	 * Set RSS cache lifetime.
+	 *
+	 * @return int
+	 */
+	public function set_rss_lifetime() {
+		return 5;
 	}
 }

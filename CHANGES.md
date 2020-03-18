@@ -1,4 +1,5 @@
 [unreleased]
+* refresh development RSS feed after core upgrade
 
 #### 2.2.8 / 2020-03-17 🍀
 * add Dev Notes and Field Guide links to dashboard

@@ -93,7 +93,6 @@ class WPBT_Beta_RC {
 	 * @since 2.2.0
 	 */
 	public function __construct() {
-		$this->load_hooks();
 		$this->get_next_packages();
 	}
 
@@ -102,7 +101,7 @@ class WPBT_Beta_RC {
 	 *
 	 * @return void
 	 */
-	protected function load_hooks() {
+	public function load_hooks() {
 		add_filter( 'http_response', array( $this, 'update_to_beta_or_rc_releases' ), 10, 3 );
 		// set priority to 11 so that we fire after the function core hooks into this filter.
 		add_filter( 'update_footer', array( $this, 'update_footer' ), 11 );

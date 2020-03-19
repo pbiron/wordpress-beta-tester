@@ -110,8 +110,8 @@ class WPBT_Beta_RC {
 		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget' ) );
 		add_action( 'wp_network_dashboard_setup', array( $this, 'add_dashboard_widget' ) );
 
-		// Refresh development RSS feed for dashboard widget on core upgrade.
-		add_action( 'upgrader_process_complete', array( $this, 'update_rss_feed_on_upgrade' ), 10, 2 );
+		// Delete development RSS feed transient for dashboard widget on core upgrade.
+		add_action( 'upgrader_process_complete', array( $this, 'delete_feed_transient_on_upgrade' ), 10, 2 );
 	}
 
 	/**
@@ -505,7 +505,7 @@ class WPBT_Beta_RC {
 	}
 
 	/**
-	 * Update development RSS feed on core upgrade.
+	 * Delete development RSS feed transient on core upgrade.
 	 *
 	 * @uses filter 'upgrader_process_complete'.
 	 *
@@ -514,21 +514,11 @@ class WPBT_Beta_RC {
 	 *
 	 * @return void
 	 */
-	public function update_rss_feed_on_upgrade( $obj, $hook_extra ) {
+	public function delete_feed_transient_on_upgrade( $obj, $hook_extra ) {
 		if ( $obj instanceof \Core_Upgrader && 'core' === $hook_extra['type'] ) {
-			add_filter( 'wp_feed_cache_transient_lifetime', array( $this, 'set_rss_lifetime' ) );
-			$next_version = $this->next_package_versions();
-			$milestone    = array_shift( $next_version );
-			$this->parse_development_feed( $milestone );
+			$transient = md5( 'https://wordpress.org/news/category/development/feed/' );
+			delete_transient( "feed_{$transient}" );
+			delete_transient( "feed_mod_{$transient}" );
 		}
-	}
-
-	/**
-	 * Set RSS cache lifetime.
-	 *
-	 * @return int
-	 */
-	public function set_rss_lifetime() {
-		return 5;
 	}
 }

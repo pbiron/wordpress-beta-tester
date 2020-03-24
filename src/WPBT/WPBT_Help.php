@@ -24,7 +24,7 @@ class WPBT_Help {
 	/**
 	 * Add individual help tabs.
 	 *
-	 * @return void
+	 * @return bool|void
 	 */
 	public function add_help_tabs() {
 		$current_screen = get_current_screen();

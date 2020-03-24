@@ -93,7 +93,6 @@ class WPBT_Beta_RC {
 	 * @since 2.2.0
 	 */
 	public function __construct() {
-		$this->load_hooks();
 		$this->get_next_packages();
 	}
 
@@ -102,7 +101,7 @@ class WPBT_Beta_RC {
 	 *
 	 * @return void
 	 */
-	protected function load_hooks() {
+	public function load_hooks() {
 		add_filter( 'http_response', array( $this, 'update_to_beta_or_rc_releases' ), 10, 3 );
 		// set priority to 11 so that we fire after the function core hooks into this filter.
 		add_filter( 'update_footer', array( $this, 'update_footer' ), 11 );
@@ -110,6 +109,9 @@ class WPBT_Beta_RC {
 		// Add dashboard widget.
 		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget' ) );
 		add_action( 'wp_network_dashboard_setup', array( $this, 'add_dashboard_widget' ) );
+
+		// Delete development RSS feed transient for dashboard widget on core upgrade.
+		add_action( 'upgrader_process_complete', array( $this, 'delete_feed_transient_on_upgrade' ), 10, 2 );
 	}
 
 	/**
@@ -500,5 +502,23 @@ class WPBT_Beta_RC {
 		$links = $beta_rc || $rc ? "<ul> $dev_note_link $field_guide_link </ul>" : null;
 
 		return $links;
+	}
+
+	/**
+	 * Delete development RSS feed transient on core upgrade.
+	 *
+	 * @uses filter 'upgrader_process_complete'.
+	 *
+	 * @param \Core_Upgrader $obj        \Core_Upgrader object.
+	 * @param array          $hook_extra $hook_extra array from filter.
+	 *
+	 * @return void
+	 */
+	public function delete_feed_transient_on_upgrade( $obj, $hook_extra ) {
+		if ( $obj instanceof \Core_Upgrader && 'core' === $hook_extra['type'] ) {
+			$transient = md5( 'https://wordpress.org/news/category/development/feed/' );
+			delete_transient( "feed_{$transient}" );
+			delete_transient( "feed_mod_{$transient}" );
+		}
 	}
 }

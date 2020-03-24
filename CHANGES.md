@@ -1,4 +1,6 @@
 [unreleased]
+
+#### 2.2.9 / 2020-03-24
 * delete development RSS feed transient after core upgrade
 
 #### 2.2.8 / 2020-03-17 🍀

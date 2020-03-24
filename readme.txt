@@ -4,7 +4,7 @@ Tags: beta, advanced, testing
 Contributors: westi, mlteal, afragen, pbiron
 Tested up to: 5.4
 Requires at least: 3.1
-Stable Tag: 2.2.8
+Stable Tag: 2.2.9
 License: GPLv2
 License URI: https://www.opensource.org/licenses/GPL-2.0
 Requires PHP: 5.2.4
@@ -39,6 +39,9 @@ If no settings are present there is no testing to be done that requires this fea
 PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 
 ## Changelog
+
+#### 2.2.9 / 2020-03-24
+* delete development RSS feed transient after core upgrade
 
 #### 2.2.8 / 2020-03-17 🍀
 * add Dev Notes and Field Guide links to dashboard

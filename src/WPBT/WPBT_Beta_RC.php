@@ -223,7 +223,8 @@ class WPBT_Beta_RC {
 					case 'development':
 					case 'autoupdate':
 						$offer['download'] = $next_package_url;
-						$offer['current']  = $offer['version'] = $version;
+						// phpcs:ignore Squiz.PHP.DisallowMultipleAssignments.Found
+						$offer['current'] = $offer['version'] = $version;
 
 						foreach ( $offer['packages'] as $package => &$package_url ) {
 							$package_url = 'full' === $package ? $next_package_url : false;

@@ -1,4 +1,5 @@
 [unreleased]
+* sanitize, escape & ignore
 
 #### 2.2.9 / 2020-03-24
 * delete development RSS feed transient after core upgrade

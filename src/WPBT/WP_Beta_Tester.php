@@ -227,9 +227,7 @@ class WP_Beta_Tester {
 		$wp_version = get_bloginfo( 'version' );
 		$current    = array_map( 'intval', explode( '.', $wp_version ) );
 
-		if ( version_compare( implode( '.', $versions ), implode( '.', $current ), '=' ) ||
-			version_compare( implode( '.', $versions ), implode( '.', $current ), '>' )
-		) {
+		if ( version_compare( implode( '.', $versions ), implode( '.', $current ), '>=' ) ) {
 			$versions[1] = $versions[1] - 1;
 		}
 		if ( isset( $current[2] ) && $versions[1] < $current[1] ) {

@@ -183,9 +183,9 @@ class WPBT_Beta_RC {
 	 * @filter http_response
 	 */
 	public function update_to_beta_or_rc_releases( $response, $parsed_args, $url ) {
-		if ( is_wp_error( $response ) ||
-				! preg_match( '@^https?://api.wordpress.org/core/version-check/@', $url ) ||
-				200 !== wp_remote_retrieve_response_code( $response ) ) {
+		if ( is_wp_error( $response )
+				|| ! preg_match( '@^https?://api.wordpress.org/core/version-check/@', $url )
+				|| 200 !== wp_remote_retrieve_response_code( $response ) ) {
 			// not a successful core update API request.
 			// nothing to do, so bail.
 			return $response;

@@ -96,8 +96,8 @@ class WPBT_Core {
 	 * @return void
 	 */
 	public function save_settings( $post_data ) {
-		if ( isset( $post_data['option_page'] ) &&
-			'wp_beta_tester_core' === $post_data['option_page']
+		if ( isset( $post_data['option_page'] )
+			&& 'wp_beta_tester_core' === $post_data['option_page']
 		) {
 			$options                 = isset( $post_data['wp-beta-tester'] )
 				? $post_data['wp-beta-tester']
@@ -251,8 +251,8 @@ class WPBT_Core {
 	 * @return string
 	 */
 	public function get_next_version( $preferred_version ) {
-		if ( ! ( 0 === strpos( static::$options['stream'], 'beta-rc' ) ||
-				! preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) ) {
+		if ( ! ( 0 === strpos( static::$options['stream'], 'beta-rc' )
+				|| ! preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) ) {
 			// site is not running a development version or not on a beta/RC stream.
 			// So use the preferred version.
 			/* translators: %s: version number */

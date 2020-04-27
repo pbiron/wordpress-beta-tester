@@ -1,5 +1,6 @@
 [unreleased]
 * sanitize, escape & ignore
+* move multiline boolean operator to front of line, new guidelines in WPCS
 
 #### 2.2.9 / 2020-03-24
 * delete development RSS feed transient after core upgrade

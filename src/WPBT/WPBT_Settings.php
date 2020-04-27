@@ -125,8 +125,8 @@ class WPBT_Settings {
 		$update      = false;
 
 		// phpcs:disable WordPress.Security.NonceVerification.Missing
-		if ( ( isset( $_POST['action'] ) && 'update' === $_POST['action'] ) &&
-			( isset( $_POST['option_page'] ) && in_array( $_POST['option_page'], $option_page, true ) )
+		if ( ( isset( $_POST['action'] ) && 'update' === $_POST['action'] )
+			&& ( isset( $_POST['option_page'] ) && in_array( $_POST['option_page'], $option_page, true ) )
 		) {
 			$update = true;
 		}

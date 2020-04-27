@@ -163,8 +163,8 @@ class WPBT_Extras {
 	 * @return void
 	 */
 	public function save_settings( $post_data ) {
-		if ( isset( $post_data['option_page'] ) &&
-			'wp_beta_tester_extras' === $post_data['option_page']
+		if ( isset( $post_data['option_page'] )
+			&& 'wp_beta_tester_extras' === $post_data['option_page']
 		) {
 			$options = isset( $post_data['wp-beta-tester'] )
 				? $post_data['wp-beta-tester']

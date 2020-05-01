@@ -1,5 +1,10 @@
 [unreleased]
 
+#### 2.2.10 / 2020-05-01
+* sanitize, escape & ignore
+* move multiline boolean operator to front of line, new guidelines in WPCS
+* fix `correct_versions_for_downgrade()` for being on current release version
+
 #### 2.2.9 / 2020-03-24
 * delete development RSS feed transient after core upgrade
 

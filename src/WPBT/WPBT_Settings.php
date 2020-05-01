@@ -105,6 +105,7 @@ class WPBT_Settings {
 		 *
 		 * @since 2.0.0
 		 */
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		do_action( 'wp_beta_tester_update_settings', $_POST );
 
 		$this->redirect_on_save();
@@ -123,16 +124,19 @@ class WPBT_Settings {
 		$option_page = apply_filters( 'wp_beta_tester_save_redirect', array( 'wp-beta-tester' ) );
 		$update      = false;
 
-		if ( ( isset( $_POST['action'] ) && 'update' === $_POST['action'] ) &&
-			( isset( $_POST['option_page'] ) && in_array( $_POST['option_page'], $option_page, true ) )
+		// phpcs:disable WordPress.Security.NonceVerification.Missing
+		if ( ( isset( $_POST['action'] ) && 'update' === $_POST['action'] )
+			&& ( isset( $_POST['option_page'] ) && in_array( $_POST['option_page'], $option_page, true ) )
 		) {
 			$update = true;
 		}
+		// phpcs:enable
 
 		$redirect_url = is_multisite() ? network_admin_url( 'settings.php' ) : admin_url( 'tools.php' );
 
 		if ( $update ) {
-			$query = isset( $_POST['_wp_http_referer'] ) ? wp_parse_url( $_POST['_wp_http_referer'], PHP_URL_QUERY ) : null;
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$query = isset( $_POST['_wp_http_referer'] ) ? wp_parse_url( esc_url_raw( wp_unslash( $_POST['_wp_http_referer'] ) ), PHP_URL_QUERY ) : null;
 			parse_str( $query, $arr );
 			$arr['tab'] = ! empty( $arr['tab'] ) ? $arr['tab'] : 'wp_beta_tester_core';
 
@@ -175,7 +179,8 @@ class WPBT_Settings {
 	 * @return void
 	 */
 	private function options_tabs() {
-		$current_tab = isset( $_GET['tab'] ) ? esc_attr( $_GET['tab'] ) : 'wp_beta_tester_core';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$current_tab = isset( $_GET['tab'] ) ? sanitize_file_name( wp_unslash( $_GET['tab'] ) ) : 'wp_beta_tester_core';
 		echo '<nav class="nav-tab-wrapper" aria-label="Secondary menu">';
 		foreach ( $this->settings_tabs() as $key => $name ) {
 			$active = ( $current_tab === $key ) ? 'nav-tab-active' : '';
@@ -190,10 +195,11 @@ class WPBT_Settings {
 	 * @return void
 	 */
 	private function saved_settings_notice() {
-		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+		// phpcs:disable WordPress.PHP.StrictComparisons.LooseComparison
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 		if ( ( isset( $_GET['updated'] ) && true == $_GET['updated'] ) ||
-		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 		( isset( $_GET['settings-updated'] ) && true == $_GET['settings-updated'] )
+		// phpcs:enable
 		) {
 			echo '<div class="updated"><p>';
 			esc_html_e( 'Saved.', 'wordpress-beta-tester' );
@@ -224,7 +230,8 @@ class WPBT_Settings {
 	public function create_settings_page() {
 		$this->saved_settings_notice();
 		$action = is_multisite() ? 'edit.php?action=wp-beta-tester' : 'options.php';
-		$tab    = isset( $_GET['tab'] ) ? esc_attr( $_GET['tab'] ) : 'wp_beta_tester_core';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$tab = isset( $_GET['tab'] ) ? sanitize_file_name( wp_unslash( $_GET['tab'] ) ) : 'wp_beta_tester_core';
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Beta Testing WordPress', 'wordpress-beta-tester' ); ?></h1>

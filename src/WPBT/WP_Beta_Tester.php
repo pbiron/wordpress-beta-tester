@@ -183,8 +183,8 @@ class WP_Beta_Tester {
 			return $wp_version;
 		}
 
-		if ( 0 === strpos( $options['stream'], 'beta-rc' ) &&
-				version_compare( $preferred->current, $wp_version, 'lt' ) ) {
+		if ( 0 === strpos( $options['stream'], 'beta-rc' )
+			&& version_compare( $preferred->current, $wp_version, 'lt' ) ) {
 			$versions = array_map( 'intval', explode( '.', $wp_version ) );
 		} else {
 			$versions = array_map( 'intval', explode( '.', $preferred->current ) );
@@ -224,15 +224,14 @@ class WP_Beta_Tester {
 	 * @return array
 	 */
 	private function correct_versions_for_downgrade( $versions ) {
-		$wp_version = get_bloginfo( 'version' );
-		$current    = array_map( 'intval', explode( '.', $wp_version ) );
+		$wp_version      = get_bloginfo( 'version' );
+		$current         = array_map( 'intval', explode( '.', $wp_version ) );
+		$release_version = 0 === preg_match( '/alpha|beta|RC/', $wp_version );
 
-		if ( version_compare( implode( '.', $versions ), implode( '.', $current ), '=' ) ||
-			version_compare( implode( '.', $versions ), implode( '.', $current ), '>' )
-		) {
+		if ( version_compare( implode( '.', $versions ), implode( '.', $current ), '>=' ) ) {
 			$versions[1] = $versions[1] - 1;
 		}
-		if ( isset( $current[2] ) && $versions[1] < $current[1] ) {
+		if ( ( $release_version || isset( $current[2] ) ) && $versions[1] < $current[1] ) {
 			$versions[1] = $current[1];
 		}
 

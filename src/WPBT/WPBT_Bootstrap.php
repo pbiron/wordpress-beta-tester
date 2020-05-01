@@ -125,8 +125,8 @@ class WPBT_Bootstrap {
 	 * @return array
 	 */
 	public function fix_stream( $value ) {
-		if ( 0 === strpos( $value['stream'], 'beta-rc' ) &&
-			1 !== preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) {
+		if ( 0 === strpos( $value['stream'], 'beta-rc' )
+			&& 1 !== preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) {
 			$value['stream'] = str_replace( 'beta-rc-', '', $value['stream'] );
 		}
 

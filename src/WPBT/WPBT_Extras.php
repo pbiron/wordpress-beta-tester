@@ -81,12 +81,12 @@ class WPBT_Extras {
 	}
 
 	/**
-	 * Test to see if wp-config.php exists, is writable, and not empty.
+	 * Test to see if wp-config.php is writable.
 	 *
 	 * @return bool
 	 */
-	public function is_config_ready() {
-		return \file_exists( self::$config_path ) && is_writable( self::$config_path ) && ! empty( trim( \file_get_contents( self::$config_path ) ) );
+	public function is_config_writable() {
+		return is_writable( self::$config_path );
 	}
 
 	/**
@@ -138,7 +138,7 @@ class WPBT_Extras {
 			)
 		);
 
-		if ( $this->is_config_ready() ) {
+		if ( $this->is_config_writable() ) {
 			// Example.
 			add_settings_field(
 				'example',
@@ -253,7 +253,7 @@ class WPBT_Extras {
 	 * @return void|array
 	 */
 	private function add_constants( $add ) {
-		if ( ! $this->is_config_ready() ) {
+		if ( ! $this->is_config_writable() || \filesize( self::$config_path ) ) {
 			return array();
 		}
 
@@ -277,7 +277,7 @@ class WPBT_Extras {
 	 * @return void
 	 */
 	private function remove_constants( $remove ) {
-		if ( ! $this->is_config_ready() ) {
+		if ( ! $this->is_config_writable() || \filesize( self::$config_path ) ) {
 			return;
 		}
 

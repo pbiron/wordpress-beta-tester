@@ -1,4 +1,5 @@
 [unreleased]
+* minor cleanup
 
 #### 2.2.10 / 2020-05-01
 * sanitize, escape & ignore

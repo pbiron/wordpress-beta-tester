@@ -81,15 +81,6 @@ class WPBT_Extras {
 	}
 
 	/**
-	 * Test to see if wp-config.php is writable.
-	 *
-	 * @return bool
-	 */
-	public function is_config_writable() {
-		return is_writable( self::$config_path );
-	}
-
-	/**
 	 * Add class settings tab.
 	 *
 	 * @param array $tabs Settings tabs.
@@ -138,7 +129,7 @@ class WPBT_Extras {
 			)
 		);
 
-		if ( $this->is_config_writable() ) {
+		if ( is_writable( self::$config_path ) ) {
 			// Example.
 			add_settings_field(
 				'example',
@@ -253,10 +244,6 @@ class WPBT_Extras {
 	 * @return void|array
 	 */
 	private function add_constants( $add ) {
-		if ( ! $this->is_config_writable() || \filesize( self::$config_path ) ) {
-			return array();
-		}
-
 		$config_transformer = new WPBT_WPConfigTransformer( self::$config_path );
 		$config_args        = array(
 			'raw'       => true,
@@ -277,10 +264,6 @@ class WPBT_Extras {
 	 * @return void
 	 */
 	private function remove_constants( $remove ) {
-		if ( ! $this->is_config_writable() || \filesize( self::$config_path ) ) {
-			return;
-		}
-
 		$config_transformer = new WPBT_WPConfigTransformer( self::$config_path );
 		foreach ( array_keys( $remove ) as $constant ) {
 			$feature_flag = strtoupper( 'wp_beta_tester_' . $constant );

@@ -1,5 +1,8 @@
 [unreleased]
 
+#### 2.2.11 / 2020-08-01
+* minor cleanup
+
 #### 2.2.10 / 2020-05-01
 * sanitize, escape & ignore
 * move multiline boolean operator to front of line, new guidelines in WPCS

@@ -1,4 +1,5 @@
 [unreleased]
+* fix intermittent PHP warning [#21](https://github.com/afragen/wordpress-beta-tester/issues/21)
 
 #### 2.2.11 / 2020-08-01
 * minor cleanup

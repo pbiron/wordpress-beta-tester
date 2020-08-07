@@ -51,6 +51,7 @@ class WPBT_Bootstrap {
 	 * @return void
 	 */
 	public function run() {
+		$this->deactivate_die_wordpress_develop();
 		$this->load_requires(); // TODO: replace with composer's autoload.
 		$this->load_hooks();
 		self::$options = get_site_option(
@@ -64,6 +65,23 @@ class WPBT_Bootstrap {
 		// TODO: ( new WP_Beta_Tester( $this->file ) )->run( $this->options );
 		$wpbt = new WP_Beta_Tester( $this->file );
 		$wpbt->run( self::$options );
+	}
+
+	/**
+	 * Deactivate and die if trying to use with `wordpress-develop`.
+	 *
+	 * @return void
+	 */
+	private function deactivate_die_wordpress_develop() {
+		$wp_version    = get_bloginfo( 'version' );
+		$version_regex = '@(\d+\.\d+(\.\d+)?)-(alpha|beta|RC)-(\d+[\.]?\d+)(-src)?@';
+
+		preg_match( $VERSION_REGEX, $wp_version, $matches );
+		if ( ! empty( $matches ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+			deactivate_plugins( $this->file );
+			wp_die( 'Cannot run WordPress Beta Tester in `wordpress-develop`' );
+		}
 	}
 
 	/**

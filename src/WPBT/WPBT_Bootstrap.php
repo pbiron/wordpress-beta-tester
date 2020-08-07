@@ -80,7 +80,7 @@ class WPBT_Bootstrap {
 		if ( ! empty( $matches ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 			deactivate_plugins( $this->file );
-			wp_die( new \WP_Error( 'deactivate', 'Cannot run WordPress Beta Tester in `wordpress-develop`' ) );
+			wp_die( new \WP_Error( 'deactivate', esc_html__( 'Cannot run WordPress Beta Tester plugin in `wordpress-develop`', 'wordpress-beta-tester' ) ) );
 		}
 	}
 

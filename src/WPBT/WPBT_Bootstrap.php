@@ -74,9 +74,9 @@ class WPBT_Bootstrap {
 	 */
 	private function deactivate_die_wordpress_develop() {
 		$wp_version    = get_bloginfo( 'version' );
-		$version_regex = '@(\d+\.\d+(\.\d+)?)-(alpha|beta|RC)-(\d+[\.]?\d+)(-src)?@';
+		$version_regex = '@(\d+\.\d+(\.\d+)?)-(alpha|beta|RC)(\d+)?-(\d+-src|\d{8}\.\d{6})@';
 
-		preg_match( $VERSION_REGEX, $wp_version, $matches );
+		preg_match( $version_regex, $wp_version, $matches );
 		if ( ! empty( $matches ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 			deactivate_plugins( $this->file );

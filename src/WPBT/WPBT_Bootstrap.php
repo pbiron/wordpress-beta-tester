@@ -51,6 +51,7 @@ class WPBT_Bootstrap {
 	 * @return void
 	 */
 	public function run() {
+		$this->deactivate_die_wordpress_develop();
 		$this->load_requires(); // TODO: replace with composer's autoload.
 		$this->load_hooks();
 		self::$options = get_site_option(
@@ -64,6 +65,24 @@ class WPBT_Bootstrap {
 		// TODO: ( new WP_Beta_Tester( $this->file ) )->run( $this->options );
 		$wpbt = new WP_Beta_Tester( $this->file );
 		$wpbt->run( self::$options );
+	}
+
+	/**
+	 * Deactivate and die if trying to use with `wordpress-develop`.
+	 *
+	 * @return void
+	 */
+	private function deactivate_die_wordpress_develop() {
+		$wp_version    = get_bloginfo( 'version' );
+		$version_regex = '@(\d+\.\d+(\.\d+)?)-(alpha|beta|RC)(\d+)?-(\d+-src|\d{8}\.\d{6})@';
+
+		preg_match( $version_regex, $wp_version, $matches );
+		if ( ! empty( $matches ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+			deactivate_plugins( $this->file );
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			wp_die( new \WP_Error( 'deactivate', esc_html__( 'Cannot run WordPress Beta Tester plugin in `wordpress-develop`', 'wordpress-beta-tester' ) ) );
+		}
 	}
 
 	/**
@@ -125,7 +144,7 @@ class WPBT_Bootstrap {
 	 * @return array
 	 */
 	public function fix_stream( $value ) {
-		if ( 0 === strpos( $value['stream'], 'beta-rc' )
+		if ( is_array( $value ) && 0 === strpos( $value['stream'], 'beta-rc' )
 			&& 1 !== preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) {
 			$value['stream'] = str_replace( 'beta-rc-', '', $value['stream'] );
 		}

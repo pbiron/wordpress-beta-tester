@@ -1,4 +1,5 @@
 [unreleased]
+* enclose `WPConfigTransformer` in try/catch
 
 #### 2.2.12 / 2020-08-10
 * fix intermittent PHP warning [#21](https://github.com/afragen/wordpress-beta-tester/issues/21)

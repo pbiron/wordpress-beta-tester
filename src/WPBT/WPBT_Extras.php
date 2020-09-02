@@ -244,14 +244,20 @@ class WPBT_Extras {
 	 * @return void|array
 	 */
 	private function add_constants( $add ) {
-		$config_transformer = new WPBT_WPConfigTransformer( self::$config_path );
-		$config_args        = array(
+		$config_args = array(
 			'raw'       => true,
 			'normalize' => true,
 		);
-		foreach ( array_keys( $add ) as $constant ) {
-			$feature_flag = strtoupper( 'wp_beta_tester_' . $constant );
-			$config_transformer->update( 'constant', $feature_flag, 'true', $config_args );
+		try {
+			$config_transformer = new WPBT_WPConfigTransformer( self::$config_path );
+			foreach ( array_keys( $add ) as $constant ) {
+				$feature_flag = strtoupper( 'wp_beta_tester_' . $constant );
+				$config_transformer->update( 'constant', $feature_flag, 'true', $config_args );
+			}
+		} catch ( \Exception $e ) {
+			$messsage = 'Caught Exception: \WPBT_Extras::add_constants() - ' . $e->getMessage();
+			// error_log( $messsage );
+			wp_die( esc_html( $messsage ) );
 		}
 	}
 
@@ -264,10 +270,16 @@ class WPBT_Extras {
 	 * @return void
 	 */
 	private function remove_constants( $remove ) {
-		$config_transformer = new WPBT_WPConfigTransformer( self::$config_path );
-		foreach ( array_keys( $remove ) as $constant ) {
-			$feature_flag = strtoupper( 'wp_beta_tester_' . $constant );
-			$config_transformer->remove( 'constant', $feature_flag );
+		try {
+			$config_transformer = new WPBT_WPConfigTransformer( self::$config_path );
+			foreach ( array_keys( $remove ) as $constant ) {
+				$feature_flag = strtoupper( 'wp_beta_tester_' . $constant );
+				$config_transformer->remove( 'constant', $feature_flag );
+			}
+		} catch ( \Exception $e ) {
+			$messsage = 'Caught Exception: \WPBT_Extras::remove_constants() - ' . $e->getMessage();
+			// error_log( $messsage );
+			wp_die( esc_html( $messsage ) );
 		}
 	}
 
@@ -300,7 +312,7 @@ class WPBT_Extras {
 	public function add_admin_page( $tab, $action ) {
 		?>
 		<div>
-			<?php if ( 'wp_beta_tester_extras' === $tab ) : ?>
+		<?php if ( 'wp_beta_tester_extras' === $tab ) : ?>
 			<form method="post" action="<?php esc_attr_e( $action ); ?>">
 				<?php settings_fields( 'wp_beta_tester_extras' ); ?>
 				<?php do_settings_sections( 'wp_beta_tester_extras' ); ?>

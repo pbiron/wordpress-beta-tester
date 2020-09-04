@@ -194,20 +194,20 @@ class WPBT_Core {
 		</tr>
 		<tr>
 			<th><label><input name="wp-beta-tester" id="update-stream-point-nightlies" type="radio" value="branch-development" class="tog" <?php checked( 'branch-development', self::$options['stream'] ); ?> />
-			<?php esc_html_e( 'Point release nightlies', 'wordpress-beta-tester' ); ?>
+			<?php esc_html_e( 'Point release', 'wordpress-beta-tester' ); ?>
 			</label></th>
 			<td><?php esc_html_e( 'This contains the work that is occurring on a branch in preparation for a x.x.x point release. This should also be fairly stable but will be available before the branch is ready for release.', 'wordpress-beta-tester' ); ?></td>
 		</tr>
 		<tr>
 			<th><label><input name="wp-beta-tester" id="update-stream-bleeding-nightlies" type="radio" value="development" class="tog" <?php checked( 'development', self::$options['stream'] ); ?> />
-			<?php esc_html_e( 'Bleeding edge nightlies', 'wordpress-beta-tester' ); ?>
+			<?php esc_html_e( 'Bleeding edge', 'wordpress-beta-tester' ); ?>
 			</label></th>
 			<td><?php echo( wp_kses_post( __( 'This is the bleeding edge development code from `trunk` which may be unstable at times. <em>Only use this if you really know what you are doing</em>.', 'wordpress-beta-tester' ) ) ); ?></td>
 		</tr>
 		</fieldset>
 
 		<fieldset>
-		<?php // if ( $point && $beta_rc && $show_beta_rc ) : ?>
+
 		<tr><th colspan="2">
 		<?php esc_html_e( 'Select one of the options below.', 'wordpress-beta-tester' ); ?>
 		</th>
@@ -216,24 +216,21 @@ class WPBT_Core {
 			<th><label><input name="wp-beta-tester-beta-rc" id="update-stream-beta" type="radio" value="" class="tog" <?php checked( false, self::$options['stream-option'] ); ?> />
 			<?php esc_html_e( 'Nightlies', 'wordpress-beta-tester' ); ?>
 			</label></th>
-			<td><?php echo( wp_kses_post( __( 'Update to nightlies.', 'wordpress-beta-tester' ) ) ); ?></td>
+			<td><?php echo( wp_kses_post( __( 'Latest daily updates.', 'wordpress-beta-tester' ) ) ); ?></td>
 		</tr>
 
 		<tr>
 			<th><label><input name="wp-beta-tester-beta-rc" id="update-stream-beta" type="radio" value="beta" class="tog" <?php checked( 'beta', self::$options['stream-option'] ); ?> />
 			<?php esc_html_e( 'Beta/RC Only', 'wordpress-beta-tester' ); ?>
 			</label></th>
-			<td><?php echo( wp_kses_post( __( 'This is for the Beta/RC releases only of the current WordPress version.', 'wordpress-beta-tester' ) ) ); ?></td>
+			<td><?php echo( wp_kses_post( __( 'This is for the Beta/RC releases only of the selected channel.', 'wordpress-beta-tester' ) ) ); ?></td>
 		</tr>
-		<?php // endif ?>
-		<?php // if ( $unstable && $beta_rc && $show_beta_rc ) : ?>
 		<tr>
 			<th><label><input name="wp-beta-tester-beta-rc" id="update-stream-rc" type="radio" value="rc" class="tog" <?php checked( 'rc', self::$options['stream-option'] ); ?> />
 			<?php esc_html_e( 'Release Candidates Only', 'wordpress-beta-tester' ); ?>
 			</label></th>
-			<td><?php echo( wp_kses_post( __( 'This is for the Release Candidate releases only of the current WordPress version.', 'wordpress-beta-tester' ) ) ); ?></td>
+			<td><?php echo( wp_kses_post( __( 'This is for the Release Candidate releases only of the selected channel.', 'wordpress-beta-tester' ) ) ); ?></td>
 		</tr>
-		<?php // endif ?>
 		</fieldset>
 		<?php
 	}

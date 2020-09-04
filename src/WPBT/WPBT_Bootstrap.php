@@ -54,17 +54,22 @@ class WPBT_Bootstrap {
 		$this->deactivate_die_wordpress_develop();
 		$this->load_requires(); // TODO: replace with composer's autoload.
 		$this->load_hooks();
+		// delete_site_option('wp_beta_tester');
 		self::$options = get_site_option(
 			'wp_beta_tester',
 			array(
-				'stream' => 'point',
-				'revert' => true,
+				'stream'        => 'development',
+				'stream-option' => '',
+				'revert'        => true,
 			)
 		);
+		if ( empty( self::$options['stream-option'] ) ) {
+			self::$options['stream-option'] = '';
+		}
 		// TODO: I really want to do this, but have to wait for PHP 5.4.
 		// TODO: ( new WP_Beta_Tester( $this->file ) )->run( $this->options );
-		$wpbt = new WP_Beta_Tester( $this->file );
-		$wpbt->run( self::$options );
+		$wpbt = new WP_Beta_Tester( $this->file, self::$options );
+		$wpbt->run();
 	}
 
 	/**
@@ -94,7 +99,7 @@ class WPBT_Bootstrap {
 		add_action( 'init', array( $this, 'load_textdomain' ) );
 		register_activation_hook( $this->file, array( $this, 'activate' ) );
 		register_deactivation_hook( $this->file, array( $this, 'deactivate' ) );
-		add_filter( 'site_option_wp_beta_tester', array( $this, 'fix_stream' ) );
+		// add_filter( 'site_option_wp_beta_tester', array( $this, 'fix_stream' ) );
 	}
 
 	/**
@@ -129,7 +134,7 @@ class WPBT_Bootstrap {
 	 */
 	public function deactivate() {
 		delete_site_transient( 'update_core' );
-		$wpbt = new WP_Beta_Tester( $this->file );
+		$wpbt = new WP_Beta_Tester( $this->file, self::$options );
 		// TODO: ( new WPBT_Extras( $wpbt, self::$options ) )->deactivate();
 		$wpbt_extras = new WPBT_Extras( $wpbt, self::$options );
 		$wpbt_extras->deactivate();
@@ -163,7 +168,7 @@ class WPBT_Bootstrap {
 		require_once $this->dir . '/src/WPBT/WPBT_Settings.php';
 		require_once $this->dir . '/src/WPBT/WPBT_Core.php';
 		require_once $this->dir . '/src/WPBT/WPBT_Extras.php';
-		require_once $this->dir . '/src/WPBT/WPBT_Beta_RC.php';
+		// require_once $this->dir . '/src/WPBT/WPBT_Beta_RC.php';
 		require_once $this->dir . '/src/WPBT/WPBT_Help.php';
 		require_once $this->dir . '/vendor/WPConfigTransformer.php';
 	}

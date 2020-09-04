@@ -12,13 +12,19 @@
  * WP_Beta_Tester
  */
 class WP_Beta_Tester {
-
 	/**
 	 * Holds main plugin file.
 	 *
 	 * @var $file
 	 */
 	public $file;
+
+	/**
+	 * Holds plugin options.
+	 *
+	 * @var $options
+	 */
+	public static $options;
 
 	/**
 	 * Holds Beta/RC class instance.
@@ -32,28 +38,29 @@ class WP_Beta_Tester {
 	/**
 	 * Constructor.
 	 *
-	 * @param string $file Main plugin file.
+	 * @param  string $file    Main plugin file.
+	 * @param  array  $options Plugin options.
 	 * @return void
 	 */
-	public function __construct( $file ) {
-		$this->file = $file;
+	public function __construct( $file, $options ) {
+		$this->file    = $file;
+		self::$options = $options;
 	}
 
 	/**
 	 * Rev up the engines.
 	 *
-	 * @param array $options Plugin options.
 	 * @return void
 	 */
-	public function run( $options ) {
+	public function run() {
 		$this->load_hooks();
 		// TODO: I really want to do this, but have to wait for PHP 5.4
 		// TODO: ( new WPBT_Settings( $this, $options ) )->run();
-		$settings = new WPBT_Settings( $this, $options );
+		$settings = new WPBT_Settings( $this, self::$options );
 		$settings->run();
 		// TODO: ( new WPBT_Beta_RC() )->load_hooks();
-		$this->beta_rc = new WPBT_Beta_RC();
-		$this->beta_rc->load_hooks();
+		// $this->beta_rc = new WPBT_Beta_RC();
+		// $this->beta_rc->load_hooks();
 	}
 
 	/**
@@ -87,7 +94,7 @@ class WP_Beta_Tester {
 		wp_version_check();
 
 		// Can output an error here if current config drives version backwards.
-		if ( $this->check_if_settings_downgrade() ) {
+		if ( $this->check_if_settings_downgrade( $st ) ) {
 			echo '<div id="message" class="notice notice-warning"><p>';
 			$admin_page = is_multisite() ? network_admin_url( 'settings.php' ) : admin_url( 'tools.php' );
 			$admin_page = add_query_arg(
@@ -110,9 +117,9 @@ class WP_Beta_Tester {
 	/**
 	 * Filter 'pre_http_request' to add beta-tester API check.
 	 *
-	 * @param mixed  $result $result from filter.
-	 * @param array  $args Array of filter args.
-	 * @param string $url URL from filter.
+	 * @param  mixed  $result $result from filter.
+	 * @param  array  $args   Array of filter args.
+	 * @param  string $url    URL from filter.
 	 * @return /stdClass Output from wp_remote_get().
 	 */
 	public function filter_http_request( $result, $args, $url ) {
@@ -127,7 +134,11 @@ class WP_Beta_Tester {
 		$args['_beta_tester'] = true;
 
 		$wp_version = get_bloginfo( 'version' );
-		$url        = str_replace( 'version=' . $wp_version, 'version=' . $this->mangle_wp_version(), $url );
+		// $url        = str_replace( 'version=' . $wp_version, 'version=' . $this->mangle_wp_version(), $url );
+		// $url = str_replace('/1.7/', '/1.8/', $url);
+		$url = empty( self::$options['stream-option'] )
+			? add_query_arg( 'channel', self::$options['stream'], $url )
+			: add_query_arg( 'channel', self::$options['stream-option'], $url );
 
 		return wp_remote_get( $url, $args );
 	}
@@ -202,9 +213,9 @@ class WP_Beta_Tester {
 				break;
 			case 'unstable':
 			case 'beta-rc-unstable':
-				++ $versions[1];
+				++$versions[1];
 				if ( 10 === $versions[1] ) {
-					++ $versions[0];
+					++$versions[0];
 					$versions[1] = 0;
 				}
 				break;
@@ -244,13 +255,17 @@ class WP_Beta_Tester {
 	/**
 	 * Returns whether beta is really downgrade.
 	 *
+	 * @param \stdClass Core update object.
+	 *
 	 * @return bool
 	 */
-	protected function check_if_settings_downgrade() {
-		$wp_version         = get_bloginfo( 'version' );
-		$wp_real_version    = explode( '-', $wp_version );
-		$wp_mangled_version = explode( '-', $this->mangle_wp_version() );
+	protected function check_if_settings_downgrade( $current ) {
+		$wp_version      = get_bloginfo( 'version' );
+		$wp_real_version = explode( '-', $wp_version );
+		$wp_test_version = explode( '-', $current->updates[0]->version );
+		// $wp_mangled_version = explode( '-', $this->mangle_wp_version() );
+		// $wp_mangled_version = $wp_real_version;
 
-		return version_compare( $wp_mangled_version[0], $wp_real_version[0], 'lt' );
+		return version_compare( $wp_test_version[0], $wp_real_version[0], 'lt' );
 	}
 }

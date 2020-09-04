@@ -1,4 +1,5 @@
 [unreleased]
+* refactor for new core update API, thanks @dd32!
 * enclose `WPConfigTransformer` in try/catch
 
 #### 2.2.12 / 2020-08-10

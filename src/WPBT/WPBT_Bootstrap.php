@@ -120,7 +120,7 @@ class WPBT_Bootstrap {
 	 */
 	public function activate() {
 		delete_site_transient( 'update_core' );
-		$wpbt        = new WP_Beta_Tester( $this->file );
+		$wpbt        = new WP_Beta_Tester( $this->file, self::$options );
 		$wpbt_extras = new WPBT_Extras( $wpbt, self::$options );
 		$wpbt_extras->activate();
 	}

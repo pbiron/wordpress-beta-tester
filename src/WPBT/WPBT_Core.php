@@ -207,7 +207,6 @@ class WPBT_Core {
 		</fieldset>
 
 		<fieldset>
-
 		<tr><th colspan="2">
 		<?php esc_html_e( 'Select one of the options below.', 'wordpress-beta-tester' ); ?>
 		</th>
@@ -265,24 +264,17 @@ class WPBT_Core {
 	 * @return string
 	 */
 	public function get_next_version( $preferred_version ) {
-		$next_version = array();
-		if ( ! ( 0 === strpos( static::$options['stream'], 'beta-rc' )
-				|| ! preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) ) {
+		$wp_version   = get_bloginfo( 'version' );
+		$beta_rc      = ! empty( self::$options['stream-option'] );
+		$next_version = $this->calculate_next_versions();
+
+		if ( ! $beta_rc && preg_match( '/alpha|beta|RC/', $wp_version ) ) {
 			// site is not running a development version or not on a beta/RC stream.
 			// So use the preferred version.
 			/* translators: %s: version number */
 			return sprintf( __( 'version %s', 'wordpress-beta-tester' ), $preferred_version );
 		}
 
-		//$next_version = $this->wp_beta_tester->beta_rc->get_found_version();
-		if ( $next_version ) {
-			// the next beta/RC package was found, return that version.
-			/* translators: %s: version number */
-			return sprintf( __( 'version %s', 'wordpress-beta-tester' ), $next_version );
-		}
-
-		// the next beta/RC package was not found.
-		//$next_version = $this->wp_beta_tester->beta_rc->next_package_versions();
 		if ( 1 === count( $next_version ) ) {
 			$next_version = array_shift( $next_version );
 		} elseif ( empty( $next_version ) ) {
@@ -290,8 +282,43 @@ class WPBT_Core {
 		} else {
 			// show all versions that may come next.
 			add_filter( 'wp_sprintf_l', array( $this, 'wpbt_sprintf_or' ) );
+			/* translators: %l: next version numbers */
 			$next_version = wp_sprintf( __( 'version %l', 'wordpress-beta-tester' ), $next_version ) . ', ' . __( 'whichever is released first', 'wordpress-beta-tester' );
 			remove_filter( 'wp_sprintf_l', array( $this, 'wpbt_sprintf_or' ) );
+		}
+
+		return $next_version;
+	}
+
+	/**
+	 * Calculate next versions.
+	 *
+	 * @return array $next_version
+	 */
+	private function calculate_next_versions() {
+		$wp_version       = get_bloginfo( 'version' );
+		$exploded_version = explode( '-', $wp_version );
+		if ( ! isset( $exploded_version[1] ) ) {
+			return array();
+		}
+		$is_alpha     = 'alpha' === $exploded_version[1];
+		$current_beta = preg_match( '/beta(?)/', $exploded_version[1], $beta_version );
+		$current_rc   = preg_match( '/RC(?)/', $exploded_version[1], $rc_version );
+		$next_release = explode( '.', $exploded_version[0] );
+
+		if ( preg_match( '/alpha|beta|RC/', $wp_version ) ) {
+			if ( 'branch-development' === self::$options['stream'] ) {
+				// $next_release[2] = isset( $next_release[2] ) ? ++$next_release[2] : '1';
+			}
+		}
+
+		$next_version = array(
+			'beta'    => ! empty( $beta_version ) || $is_alpha ? $exploded_version[0] . '-beta' . ++$current_beta : false,
+			'rc'      => $exploded_version[0] . '-RC' . ++$current_rc,
+			'release' => $exploded_version[0],
+		);
+		if ( ! $next_version['beta'] || 'rc' === self::$options['stream-option'] ) {
+			unset( $next_version['beta'] );
 		}
 
 		return $next_version;

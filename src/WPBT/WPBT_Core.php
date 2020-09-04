@@ -265,6 +265,7 @@ class WPBT_Core {
 	 * @return string
 	 */
 	public function get_next_version( $preferred_version ) {
+		$next_version = array();
 		if ( ! ( 0 === strpos( static::$options['stream'], 'beta-rc' )
 				|| ! preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) ) {
 			// site is not running a development version or not on a beta/RC stream.
@@ -273,7 +274,7 @@ class WPBT_Core {
 			return sprintf( __( 'version %s', 'wordpress-beta-tester' ), $preferred_version );
 		}
 
-		$next_version = $this->wp_beta_tester->beta_rc->get_found_version();
+		//$next_version = $this->wp_beta_tester->beta_rc->get_found_version();
 		if ( $next_version ) {
 			// the next beta/RC package was found, return that version.
 			/* translators: %s: version number */
@@ -281,7 +282,7 @@ class WPBT_Core {
 		}
 
 		// the next beta/RC package was not found.
-		$next_version = $this->wp_beta_tester->beta_rc->next_package_versions();
+		//$next_version = $this->wp_beta_tester->beta_rc->next_package_versions();
 		if ( 1 === count( $next_version ) ) {
 			$next_version = array_shift( $next_version );
 		} elseif ( empty( $next_version ) ) {

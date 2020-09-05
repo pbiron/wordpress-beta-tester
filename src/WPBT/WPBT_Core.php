@@ -264,11 +264,10 @@ class WPBT_Core {
 	 * @return string
 	 */
 	public function get_next_version( $preferred_version ) {
-		$wp_version   = get_bloginfo( 'version' );
 		$beta_rc      = ! empty( self::$options['stream-option'] );
 		$next_version = $this->calculate_next_versions();
 
-		if ( ! $beta_rc && ! empty( $next_version ) && preg_match( '/alpha|beta|RC/', $wp_version ) ) {
+		if ( ! $beta_rc && ! empty( $next_version ) && preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) {
 			// Site is not on a beta/RC stream so use the preferred version.
 			/* translators: %s: version number */
 			return sprintf( __( 'version %s', 'wordpress-beta-tester' ), $preferred_version );

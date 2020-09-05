@@ -59,8 +59,8 @@ class WP_Beta_Tester {
 		$settings = new WPBT_Settings( $this, self::$options );
 		$settings->run();
 		// TODO: ( new WPBT_Beta_RC() )->load_hooks();
-		// $this->beta_rc = new WPBT_Beta_RC();
-		// $this->beta_rc->load_hooks();
+		$this->beta_rc = new WPBT_Beta_RC();
+		$this->beta_rc->load_hooks();
 	}
 
 	/**

@@ -111,7 +111,7 @@ class WPBT_Beta_RC {
 		add_action( 'wp_network_dashboard_setup', array( $this, 'add_dashboard_widget' ) );
 
 		// Delete development RSS feed transient for dashboard widget on core upgrade.
-		// add_action( 'upgrader_process_complete', array( $this, 'delete_feed_transient_on_upgrade' ), 10, 2 );
+		add_action( 'upgrader_process_complete', array( $this, 'delete_feed_transient_on_upgrade' ), 10, 2 );
 	}
 
 	/**

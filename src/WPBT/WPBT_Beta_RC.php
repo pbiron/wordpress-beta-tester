@@ -93,7 +93,7 @@ class WPBT_Beta_RC {
 	 * @since 2.2.0
 	 */
 	public function __construct() {
-		//$this->get_next_packages();
+		// $this->get_next_packages();
 	}
 
 	/**
@@ -102,16 +102,16 @@ class WPBT_Beta_RC {
 	 * @return void
 	 */
 	public function load_hooks() {
-		//add_filter( 'http_response', array( $this, 'update_to_beta_or_rc_releases' ), 10, 3 );
+		// add_filter( 'http_response', array( $this, 'update_to_beta_or_rc_releases' ), 10, 3 );
 		// set priority to 11 so that we fire after the function core hooks into this filter.
-		//add_filter( 'update_footer', array( $this, 'update_footer' ), 11 );
+		// add_filter( 'update_footer', array( $this, 'update_footer' ), 11 );
 
 		// Add dashboard widget.
 		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget' ) );
 		add_action( 'wp_network_dashboard_setup', array( $this, 'add_dashboard_widget' ) );
 
 		// Delete development RSS feed transient for dashboard widget on core upgrade.
-		//add_action( 'upgrader_process_complete', array( $this, 'delete_feed_transient_on_upgrade' ), 10, 2 );
+		// add_action( 'upgrader_process_complete', array( $this, 'delete_feed_transient_on_upgrade' ), 10, 2 );
 	}
 
 	/**

@@ -54,7 +54,6 @@ class WPBT_Bootstrap {
 		$this->deactivate_die_wordpress_develop();
 		$this->load_requires(); // TODO: replace with composer's autoload.
 		$this->load_hooks();
-		// delete_site_option('wp_beta_tester');
 		self::$options = get_site_option(
 			'wp_beta_tester',
 			array(

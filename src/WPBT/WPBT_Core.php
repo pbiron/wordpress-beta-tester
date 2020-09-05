@@ -269,8 +269,7 @@ class WPBT_Core {
 		$next_version = $this->calculate_next_versions();
 
 		if ( ! $beta_rc && preg_match( '/alpha|beta|RC/', $wp_version ) ) {
-			// site is not running a development version or not on a beta/RC stream.
-			// So use the preferred version.
+			// Site is not on a beta/RC stream so use the preferred version.
 			/* translators: %s: version number */
 			return sprintf( __( 'version %s', 'wordpress-beta-tester' ), $preferred_version );
 		}
@@ -298,6 +297,7 @@ class WPBT_Core {
 	private function calculate_next_versions() {
 		$wp_version       = get_bloginfo( 'version' );
 		$exploded_version = explode( '-', $wp_version );
+
 		if ( ! isset( $exploded_version[1] ) ) {
 			return array();
 		}
@@ -305,11 +305,10 @@ class WPBT_Core {
 		$current_beta = preg_match( '/beta(?)/', $exploded_version[1], $beta_version );
 		$current_rc   = preg_match( '/RC(?)/', $exploded_version[1], $rc_version );
 		$next_release = explode( '.', $exploded_version[0] );
-
-		if ( preg_match( '/alpha|beta|RC/', $wp_version ) ) {
-			if ( 'branch-development' === self::$options['stream'] ) {
-				// $next_release[2] = isset( $next_release[2] ) ? ++$next_release[2] : '1';
-			}
+		if ( 'development' === self::$options['stream'] && isset( $next_release[2] )
+			|| 'branch-development' === self::$options['stream'] && ! isset( $next_release[2] )
+		) {
+			return array();
 		}
 
 		$next_version = array(

@@ -262,10 +262,10 @@ class WP_Beta_Tester {
 	protected function check_if_settings_downgrade( $current ) {
 		$wp_version      = get_bloginfo( 'version' );
 		$wp_real_version = explode( '-', $wp_version );
-		$wp_test_version = explode( '-', $current->updates[0]->version );
+		$wp_next_version = explode( '-', $current->updates[0]->version );
 		// $wp_mangled_version = explode( '-', $this->mangle_wp_version() );
 		// $wp_mangled_version = $wp_real_version;
 
-		return version_compare( $wp_test_version[0], $wp_real_version[0], 'lt' );
+		return version_compare( $wp_next_version[0], $wp_real_version[0], 'lt' );
 	}
 }

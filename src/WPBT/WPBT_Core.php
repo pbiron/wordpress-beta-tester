@@ -296,19 +296,18 @@ class WPBT_Core {
 	private function calculate_next_versions() {
 		$wp_version       = get_bloginfo( 'version' );
 		$exploded_version = explode( '-', $wp_version );
+		$next_release     = explode( '.', $exploded_version[0] );
 
-		if ( ! isset( $exploded_version[1] ) ) {
-			return array();
-		}
-		$is_alpha     = 'alpha' === $exploded_version[1];
-		$current_beta = preg_match( '/beta(?)/', $exploded_version[1], $beta_version );
-		$current_rc   = preg_match( '/RC(?)/', $exploded_version[1], $rc_version );
-		$next_release = explode( '.', $exploded_version[0] );
-		if ( 'development' === self::$options['stream'] && isset( $next_release[2] )
-			|| 'branch-development' === self::$options['stream'] && ! isset( $next_release[2] )
+		if ( ! isset( $exploded_version[1] )
+			|| ( 'development' === self::$options['stream'] && isset( $next_release[2] ) )
+			|| ( 'branch-development' === self::$options['stream'] && ! isset( $next_release[2] ) )
 		) {
 			return array();
 		}
+
+		$is_alpha     = 'alpha' === $exploded_version[1];
+		$current_beta = preg_match( '/beta(?)/', $exploded_version[1], $beta_version );
+		$current_rc   = preg_match( '/RC(?)/', $exploded_version[1], $rc_version );
 
 		$next_version = array(
 			'beta'    => ! empty( $beta_version ) || $is_alpha ? $exploded_version[0] . '-beta' . ++$current_beta : false,

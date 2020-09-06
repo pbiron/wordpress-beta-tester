@@ -300,7 +300,8 @@ class WP_Beta_Tester {
 	 * @return void
 	 */
 	public function beta_tester_dashboard() {
-		$next_version = $this->next_package_versions();
+		$wp_version   = get_bloginfo( 'version' );
+		$next_version = explode( '-', $wp_version );
 		$milestone    = array_shift( $next_version );
 
 		/* translators: %s: WordPress version */

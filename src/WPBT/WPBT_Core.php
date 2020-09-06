@@ -308,8 +308,8 @@ class WPBT_Core {
 		$current_rc   = preg_match( '/RC(?)/', $exploded_version[1], $rc_version );
 
 		$next_version = array(
-			'beta'    => ! empty( $beta_version ) || $is_alpha ? $exploded_version[0] . '-beta' . ++$current_beta : false,
-			'rc'      => $exploded_version[0] . '-RC' . ++$current_rc,
+			'beta'    => ! empty( $beta_version ) || $is_alpha ? $exploded_version[0] . '-beta' . ( ++$current_beta ) : false,
+			'rc'      => $exploded_version[0] . '-RC' . ( ++$current_rc ),
 			'release' => $exploded_version[0],
 		);
 		if ( ! $next_version['beta'] || 'rc' === self::$options['stream-option'] ) {

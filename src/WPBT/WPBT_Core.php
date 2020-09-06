@@ -99,7 +99,7 @@ class WPBT_Core {
 		if ( isset( $post_data['option_page'] )
 			&& 'wp_beta_tester_core' === $post_data['option_page']
 		) {
-			$options                 = isset( $post_data['wp-beta-tester'] ) ? $post_data['wp-beta-tester'] : 'branch-development';
+			$options                  = isset( $post_data['wp-beta-tester'] ) ? $post_data['wp-beta-tester'] : 'branch-development';
 			self::$options['channel'] = WPBT_Settings::sanitize( $options );
 
 			$options_beta_rc                = isset( $post_data['wp-beta-tester-beta-rc'] ) ? $post_data['wp-beta-tester-beta-rc'] : '';

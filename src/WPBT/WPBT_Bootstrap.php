@@ -57,16 +57,22 @@ class WPBT_Bootstrap {
 		self::$options = get_site_option(
 			'wp_beta_tester',
 			array(
-				'channel'        => 'branch-development',
+				'channel'       => 'branch-development',
 				'stream-option' => '',
 				'revert'        => true,
 			)
 		);
+
+		// Switch from v2 to v3.
+		if ( empty( self::$options['channel'] ) ) {
+			self::$options['branch-development'];
+		}
 		if ( empty( self::$options['stream-option'] ) ) {
 			self::$options['stream-option'] = '';
 		}
+
 		// TODO: I really want to do this, but have to wait for PHP 5.4.
-		// TODO: ( new WP_Beta_Tester( $this->file ) )->run( $this->options );
+		// TODO: ( new WP_Beta_Tester( $this->file, self::$options ) )->run();
 		$wpbt = new WP_Beta_Tester( $this->file, self::$options );
 		$wpbt->run();
 	}
@@ -167,7 +173,7 @@ class WPBT_Bootstrap {
 		require_once $this->dir . '/src/WPBT/WPBT_Settings.php';
 		require_once $this->dir . '/src/WPBT/WPBT_Core.php';
 		require_once $this->dir . '/src/WPBT/WPBT_Extras.php';
-		//require_once $this->dir . '/src/WPBT/WPBT_Beta_RC.php';
+		// require_once $this->dir . '/src/WPBT/WPBT_Beta_RC.php';
 		require_once $this->dir . '/src/WPBT/WPBT_Help.php';
 		require_once $this->dir . '/vendor/WPConfigTransformer.php';
 	}

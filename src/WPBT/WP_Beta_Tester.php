@@ -33,7 +33,7 @@ class WP_Beta_Tester {
 	 *
 	 * @var WPBT_Beta_RC
 	 */
-	public $beta_rc;
+	// public $beta_rc;
 
 	/**
 	 * Constructor.
@@ -59,8 +59,8 @@ class WP_Beta_Tester {
 		$settings = new WPBT_Settings( $this, self::$options );
 		$settings->run();
 		// TODO: ( new WPBT_Beta_RC() )->load_hooks();
-		//$this->beta_rc = new WPBT_Beta_RC();
-		//$this->beta_rc->load_hooks();
+		// $this->beta_rc = new WPBT_Beta_RC();
+		// $this->beta_rc->load_hooks();
 	}
 
 	/**
@@ -276,7 +276,7 @@ class WP_Beta_Tester {
 		return version_compare( $wp_next_version[0], $wp_real_version[0], 'lt' );
 	}
 
-		/**
+	/**
 	 * Add dashboard widget for beta testing information.
 	 *
 	 * @since 2.2.3
@@ -355,7 +355,7 @@ class WP_Beta_Tester {
 	/**
 	 * Add milestone dev notes and field guide when on RC version.
 	 *
-	 * @since x.x.x
+	 * @since 2.2.3
 	 * @param string $milestone Milestone version.
 	 *
 	 * @return string HTML unordered list.

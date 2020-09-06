@@ -100,7 +100,7 @@ class WPBT_Core {
 			&& 'wp_beta_tester_core' === $post_data['option_page']
 		) {
 			$options                 = isset( $post_data['wp-beta-tester'] ) ? $post_data['wp-beta-tester'] : 'branch-development';
-			self::$options['stream'] = WPBT_Settings::sanitize( $options );
+			self::$options['channel'] = WPBT_Settings::sanitize( $options );
 
 			$options_beta_rc                = isset( $post_data['wp-beta-tester-beta-rc'] ) ? $post_data['wp-beta-tester-beta-rc'] : '';
 			self::$options['stream-option'] = WPBT_Settings::sanitize( $options_beta_rc );
@@ -174,8 +174,8 @@ class WPBT_Core {
 		// $preferred  = $this->wp_beta_tester->get_preferred_from_update_core();
 		//
 		// $beta_rc                = 1 === preg_match( '/alpha|beta|RC/', $wp_version );
-		// $point                  = 1 === preg_match( '/point/', static::$options['stream'] );
-		// $unstable               = 1 === preg_match( '/unstable/', static::$options['stream'] );
+		// $point                  = 1 === preg_match( '/point/', static::$options['channel'] );
+		// $unstable               = 1 === preg_match( '/unstable/', static::$options['channel'] );
 		// list( $wp_base )        = explode( '-', $wp_version );
 		// list( $preferred_base ) = explode( '-', $preferred->version );
 		//
@@ -193,13 +193,13 @@ class WPBT_Core {
 		</th>
 		</tr>
 		<tr>
-			<th><label><input name="wp-beta-tester" id="update-stream-point-nightlies" type="radio" value="branch-development" class="tog" <?php checked( 'branch-development', self::$options['stream'] ); ?> />
+			<th><label><input name="wp-beta-tester" id="update-stream-point-nightlies" type="radio" value="branch-development" class="tog" <?php checked( 'branch-development', self::$options['channel'] ); ?> />
 			<?php esc_html_e( 'Point release', 'wordpress-beta-tester' ); ?>
 			</label></th>
 			<td><?php esc_html_e( 'This contains the work that is occurring on a branch in preparation for a x.x.x point release. This should also be fairly stable but will be available before the branch is ready for release.', 'wordpress-beta-tester' ); ?></td>
 		</tr>
 		<tr>
-			<th><label><input name="wp-beta-tester" id="update-stream-bleeding-nightlies" type="radio" value="development" class="tog" <?php checked( 'development', self::$options['stream'] ); ?> />
+			<th><label><input name="wp-beta-tester" id="update-stream-bleeding-nightlies" type="radio" value="development" class="tog" <?php checked( 'development', self::$options['channel'] ); ?> />
 			<?php esc_html_e( 'Bleeding edge', 'wordpress-beta-tester' ); ?>
 			</label></th>
 			<td><?php echo( wp_kses_post( __( 'This is the bleeding edge development code from `trunk` which may be unstable at times. <em>Only use this if you really know what you are doing</em>.', 'wordpress-beta-tester' ) ) ); ?></td>
@@ -299,8 +299,8 @@ class WPBT_Core {
 		$next_release     = explode( '.', $exploded_version[0] );
 
 		if ( ! isset( $exploded_version[1] )
-			|| ( 'development' === self::$options['stream'] && isset( $next_release[2] ) )
-			|| ( 'branch-development' === self::$options['stream'] && ! isset( $next_release[2] ) )
+			|| ( 'development' === self::$options['channel'] && isset( $next_release[2] ) )
+			|| ( 'branch-development' === self::$options['channel'] && ! isset( $next_release[2] ) )
 		) {
 			return array();
 		}

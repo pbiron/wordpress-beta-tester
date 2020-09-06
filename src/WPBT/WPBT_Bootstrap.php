@@ -57,7 +57,7 @@ class WPBT_Bootstrap {
 		self::$options = get_site_option(
 			'wp_beta_tester',
 			array(
-				'stream'        => 'branch-development',
+				'channel'        => 'branch-development',
 				'stream-option' => '',
 				'revert'        => true,
 			)

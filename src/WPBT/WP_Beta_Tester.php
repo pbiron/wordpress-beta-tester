@@ -144,7 +144,7 @@ class WP_Beta_Tester {
 		// $url        = str_replace( 'version=' . $wp_version, 'version=' . $this->mangle_wp_version(), $url );
 		// $url = str_replace('/1.7/', '/1.8/', $url);
 		$url = empty( self::$options['stream-option'] )
-			? add_query_arg( 'channel', self::$options['stream'], $url )
+			? add_query_arg( 'channel', self::$options['channel'], $url )
 			: add_query_arg( 'channel', self::$options['stream-option'], $url );
 
 		return wp_remote_get( $url, $args );

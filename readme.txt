@@ -4,7 +4,7 @@ Tags: beta, advanced, testing
 Contributors: westi, mlteal, afragen, pbiron
 Tested up to: 5.5
 Requires at least: 3.1
-Stable Tag: 2.2.12
+Stable Tag: 2.2.13
 License: GPLv2
 License URI: https://www.opensource.org/licenses/GPL-2.0
 Requires PHP: 5.2.4
@@ -39,6 +39,9 @@ If no settings are present there is no testing to be done that requires this fea
 PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 
 ## Changelog
+
+#### 2.2.13 / 2020-09-05
+* enclose `WPConfigTransformer` in try/catch
 
 #### 2.2.12 / 2020-08-10
 * fix intermittent PHP warning [#21](https://github.com/afragen/wordpress-beta-tester/issues/21)

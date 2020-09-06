@@ -27,15 +27,6 @@ class WP_Beta_Tester {
 	public static $options;
 
 	/**
-	 * Holds Beta/RC class instance.
-	 *
-	 * @since 2.2.0
-	 *
-	 * @var WPBT_Beta_RC
-	 */
-	// public $beta_rc;
-
-	/**
 	 * Constructor.
 	 *
 	 * @param  string $file    Main plugin file.
@@ -58,9 +49,6 @@ class WP_Beta_Tester {
 		// TODO: ( new WPBT_Settings( $this, $options ) )->run();
 		$settings = new WPBT_Settings( $this, self::$options );
 		$settings->run();
-		// TODO: ( new WPBT_Beta_RC() )->load_hooks();
-		// $this->beta_rc = new WPBT_Beta_RC();
-		// $this->beta_rc->load_hooks();
 	}
 
 	/**

@@ -112,7 +112,7 @@ class WPBT_Core {
 			$options_beta_rc                = isset( $post_data['wp-beta-tester-beta-rc'] ) ? $post_data['wp-beta-tester-beta-rc'] : '';
 			self::$options['stream-option'] = WPBT_Settings::sanitize( $options_beta_rc );
 
-			// set an option when picking 'point' release stream.
+			// set an option when picking 'branch-development' channel.
 			// used to ensure correct mangled version is returned.
 			self::$options['revert'] = 'branch-development' === $options;
 			update_site_option( 'wp_beta_tester', (array) self::$options );

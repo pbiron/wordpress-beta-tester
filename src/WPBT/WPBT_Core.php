@@ -80,12 +80,19 @@ class WPBT_Core {
 		);
 
 		add_settings_field(
-			'core_settings',
+			'channel_settings',
 			null,
-			array( $this, 'core_radio_group' ),
+			array( $this, 'channel_radio_group' ),
 			'wp_beta_tester_core',
+			'wp_beta_tester_core'
+		);
+
+		add_settings_field(
+			'stream_settings',
+			null,
+			array( $this, 'stream_radio_group' ),
 			'wp_beta_tester_core',
-			array( esc_html__( 'Choose an update branch', 'wordpress-beta-tester' ) )
+			'wp_beta_tester_core'
 		);
 	}
 
@@ -165,33 +172,16 @@ class WPBT_Core {
 	}
 
 	/**
-	 * Create settings radio button options.
+	 * Create channel settings radio button options.
 	 *
 	 * @return void
 	 */
-	public function core_radio_group() {
-		// $wp_version = get_bloginfo( 'version' );
-		// $preferred  = $this->wp_beta_tester->get_preferred_from_update_core();
-		//
-		// $beta_rc                = 1 === preg_match( '/alpha|beta|RC/', $wp_version );
-		// $point                  = 1 === preg_match( '/point/', static::$options['channel'] );
-		// $unstable               = 1 === preg_match( '/unstable/', static::$options['channel'] );
-		// list( $wp_base )        = explode( '-', $wp_version );
-		// list( $preferred_base ) = explode( '-', $preferred->version );
-		//
-		// Odd bug where Core API returns 'version <version_number>' instead of just the <version_number>.
-		// I can't explain it, but it showed up on my server at least once.
-		// $preferred_base = explode( ' ', $preferred_base );
-		// $preferred_base = array_pop( $preferred_base );
-		//
-		// $show_beta_rc = $wp_base === $preferred_base || 'latest' === $preferred->response;
-
+	public function channel_radio_group() {
 		?>
 		<fieldset>
 		<tr><th colspan="2">
-		<?php esc_html_e( 'Please select the update channel you would like this website to use:', 'wordpress-beta-tester' ); ?>
-		</th>
-		</tr>
+			<?php esc_html_e( 'Select the update channel you would like this website to use:', 'wordpress-beta-tester' ); ?>
+		</th></tr>
 		<tr>
 			<th><label><input name="wp-beta-tester" id="update-stream-point-nightlies" type="radio" value="branch-development" class="tog" <?php checked( 'branch-development', self::$options['channel'] ); ?> />
 			<?php esc_html_e( 'Point release', 'wordpress-beta-tester' ); ?>
@@ -205,13 +195,21 @@ class WPBT_Core {
 			<td><?php echo( wp_kses_post( __( 'This is the bleeding edge development code from `trunk` which may be unstable at times. <em>Only use this if you really know what you are doing</em>.', 'wordpress-beta-tester' ) ) ); ?></td>
 		</tr>
 		</fieldset>
+		<?php
+	}
 
+	/**
+	 * Create stream settings radio button options.
+	 *
+	 * @return void
+	 */
+	public function stream_radio_group() {
+		?>
 		<fieldset>
 		<tr><th colspan="2">
-		<?php esc_html_e( 'Select one of the options below.', 'wordpress-beta-tester' ); ?>
-		</th>
-		</tr>
-			<tr>
+			<?php esc_html_e( 'Select one of the stream options below:', 'wordpress-beta-tester' ); ?>
+		</th></tr>
+		<tr>
 			<th><label><input name="wp-beta-tester-beta-rc" id="update-stream-beta" type="radio" value="" class="tog" <?php checked( false, self::$options['stream-option'] ); ?> />
 			<?php esc_html_e( 'Nightlies', 'wordpress-beta-tester' ); ?>
 			</label></th>

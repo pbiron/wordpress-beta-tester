@@ -66,6 +66,9 @@ class WP_Beta_Tester {
 		);
 		add_filter( 'pre_http_request', array( $this, 'filter_http_request' ), 10, 3 );
 
+		// set priority to 11 so that we fire after the function core hooks into this filter.
+		add_filter( 'update_footer', array( $this, 'update_footer' ), 11 );
+
 		// Add dashboard widget.
 		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget' ) );
 		add_action( 'wp_network_dashboard_setup', array( $this, 'add_dashboard_widget' ) );
@@ -398,5 +401,56 @@ class WP_Beta_Tester {
 			delete_transient( "feed_{$transient}" );
 			delete_transient( "feed_mod_{$transient}" );
 		}
+	}
+
+	/**
+	 * Ensure core still displays "You are using a development verison..." in the admin
+	 * footer, even if we've removed the `development` update response because the next
+	 * beta/RC package is not available.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @return string
+	 *
+	 * @filter update_footer
+	 */
+	public function update_footer() {
+		add_filter( 'pre_site_transient_update_core', array( $this, 'add_minimal_development_response' ), 10, 2 );
+
+		$content = core_update_footer();
+
+		remove_filter( 'pre_site_transient_update_core', array( $this, 'add_minimal_development_response' ) );
+
+		return $content;
+	}
+
+	/**
+	 * Add a minimal development response as the preferred update.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param  mixed  $pre_site_transient The default value to return if the site
+	 *                                    transient does not exist. Any value other
+	 *                                    than false will short-circuit the retrieval
+	 *                                    of the transient, and return the returned value.
+	 * @param  string $transient          Transient name.
+	 * @return object
+	 *
+	 * @filter pre_site_transient_update_core
+	 */
+	public function add_minimal_development_response( $pre_site_transient, $transient ) {
+		$from_api = new stdClass();
+		$update   = new stdClass();
+		// a "minimal" response is one with the `response`, `current` and
+		// `locale` properties.
+		$update->response = 'development';
+		$update->current  = get_bloginfo( 'version' );
+		$update->locale   = get_locale();
+
+		$from_api->updates = array(
+			$update,
+		);
+
+		return $from_api;
 	}
 }

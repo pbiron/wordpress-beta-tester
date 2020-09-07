@@ -205,11 +205,13 @@ class WP_Beta_Tester {
 	protected function check_if_settings_downgrade( $current ) {
 		$wp_version      = get_bloginfo( 'version' );
 		$wp_real_version = explode( '-', $wp_version );
-		$wp_next_version = explode( '-', $current->updates[0]->version );
-		// $wp_mangled_version = explode( '-', $this->mangle_wp_version() );
-		// $wp_mangled_version = $wp_real_version;
+		$wpbt_core       = new WPBT_Core( $this, self::$options );
+		$next_versions   = $wpbt_core->calculate_next_versions();
+		if ( empty( $next_versions ) ) {
+			return false;
+		}
 
-		return version_compare( $wp_next_version[0], $wp_real_version[0], 'lt' );
+		return version_compare( $next_versions['release'], $wp_real_version[0], 'lt' );
 	}
 
 	/**

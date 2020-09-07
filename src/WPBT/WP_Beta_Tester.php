@@ -132,11 +132,12 @@ class WP_Beta_Tester {
 		$args['_beta_tester'] = true;
 
 		$wp_version = get_bloginfo( 'version' );
-		// $url        = str_replace( 'version=' . $wp_version, 'version=' . $this->mangle_wp_version(), $url );
-		// $url = str_replace('/1.7/', '/1.8/', $url);
-		$url = empty( self::$options['stream-option'] )
+		$url        = str_replace( 'version=' . $wp_version, 'version=' . $this->get_current_wp_release(), $url );
+		$url        = empty( self::$options['stream-option'] )
 			? add_query_arg( 'channel', self::$options['channel'], $url )
 			: add_query_arg( 'channel', self::$options['stream-option'], $url );
+
+		// $url = add_query_arg( 'pretend_releases', array( '5.6-beta1' ), $url );
 
 		return wp_remote_get( $url, $args );
 	}

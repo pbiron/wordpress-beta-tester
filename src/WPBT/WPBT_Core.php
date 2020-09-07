@@ -177,6 +177,7 @@ class WPBT_Core {
 	 * @return void
 	 */
 	public function channel_radio_group() {
+		$next_versions = $this->calculate_next_versions();
 		?>
 		<fieldset>
 		<tr><th colspan="2">
@@ -186,7 +187,15 @@ class WPBT_Core {
 			<th><label><input name="wp-beta-tester" id="update-stream-point-nightlies" type="radio" value="branch-development" class="tog" <?php checked( 'branch-development', self::$options['channel'] ); ?> />
 			<?php esc_html_e( 'Point release', 'wordpress-beta-tester' ); ?>
 			</label></th>
-			<td><?php esc_html_e( 'This contains the work that is occurring on a branch in preparation for a x.x.x point release. This should also be fairly stable but will be available before the branch is ready for release.', 'wordpress-beta-tester' ); ?></td>
+			<td>
+			<?php
+			printf(
+				/* translators: %s: Current WordPress version base, eg 5.5 */
+				esc_html__( 'This contains the work that is occurring on a branch in preparation for a %s point release. This should also be fairly stable but will be available before the branch is ready for release.', 'wordpress-beta-tester' ),
+				$next_versions['point']
+			);
+			?>
+			</td>
 		</tr>
 		<tr>
 			<th><label><input name="wp-beta-tester" id="update-stream-bleeding-nightlies" type="radio" value="development" class="tog" <?php checked( 'development', self::$options['channel'] ); ?> />

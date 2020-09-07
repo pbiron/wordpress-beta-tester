@@ -275,8 +275,8 @@ class WPBT_Core {
 		$next_version = $this->calculate_next_versions();
 		unset( $next_version['point'] );
 
-		if ( ! $beta_rc && ! empty( $next_version ) && preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) {
-			// Site is not on a beta/RC stream so use the preferred version.
+		// Site is not on a beta/RC stream so use the preferred version.
+		if ( ! $beta_rc && ! empty( $next_version ) ) {
 			/* translators: %s: version number */
 			return sprintf( __( 'version %s', 'wordpress-beta-tester' ), $preferred_version );
 		}
@@ -305,31 +305,31 @@ class WPBT_Core {
 		$wp_version       = get_bloginfo( 'version' );
 		$exploded_version = explode( '-', $wp_version );
 		$next_release     = array_map( 'intval', explode( '.', $exploded_version[0] ) );
+		$current_release  = $this->wp_beta_tester->get_current_wp_release();
 
-		if ( ! isset( $exploded_version[1] )
-			// || ( 'development' === self::$options['channel'] && isset( $next_release[2] )  )
-			// || ( 'branch-development' === self::$options['channel'] && ! isset( $next_release[2] ) && ! $false )
-		) {
-			return array();
+		// User on a current release.
+		if ( 0 === preg_match( '/alpha|beta|RC/', $wp_version ) ) {
+			$exploded_version[0] = $current_release;
+			$exploded_version[1] = null;
 		}
 
-		// Set base version when switching from branch-development to development channel.
-		if ( preg_match( '/alpha|beta|RC/', $wp_version ) ) {
-			$current_exploded = array_map( 'intval', explode( '.', $exploded_version[0] ) );
-			if ( 'development' === self::$options['channel'] && isset( $current_exploded[2] ) ) {
-				$current_exploded[1] = ++$current_exploded[1];
-				unset( $current_exploded[2] );
-				$exploded_version[0] = implode( '.', $current_exploded );
-			}
+		// Set base version for development channel if necessary.
+		$current_exploded = array_map( 'intval', explode( '.', $exploded_version[0] ) );
+		if ( 'development' === self::$options['channel'] && isset( $current_exploded[2] ) ) {
+			$current_exploded[1] = ++$current_exploded[1];
+			unset( $current_exploded[2] );
+			$exploded_version[0] = implode( '.', $current_exploded );
 		}
 
-		$is_alpha        = 'alpha' === $exploded_version[1];
-		$current_beta    = preg_match( '/beta(?)/', $exploded_version[1], $beta_version );
-		$current_rc      = preg_match( '/RC(?)/', $exploded_version[1], $rc_version );
-		$current_release = $this->wp_beta_tester->get_current_wp_release();
-		$next_point      = array_map( 'intval', explode( '.', $current_release ) );
-		$next_point[2]   = isset( $next_point[2] ) ? ( ++$next_point[2] ) : '1';
-		$next_point      = implode( '.', $next_point );
+		$is_alpha     = 'alpha' === $exploded_version[1];
+		$current_beta = preg_match( '/beta(?)/', $exploded_version[1], $beta_version );
+		$current_rc   = preg_match( '/RC(?)/', $exploded_version[1], $rc_version );
+		$next_beta    = ! empty( $beta_version ) || $is_alpha ? ++$current_beta : 1;
+
+		// Make next point release.
+		$next_point    = array_map( 'intval', explode( '.', $current_release ) );
+		$next_point[2] = isset( $next_point[2] ) ? ++$next_point[2] : 1;
+		$next_point    = implode( '.', $next_point );
 
 		// Set base version for branch-development channel.
 		if ( 'branch-development' === self::$options['channel'] ) {
@@ -338,7 +338,7 @@ class WPBT_Core {
 
 		$next_versions = array(
 			'point'   => $next_point,
-			'beta'    => ! empty( $beta_version ) || $is_alpha ? $exploded_version[0] . '-beta' . ( ++$current_beta ) : false,
+			'beta'    => $exploded_version[0] . '-beta' . $next_beta,
 			'rc'      => $exploded_version[0] . '-RC' . ( ++$current_rc ),
 			'release' => $exploded_version[0],
 		);

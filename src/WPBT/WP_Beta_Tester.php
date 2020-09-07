@@ -105,7 +105,7 @@ class WP_Beta_Tester {
 			/* translators: %s: link to setting page */
 			printf(
 				/* translators: %s: WordPress Beta Tester Settings page URL */
-				wp_kses_post( __( '<strong>Warning:</strong> Your current <a href="%s">WordPress Beta Tester plugin configuration</a> will downgrade your install to a previous version - please reconfigure it.', 'wordpress-beta-tester' ) ),
+				wp_kses_post( __( '<strong>Warning:</strong> Your current <a href="%s">WordPress Beta Tester plugin configuration</a> will downgrade your installation to a previous version - please reconfigure it.', 'wordpress-beta-tester' ) ),
 				esc_url( $admin_page )
 			);
 			echo '</p></div>';

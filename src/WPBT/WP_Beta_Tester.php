@@ -92,7 +92,7 @@ class WP_Beta_Tester {
 		wp_version_check();
 
 		// Can output an error here if current config drives version backwards.
-		if ( $this->check_if_settings_downgrade( $st ) ) {
+		if ( $this->check_if_settings_downgrade() ) {
 			echo '<div id="message" class="notice notice-warning"><p>';
 			$admin_page = is_multisite() ? network_admin_url( 'settings.php' ) : admin_url( 'tools.php' );
 			$admin_page = add_query_arg(
@@ -199,11 +199,9 @@ class WP_Beta_Tester {
 	/**
 	 * Returns whether beta is really downgrade.
 	 *
-	 * @param \stdClass Core update object.
-	 *
 	 * @return bool
 	 */
-	protected function check_if_settings_downgrade( $current ) {
+	protected function check_if_settings_downgrade() {
 		$wp_version      = get_bloginfo( 'version' );
 		$wp_real_version = explode( '-', $wp_version );
 		$wpbt_core       = new WPBT_Core( $this, self::$options );

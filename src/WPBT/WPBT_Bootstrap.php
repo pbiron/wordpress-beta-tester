@@ -104,7 +104,6 @@ class WPBT_Bootstrap {
 		add_action( 'init', array( $this, 'load_textdomain' ) );
 		register_activation_hook( $this->file, array( $this, 'activate' ) );
 		register_deactivation_hook( $this->file, array( $this, 'deactivate' ) );
-		// add_filter( 'site_option_wp_beta_tester', array( $this, 'fix_stream' ) );
 	}
 
 	/**
@@ -143,23 +142,6 @@ class WPBT_Bootstrap {
 		// TODO: ( new WPBT_Extras( $wpbt, self::$options ) )->deactivate();
 		$wpbt_extras = new WPBT_Extras( $wpbt, self::$options );
 		$wpbt_extras->deactivate();
-	}
-
-	/**
-	 * Fix stream option for when `beta-rc` set but current version
-	 * isn't a `beta|RC` version.
-	 *
-	 * @param array $value Array of options values from `wp_beta_tester` option.
-	 *
-	 * @return array
-	 */
-	public function fix_stream( $value ) {
-		if ( is_array( $value ) && 0 === strpos( $value['stream'], 'beta-rc' )
-			&& 1 !== preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) {
-			$value['stream'] = str_replace( 'beta-rc-', '', $value['stream'] );
-		}
-
-		return $value;
 	}
 
 	/**

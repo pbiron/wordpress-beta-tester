@@ -171,20 +171,14 @@ class WP_Beta_Tester {
 	}
 
 	/**
-	 * Get modified WP version to pass to API check.
+	 * Get current WP release version to pass to API check.
 	 *
 	 * @return string $wp_version
 	 */
-	protected function mangle_wp_version() {
-		$options    = get_site_option(
-			'wp_beta_tester',
-			array(
-				'stream' => 'point',
-				'revert' => true,
-			)
-		);
-		$preferred  = $this->get_preferred_from_update_core();
+	public function get_current_wp_release() {
 		$wp_version = get_bloginfo( 'version' );
+		$preferred  = $this->get_preferred_from_update_core();
+		$current    = get_site_transient( 'update_core' );
 
 		// If we're getting no updates back from get_preferred_from_update_core(),
 		// let an HTTP request go through unmangled.
@@ -192,62 +186,13 @@ class WP_Beta_Tester {
 			return $wp_version;
 		}
 
-		if ( 0 === strpos( $options['stream'], 'beta-rc' )
-			&& version_compare( $preferred->current, $wp_version, 'lt' ) ) {
-			$versions = array_map( 'intval', explode( '.', $wp_version ) );
-		} else {
-			$versions = array_map( 'intval', explode( '.', $preferred->current ) );
+		foreach ( $current->updates as $update ) {
+			if ( 'latest' === $update->response ) {
+				$wp_version = $update->version;
+			}
 		}
-
-		// ensure that a downgrade correctly gets mangled version.
-		if ( isset( $options['revert'] ) && $options['revert'] ) {
-			$versions = $this->correct_versions_for_downgrade( $versions );
-		}
-
-		switch ( $options['stream'] ) {
-			case 'point':
-			case 'beta-rc-point':
-				$versions[2] = isset( $versions[2] ) ? $versions[2] + 1 : 1;
-				break;
-			case 'unstable':
-			case 'beta-rc-unstable':
-				++$versions[1];
-				if ( 10 === $versions[1] ) {
-					++$versions[0];
-					$versions[1] = 0;
-				}
-				break;
-		}
-		$wp_version = implode( '.', $versions ) . '-wp-beta-tester';
 
 		return $wp_version;
-	}
-
-	/**
-	 * Ensure that a downgrade to a point release returns a version array that
-	 * will properly get the correct offer.
-	 *
-	 * @param array $versions Array containing the semver arguments of the currently
-	 *                        installed version.
-	 *
-	 * @return array
-	 */
-	private function correct_versions_for_downgrade( $versions ) {
-		$wp_version      = get_bloginfo( 'version' );
-		$current         = array_map( 'intval', explode( '.', $wp_version ) );
-		$release_version = 0 === preg_match( '/alpha|beta|RC/', $wp_version );
-
-		if ( version_compare( implode( '.', $versions ), implode( '.', $current ), '>=' ) ) {
-			$versions[1] = $versions[1] - 1;
-		}
-		if ( ( $release_version || isset( $current[2] ) ) && $versions[1] < $current[1] ) {
-			$versions[1] = $current[1];
-		}
-
-		// Add an obscenely high value to always get the point release offer.
-		$versions[2] = 100;
-
-		return $versions;
 	}
 
 	/**

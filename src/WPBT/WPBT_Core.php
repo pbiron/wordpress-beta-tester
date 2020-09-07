@@ -273,6 +273,7 @@ class WPBT_Core {
 	public function get_next_version( $preferred_version ) {
 		$beta_rc      = ! empty( self::$options['stream-option'] );
 		$next_version = $this->calculate_next_versions();
+		unset( $next_version['point'] );
 
 		if ( ! $beta_rc && ! empty( $next_version ) && preg_match( '/alpha|beta|RC/', get_bloginfo( 'version' ) ) ) {
 			// Site is not on a beta/RC stream so use the preferred version.
@@ -298,34 +299,54 @@ class WPBT_Core {
 	/**
 	 * Calculate next versions.
 	 *
-	 * @return array $next_version
+	 * @return array $next_versions
 	 */
-	private function calculate_next_versions() {
+	public function calculate_next_versions() {
 		$wp_version       = get_bloginfo( 'version' );
 		$exploded_version = explode( '-', $wp_version );
-		$next_release     = explode( '.', $exploded_version[0] );
+		$next_release     = array_map( 'intval', explode( '.', $exploded_version[0] ) );
 
 		if ( ! isset( $exploded_version[1] )
-			|| ( 'development' === self::$options['channel'] && isset( $next_release[2] ) )
-			|| ( 'branch-development' === self::$options['channel'] && ! isset( $next_release[2] ) )
+			// || ( 'development' === self::$options['channel'] && isset( $next_release[2] )  )
+			// || ( 'branch-development' === self::$options['channel'] && ! isset( $next_release[2] ) && ! $false )
 		) {
 			return array();
 		}
 
-		$is_alpha     = 'alpha' === $exploded_version[1];
-		$current_beta = preg_match( '/beta(?)/', $exploded_version[1], $beta_version );
-		$current_rc   = preg_match( '/RC(?)/', $exploded_version[1], $rc_version );
+		// Set base version when switching from branch-development to development channel.
+		if ( preg_match( '/alpha|beta|RC/', $wp_version ) ) {
+			$current_exploded = array_map( 'intval', explode( '.', $exploded_version[0] ) );
+			if ( 'development' === self::$options['channel'] && isset( $current_exploded[2] ) ) {
+				$current_exploded[1] = ++$current_exploded[1];
+				unset( $current_exploded[2] );
+				$exploded_version[0] = implode( '.', $current_exploded );
+			}
+		}
 
-		$next_version = array(
+		$is_alpha        = 'alpha' === $exploded_version[1];
+		$current_beta    = preg_match( '/beta(?)/', $exploded_version[1], $beta_version );
+		$current_rc      = preg_match( '/RC(?)/', $exploded_version[1], $rc_version );
+		$current_release = $this->wp_beta_tester->get_current_wp_release();
+		$next_point      = array_map( 'intval', explode( '.', $current_release ) );
+		$next_point[2]   = isset( $next_point[2] ) ? ( ++$next_point[2] ) : '1';
+		$next_point      = implode( '.', $next_point );
+
+		// Set base version for branch-development channel.
+		if ( 'branch-development' === self::$options['channel'] ) {
+			$exploded_version = (array) $next_point;
+		}
+
+		$next_versions = array(
+			'point'   => $next_point,
 			'beta'    => ! empty( $beta_version ) || $is_alpha ? $exploded_version[0] . '-beta' . ( ++$current_beta ) : false,
 			'rc'      => $exploded_version[0] . '-RC' . ( ++$current_rc ),
 			'release' => $exploded_version[0],
 		);
-		if ( ! $next_version['beta'] || 'rc' === self::$options['stream-option'] ) {
-			unset( $next_version['beta'] );
+		if ( ! $next_versions['beta'] || 'rc' === self::$options['stream-option'] ) {
+			unset( $next_versions['beta'] );
 		}
 
-		return $next_version;
+		return $next_versions;
 	}
 
 	/**

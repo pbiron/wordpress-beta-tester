@@ -198,7 +198,7 @@ class WP_Beta_Tester {
 	}
 
 	/**
-	 * Returns whether beta is really downgrade.
+	 * Returns whether upgrade is really downgrade.
 	 *
 	 * @return bool
 	 */

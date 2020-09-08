@@ -84,15 +84,17 @@ class WPBT_Core {
 			null,
 			array( $this, 'channel_radio_group' ),
 			'wp_beta_tester_core',
-			'wp_beta_tester_core'
+			'wp_beta_tester_core',
+			array( 'class' => 'hidden' )
 		);
 
 		add_settings_field(
 			'stream_settings',
-			null,
+			'Stream Settings',
 			array( $this, 'stream_radio_group' ),
 			'wp_beta_tester_core',
-			'wp_beta_tester_core'
+			'wp_beta_tester_core',
+			array( 'class' => 'hidden' )
 		);
 	}
 

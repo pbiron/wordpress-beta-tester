@@ -64,7 +64,7 @@ class WPBT_Bootstrap {
 
 		// Switch from v2 to v3.
 		if ( empty( self::$options['channel'] ) ) {
-			self::$options['branch-development'];
+			self::$options['channel'] = 'branch-development';
 		}
 		if ( empty( self::$options['stream-option'] ) ) {
 			self::$options['stream-option'] = '';

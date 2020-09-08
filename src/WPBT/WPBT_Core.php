@@ -201,7 +201,7 @@ class WPBT_Core {
 			<th><label><input name="wp-beta-tester" id="update-stream-bleeding-nightlies" type="radio" value="development" class="tog" <?php checked( 'development', self::$options['channel'] ); ?> />
 			<?php esc_html_e( 'Bleeding edge', 'wordpress-beta-tester' ); ?>
 			</label></th>
-			<td><?php echo( wp_kses_post( __( 'This is the bleeding edge development code from `trunk` which may be unstable at times. <em>Only use this if you really know what you are doing</em>.', 'wordpress-beta-tester' ) ) ); ?></td>
+			<td><?php echo wp_kses_post( __( 'This is the bleeding edge development code from `trunk` which may be unstable at times. <em>Only use this if you really know what you are doing</em>.', 'wordpress-beta-tester' ) ); ?></td>
 		</tr>
 		</fieldset>
 		<?php
@@ -222,20 +222,20 @@ class WPBT_Core {
 			<th><label><input name="wp-beta-tester-beta-rc" id="update-stream-beta" type="radio" value="" class="tog" <?php checked( false, self::$options['stream-option'] ); ?> />
 			<?php esc_html_e( 'Nightlies', 'wordpress-beta-tester' ); ?>
 			</label></th>
-			<td><?php echo( wp_kses_post( __( 'Latest daily updates.', 'wordpress-beta-tester' ) ) ); ?></td>
+			<td><?php echo wp_kses_post( __( 'Latest daily updates.', 'wordpress-beta-tester' ) ); ?></td>
 		</tr>
 
 		<tr>
 			<th><label><input name="wp-beta-tester-beta-rc" id="update-stream-beta" type="radio" value="beta" class="tog" <?php checked( 'beta', self::$options['stream-option'] ); ?> />
 			<?php esc_html_e( 'Beta/RC Only', 'wordpress-beta-tester' ); ?>
 			</label></th>
-			<td><?php echo( wp_kses_post( __( 'This is for the Beta/RC releases only of the selected channel.', 'wordpress-beta-tester' ) ) ); ?></td>
+			<td><?php echo wp_kses_post( __( 'This is for the Beta/RC releases only of the selected channel.', 'wordpress-beta-tester' ) ); ?></td>
 		</tr>
 		<tr>
 			<th><label><input name="wp-beta-tester-beta-rc" id="update-stream-rc" type="radio" value="rc" class="tog" <?php checked( 'rc', self::$options['stream-option'] ); ?> />
 			<?php esc_html_e( 'Release Candidates Only', 'wordpress-beta-tester' ); ?>
 			</label></th>
-			<td><?php echo( wp_kses_post( __( 'This is for the Release Candidate releases only of the selected channel.', 'wordpress-beta-tester' ) ) ); ?></td>
+			<td><?php echo wp_kses_post( __( 'This is for the Release Candidate releases only of the selected channel.', 'wordpress-beta-tester' ) ); ?></td>
 		</tr>
 		</fieldset>
 		<?php
@@ -263,7 +263,7 @@ class WPBT_Core {
 	}
 
 	/**
-	 * Get the next version the site will be updated to.
+	 * Get the next version(s) the site will be updated to.
 	 *
 	 * @since 2.2.0
 	 *
@@ -299,6 +299,7 @@ class WPBT_Core {
 	/**
 	 * Calculate next versions.
 	 *
+	 * @since 3.0.0
 	 * @return array $next_versions
 	 */
 	public function calculate_next_versions() {

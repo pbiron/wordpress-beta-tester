@@ -174,6 +174,7 @@ class WP_Beta_Tester {
 	/**
 	 * Get current WP release version to pass to API check.
 	 *
+	 * @since 3.0.0
 	 * @return string $wp_version
 	 */
 	public function get_current_wp_release() {
@@ -387,8 +388,7 @@ class WP_Beta_Tester {
 	public function add_minimal_development_response( $pre_site_transient, $transient ) {
 		$from_api = new stdClass();
 		$update   = new stdClass();
-		// a "minimal" response is one with the `response`, `current` and
-		// `locale` properties.
+		// a "minimal" response is one with the `response`, `current` and `locale` properties.
 		$update->response = 'development';
 		$update->current  = get_bloginfo( 'version' );
 		$update->locale   = get_locale();

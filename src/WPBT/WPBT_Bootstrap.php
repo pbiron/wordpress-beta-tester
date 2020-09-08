@@ -59,7 +59,6 @@ class WPBT_Bootstrap {
 			array(
 				'channel'       => 'branch-development',
 				'stream-option' => '',
-				'revert'        => true,
 			)
 		);
 

@@ -219,20 +219,20 @@ class WPBT_Core {
 			<th><label><input name="wp-beta-tester-beta-rc" id="update-stream-beta" type="radio" value="" class="tog" <?php checked( false, self::$options['stream-option'] ); ?> />
 			<?php esc_html_e( 'Nightlies', 'wordpress-beta-tester' ); ?>
 			</label></th>
-			<td><?php echo wp_kses_post( __( 'Latest daily updates.', 'wordpress-beta-tester' ) ); ?></td>
+			<td><?php esc_html_e( 'Latest daily updates.', 'wordpress-beta-tester' ); ?></td>
 		</tr>
 
 		<tr>
 			<th><label><input name="wp-beta-tester-beta-rc" id="update-stream-beta" type="radio" value="beta" class="tog" <?php checked( 'beta', self::$options['stream-option'] ); ?> />
 			<?php esc_html_e( 'Beta/RC Only', 'wordpress-beta-tester' ); ?>
 			</label></th>
-			<td><?php echo wp_kses_post( __( 'This is for the Beta/RC releases only of the selected channel.', 'wordpress-beta-tester' ) ); ?></td>
+			<td><?php esc_html_e( 'This is for the Beta/RC releases only of the selected channel.', 'wordpress-beta-tester' ); ?></td>
 		</tr>
 		<tr>
 			<th><label><input name="wp-beta-tester-beta-rc" id="update-stream-rc" type="radio" value="rc" class="tog" <?php checked( 'rc', self::$options['stream-option'] ); ?> />
 			<?php esc_html_e( 'Release Candidates Only', 'wordpress-beta-tester' ); ?>
 			</label></th>
-			<td><?php echo wp_kses_post( __( 'This is for the Release Candidate releases only of the selected channel.', 'wordpress-beta-tester' ) ); ?></td>
+			<td><?php esc_html_e( 'This is for the Release Candidate releases only of the selected channel.', 'wordpress-beta-tester' ); ?></td>
 		</tr>
 		</fieldset>
 		<?php

@@ -81,20 +81,20 @@ class WPBT_Core {
 
 		add_settings_field(
 			'channel_settings',
-			null,
+			__( 'Select the update channel you would like this website to use:', 'wordpress-beta-tester' ),
 			array( $this, 'channel_radio_group' ),
 			'wp_beta_tester_core',
 			'wp_beta_tester_core',
-			array( 'class' => 'hidden' )
+			array( 'class' => 'wpbt-settings-title' )
 		);
 
 		add_settings_field(
 			'stream_settings',
-			'Stream Settings',
+			__( 'Select one of the stream options below:', 'wordpress-beta-tester' ),
 			array( $this, 'stream_radio_group' ),
 			'wp_beta_tester_core',
 			'wp_beta_tester_core',
-			array( 'class' => 'hidden' )
+			array( 'class' => 'wpbt-settings-title' )
 		);
 	}
 
@@ -179,9 +179,6 @@ class WPBT_Core {
 		$next_versions = $this->calculate_next_versions();
 		?>
 		<fieldset>
-		<tr><th colspan="2">
-			<?php esc_html_e( 'Select the update channel you would like this website to use:', 'wordpress-beta-tester' ); ?>
-		</th></tr>
 		<tr>
 			<th><label><input name="wp-beta-tester" id="update-stream-point-nightlies" type="radio" value="branch-development" class="tog" <?php checked( 'branch-development', self::$options['channel'] ); ?> />
 			<?php esc_html_e( 'Point release', 'wordpress-beta-tester' ); ?>
@@ -214,9 +211,6 @@ class WPBT_Core {
 	public function stream_radio_group() {
 		?>
 		<fieldset>
-		<tr><th colspan="2">
-			<?php esc_html_e( 'Select one of the stream options below:', 'wordpress-beta-tester' ); ?>
-		</th></tr>
 		<tr>
 			<th><label><input name="wp-beta-tester-beta-rc" id="update-stream-beta" type="radio" value="" class="tog" <?php checked( false, self::$options['stream-option'] ); ?> />
 			<?php esc_html_e( 'Nightlies', 'wordpress-beta-tester' ); ?>
@@ -258,6 +252,7 @@ class WPBT_Core {
 			</form>
 			<?php endif; ?>
 		</div>
+		<script>jQuery('tr.wpbt-settings-title th').attr('colspan',2);</script>
 		<?php
 	}
 

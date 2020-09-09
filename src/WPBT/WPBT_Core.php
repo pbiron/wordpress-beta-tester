@@ -160,7 +160,7 @@ class WPBT_Core {
 			'https://core.trac.wordpress.org/newticket'
 		);
 		echo '</p><p>';
-		echo wp_kses_post( __( 'By default, your WordPress install uses the stable update channel. To return to this, please deactivate this plugin and re-install from the <a href="update-core.php">WordPress Updates</a> page.', 'wordpress-beta-tester' ) );
+		echo wp_kses_post( __( 'By default, your WordPress installation uses the stable update channel. To return to this, please deactivate this plugin and re-install from the <a href="update-core.php">WordPress Updates</a> page.', 'wordpress-beta-tester' ) );
 		echo '</p><p>';
 		printf(
 			/* translators: %s: update version */

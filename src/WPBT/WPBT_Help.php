@@ -67,5 +67,10 @@ class WPBT_Help {
 				'content' => '<p>' . __( 'A dashboard widget is displayed when the plugin is active. It will contain links to milestone commits and filing a bug report. It may contain links to Dev Notes, the Field Guide, and beta/RC release posts.', 'wordpress-beta-tester' ) . '</p>',
 			)
 		);
+
+		get_current_screen()->set_help_sidebar(
+			'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
+			'<p>' . __( '<a href="https://make.wordpress.org/core/handbook/testing/beta-testing/">Beta Testing</a>', 'wordpress-beta-tester' ) . '</p>'
+		);
 	}
 }
